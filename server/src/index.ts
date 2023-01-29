@@ -1,9 +1,12 @@
 import express from "express";
 import files from "./routes/files";
+import cors from "cors";
+
+const PORT = 8080;
 
 const app = express();
 
-const PORT = 8080;
+app.use(cors());
 
 app.use("/files", files);
 
