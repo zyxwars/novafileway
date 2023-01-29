@@ -1,0 +1,21 @@
+{
+  "name": "novafileway",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd ./client && npm run dev",
+    "server": "cd ./server && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zyxwars/novafileway.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zyxwars/novafileway/issues"
+  },
+  "homepage": "https://github.com/zyxwars/novafileway#readme"
+}
