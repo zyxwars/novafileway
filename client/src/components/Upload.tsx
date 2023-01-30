@@ -19,15 +19,15 @@ export const Upload = () => {
 
       <button
         onClick={() => {
-          // TODO: send as form data
           filesToUpload.forEach((file) => {
+            // TODO: get progress
+
+            const formData = new FormData();
+            formData.append("file", file);
+
             fetch("http://localhost:8080/files", {
               method: "POST",
-              body: file,
-              headers: {
-                "content-type": file.type,
-                "content-length": `${file.size}`,
-              },
+              body: formData,
             });
           });
         }}
