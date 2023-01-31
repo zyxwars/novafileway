@@ -11,6 +11,11 @@ router.get("/hello", (req, res) => {
   res.send("Hello from the server");
 });
 
+router.get("/", async (req, res) => {
+  const files = await prisma.file.findMany();
+  res.json(files);
+});
+
 router.post("/", (req, res) => {
   upload(req, res, async (err) => {
     if (err instanceof multer.MulterError) {

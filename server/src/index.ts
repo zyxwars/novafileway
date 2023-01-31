@@ -5,7 +5,6 @@ import cors from "cors";
 const PORT = 8080;
 
 const app = express();
-
 app.use(cors());
 
 app.use("/files", files);
