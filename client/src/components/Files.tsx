@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { IFile } from "../types";
-import { FileCard } from "./FileCard";
+import { Card } from "@chakra-ui/react";
 
 export const Files = () => {
   const {
@@ -21,9 +21,9 @@ export const Files = () => {
   if (!files) return <div>No files</div>;
 
   return (
-    <div className="w-full h-full grid grid-cols-4 gap-2">
+    <div>
       {files.map((file) => (
-        <FileCard file={file} key={file.id} />
+        <div key={file.id}>{file.originalname}</div>
       ))}
     </div>
   );

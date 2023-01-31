@@ -2,7 +2,6 @@ import { Button } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { UploadFileCard } from "./UploadFileCard";
 
 export const Upload = () => {
   const queryClient = useQueryClient();
@@ -30,34 +29,16 @@ export const Upload = () => {
   };
 
   return (
-    <div className="w-full grid grid-flow-row">
-      <div className="bg-white w-full h-full flex justify-center items-center flex-col">
-        <div className="w-full h-60 relative flex justify-center items-center">
-          <input
-            className="absolute left-0 top-0 w-full h-full opacity-25"
-            type="file"
-            multiple
-            // directory=""
-            // webkitdirectory=""
-            // mozdirectory=""
-            onChange={(e) => {
-              const fileArray = e.target.files
-                ? Array.from(e.target.files)
-                : [];
-              setFilesToUpload(fileArray);
-            }}
-          />
-          <div className="">Drag and drop files</div>
-        </div>
-
-        <Button className="w-full" onClick={handleUpload}>
-          Upload
-        </Button>
-      </div>
-
-      {filesToUpload.map((file) => (
-        <UploadFileCard file={file} />
-      ))}
-    </div>
+    <input
+      type="file"
+      multiple
+      // directory=""
+      // webkitdirectory=""
+      // mozdirectory=""
+      onChange={(e) => {
+        const fileArray = e.target.files ? Array.from(e.target.files) : [];
+        setFilesToUpload(fileArray);
+      }}
+    />
   );
 };
