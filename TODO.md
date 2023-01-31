@@ -1,4 +1,5 @@
 - Functionality:
+
   - Single file upload ✅
   - Multi file upload loop ✅
   - Upload progress 🚧
@@ -12,3 +13,6 @@
   - Paste text upload
   - Text field creation
   - Peek text
+
+- [ ] Test tailwind formatting
+- [ ] Add trpc

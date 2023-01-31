@@ -1,4 +1,14 @@
-import { Button } from "@chakra-ui/react";
+import {
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  Input,
+  useDisclosure,
+} from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
@@ -28,17 +38,22 @@ export const Upload = () => {
     queryClient.invalidateQueries("files");
   };
 
+  const { isOpen, onToggle, onClose } = useDisclosure();
+
   return (
-    <input
-      type="file"
-      multiple
-      // directory=""
-      // webkitdirectory=""
-      // mozdirectory=""
-      onChange={(e) => {
-        const fileArray = e.target.files ? Array.from(e.target.files) : [];
-        setFilesToUpload(fileArray);
-      }}
-    />
+    <>
+      <input
+        type="file"
+        multiple
+        // directory=""
+        // webkitdirectory=""
+        // mozdirectory=""
+        onChange={(e) => {
+          const fileArray = e.target.files ? Array.from(e.target.files) : [];
+          setFilesToUpload(fileArray);
+        }}
+      />
+      <Button onClick={onToggle}>Open upload view</Button>
+    </>
   );
 };

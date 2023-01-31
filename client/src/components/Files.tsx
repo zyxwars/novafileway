@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { IFile } from "../types";
-import { Card } from "@chakra-ui/react";
+import { Button, Card, CardBody, CardFooter } from "@chakra-ui/react";
 
 export const Files = () => {
   const {
@@ -23,7 +23,9 @@ export const Files = () => {
   return (
     <div>
       {files.map((file) => (
-        <div key={file.id}>{file.originalname}</div>
+        <Card key={file.id}>
+          <CardBody>{file.originalname}</CardBody>
+        </Card>
       ))}
     </div>
   );
