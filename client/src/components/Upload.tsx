@@ -38,8 +38,6 @@ export const Upload = () => {
     queryClient.invalidateQueries("files");
   };
 
-  const { isOpen, onToggle, onClose } = useDisclosure();
-
   return (
     <>
       <input
@@ -53,7 +51,7 @@ export const Upload = () => {
           setFilesToUpload(fileArray);
         }}
       />
-      <Button onClick={onToggle}>Open upload view</Button>
+      <button>Open upload view</button>
     </>
   );
 };

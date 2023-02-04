@@ -14,5 +14,5 @@
   - Text field creation
   - Peek text
 
-- [ ] Test tailwind formatting
-- [ ] Add trpc
+- [x] Test tailwind formatting
+- [x] Add trpc

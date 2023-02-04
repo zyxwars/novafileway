@@ -1,19 +1,26 @@
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ChakraProvider } from "@chakra-ui/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { trpc } from "./utils/trpc";
 
 import { Upload } from "./components/Upload";
 import { Files } from "./components/Files";
-
-const queryClient = new QueryClient();
+import { useState } from "react";
+import { httpBatchLink } from "@trpc/client";
 
 function App() {
+  const [queryClient] = useState(() => new QueryClient());
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      links: [httpBatchLink({ url: "http://localhost:8080/trpc" })],
+    })
+  );
+
   return (
-    <ChakraProvider>
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <Upload />
+        {/* <Upload /> */}
         <Files />
       </QueryClientProvider>
-    </ChakraProvider>
+    </trpc.Provider>
   );
 }
 
