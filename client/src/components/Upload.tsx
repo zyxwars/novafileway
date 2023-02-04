@@ -1,57 +1,58 @@
-import {
-  Button,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
-  Input,
-  useDisclosure,
-} from "@chakra-ui/react";
-import axios from "axios";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { motion } from "framer-motion";
 
 export const Upload = () => {
-  const queryClient = useQueryClient();
-
   const [filesToUpload, setFilesToUpload] = useState<File[]>([]);
 
-  const handleUpload = () => {
-    filesToUpload.forEach((file) => {
-      // TODO: get progress
+  // const handleUpload = () => {
+  //   filesToUpload.forEach((file) => {
+  //     // TODO: get progress
 
-      const formData = new FormData();
-      formData.append("file", file);
+  //     const formData = new FormData();
+  //     formData.append("file", file);
 
-      axios.postForm("http://127.0.0.1:8080/files", formData, {
-        onUploadProgress: (e) => {
-          console.log(e);
-        },
-      });
-    });
+  //     axios.postForm("http://127.0.0.1:8080/files", formData, {
+  //       onUploadProgress: (e) => {
+  //         console.log(e);
+  //       },
+  //     });
+  //   });
 
-    // TODO: Pack into mutation after progress bar is done
-    // TODO: Invalidate after await all queries?, use the mutation?
+  // TODO: Pack into mutation after progress bar is done
+  // TODO: Invalidate after await all queries?, use the mutation?
+  // };
 
-    queryClient.invalidateQueries("files");
-  };
+  const [showUpload, setShowUpload] = useState(false);
 
   return (
     <>
-      <input
-        type="file"
-        multiple
-        // directory=""
-        // webkitdirectory=""
-        // mozdirectory=""
-        onChange={(e) => {
-          const fileArray = e.target.files ? Array.from(e.target.files) : [];
-          setFilesToUpload(fileArray);
-        }}
-      />
-      <button>Open upload view</button>
+      <div className="h-64 w-full bg-violet-400">
+        <input
+          type="file"
+          multiple
+          // directory=""
+          // webkitdirectory=""
+          // mozdirectory=""
+          onChange={(e) => {
+            const fileArray = e.target.files ? Array.from(e.target.files) : [];
+            setFilesToUpload(fileArray);
+          }}
+        />
+        <button onClick={() => setShowUpload(true)}>Open upload view</button>
+      </div>
+
+      {showUpload && (
+        <div className="fixed top-0 left-0 h-screen w-full">
+          <div className="h-64 w-full bg-violet-400"></div>
+          <motion.div
+            className="h-full w-full bg-violet-900"
+            initial={{ y: "100vh" }}
+            animate={{ y: "0" }}
+            exit={{}}
+            transition={{ type: "spring", duration: 1 }}
+          ></motion.div>
+        </div>
+      )}
     </>
   );
 };
