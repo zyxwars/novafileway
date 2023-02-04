@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 export const Upload = () => {
   const [filesToUpload, setFilesToUpload] = useState<File[]>([]);
 
+  const [showUpload, setShowUpload] = useState(false);
+
   // const handleUpload = () => {
   //   filesToUpload.forEach((file) => {
   //     // TODO: get progress
@@ -20,13 +22,15 @@ export const Upload = () => {
 
   // TODO: Pack into mutation after progress bar is done
   // TODO: Invalidate after await all queries?, use the mutation?
-  // };
 
-  const [showUpload, setShowUpload] = useState(false);
+  const handleAddFiles = (files: FileList | null) => {
+    const fileArray = files ? Array.from(files) : [];
+    setFilesToUpload(fileArray);
+  };
 
   return (
     <>
-      <div className="h-64 w-full bg-violet-400">
+      <div className="h-64">
         <input
           type="file"
           multiple
@@ -34,23 +38,40 @@ export const Upload = () => {
           // webkitdirectory=""
           // mozdirectory=""
           onChange={(e) => {
-            const fileArray = e.target.files ? Array.from(e.target.files) : [];
-            setFilesToUpload(fileArray);
+            handleAddFiles(e.target?.files);
+            setShowUpload(true);
           }}
         />
         <button onClick={() => setShowUpload(true)}>Open upload view</button>
       </div>
 
       {showUpload && (
-        <div className="fixed top-0 left-0 h-screen w-full">
-          <div className="h-64 w-full bg-violet-400"></div>
+        <div className="fixed left-0 top-0 bottom-0 flex flex-col">
+          <div className="h-64 border-8 ">
+            <input
+              type="file"
+              multiple
+              // directory=""
+              // webkitdirectory=""
+              // mozdirectory=""
+              onChange={(e) => {
+                handleAddFiles(e.target?.files);
+              }}
+            />
+          </div>
           <motion.div
-            className="h-full w-full bg-violet-900"
+            className="grid flex-grow grid-cols-6 gap-4 overflow-y-auto  p-4"
             initial={{ y: "100vh" }}
             animate={{ y: "0" }}
             exit={{}}
             transition={{ type: "spring", duration: 1 }}
-          ></motion.div>
+          >
+            {filesToUpload.map((file, i) => (
+              <motion.div className="h-64 bg-neutral-800 outline outline-1">
+                {file.name}
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       )}
     </>

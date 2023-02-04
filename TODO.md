@@ -16,3 +16,4 @@
 
 - [x] Test tailwind formatting
 - [x] Add trpc
+- [ ] Add animate presence for framer
