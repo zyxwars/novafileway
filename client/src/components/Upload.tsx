@@ -31,7 +31,7 @@ export const Upload = () => {
   return (
     <>
       <div className="fixed left-0 top-0 bottom-0 right-0 flex flex-col">
-        <div className="relative flex h-14 flex-shrink-0 items-center justify-center rounded-b-xl bg-gradient-to-r from-cyan-500 to-blue-500">
+        <div className="relative flex h-14 flex-none items-center justify-center rounded-b-xl bg-gradient-to-r from-cyan-500 to-blue-500">
           <input
             className="absolute top-0 left-0 bottom-0 w-full opacity-0"
             type="file"
@@ -54,24 +54,34 @@ export const Upload = () => {
         </div>
 
         {showUpload && (
-          <motion.div
-            className="flex w-full flex-grow flex-col overflow-y-auto px-4"
-            initial={{ y: "100vh" }}
-            animate={{ y: "0" }}
-            exit={{}}
-            transition={{ type: "spring", duration: 1 }}
-          >
-            {filesToUpload.map((file, i) => (
-              <div className="mb-4 flex flex-shrink-0 items-center text-ellipsis rounded-sm bg-zinc-800 p-3 font-semibold text-white first:mt-4">
-                <div className="flex-1">{file.name}</div>
-                <div className="flex-none pl-2">
-                  <span className="material-symbols-outlined rounded-sm bg-zinc-900">
-                    close
-                  </span>
-                </div>
+          <>
+            <motion.div
+              className="relative flex w-full flex-grow flex-col overflow-y-auto px-4"
+              // initial={{ y: "100vh" }}
+              // animate={{ y: "0" }}
+              // exit={{}}
+              // transition={{ type: "spring", duration: 1 }}
+            >
+              <div className="relative flex w-full flex-grow flex-col overflow-y-auto px-4">
+                {filesToUpload.map((file, i) => (
+                  <div className="mb-4 flex flex-none items-center rounded-sm bg-zinc-800 p-3 font-semibold text-white first:mt-4">
+                    <div className="flex-1">{file.name}</div>
+                    <div className="flex-none pl-2">
+                      <span className="material-symbols-outlined rounded-sm bg-zinc-900 p-2">
+                        close
+                      </span>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </motion.div>
+            </motion.div>
+
+            <div className="flex w-full flex-none items-center justify-end bg-zinc-900 p-4 pb-8">
+              <button className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 py-4 px-7 text-lg font-semibold text-white">
+                Upload
+              </button>
+            </div>
+          </>
         )}
       </div>
     </>
