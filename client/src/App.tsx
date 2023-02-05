@@ -17,7 +17,7 @@ function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <div className="h-screen w-full bg-zinc-900 p-4">
+        <div className="min-h-screen w-full bg-zinc-900 p-4">
           <Upload />
           <Files />
         </div>

@@ -56,13 +56,13 @@ export const Upload = () => {
         {showUpload && (
           <>
             <motion.div
-              className="relative flex w-full flex-grow flex-col overflow-y-auto px-4"
+              className="flex w-full flex-grow flex-col overflow-y-auto bg-zinc-900"
               // initial={{ y: "100vh" }}
               // animate={{ y: "0" }}
               // exit={{}}
               // transition={{ type: "spring", duration: 1 }}
             >
-              <div className="relative flex w-full flex-grow flex-col overflow-y-auto px-4">
+              <div className="flex w-full flex-grow flex-col overflow-y-auto px-4">
                 {filesToUpload.map((file, i) => (
                   <div className="mb-4 flex flex-none items-center rounded-sm bg-zinc-800 p-3 font-semibold text-white first:mt-4">
                     <div className="flex-1">{file.name}</div>
