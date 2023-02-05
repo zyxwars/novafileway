@@ -30,50 +30,50 @@ export const Upload = () => {
 
   return (
     <>
-      <div className="h-64">
-        <input
-          type="file"
-          multiple
-          // directory=""
-          // webkitdirectory=""
-          // mozdirectory=""
-          onChange={(e) => {
-            handleAddFiles(e.target?.files);
-            setShowUpload(true);
-          }}
-        />
-        <button onClick={() => setShowUpload(true)}>Open upload view</button>
-      </div>
-
-      {showUpload && (
-        <div className="fixed left-0 top-0 bottom-0 flex flex-col">
-          <div className="h-64 border-8 ">
-            <input
-              type="file"
-              multiple
-              // directory=""
-              // webkitdirectory=""
-              // mozdirectory=""
-              onChange={(e) => {
-                handleAddFiles(e.target?.files);
-              }}
-            />
-          </div>
+      <div className="fixed left-0 top-0 bottom-0 right-0 flex flex-col">
+        <div className="relative flex h-14 flex-shrink-0 items-center justify-center rounded-b-xl bg-gradient-to-r from-cyan-500 to-blue-500">
+          <input
+            className="absolute top-0 left-0 bottom-0 w-full opacity-0"
+            type="file"
+            multiple
+            // directory=""
+            // webkitdirectory=""
+            // mozdirectory=""
+            onChange={(e) => {
+              handleAddFiles(e.target?.files);
+              setShowUpload(true);
+            }}
+          />
           <motion.div
-            className="grid flex-grow grid-cols-6 gap-4 overflow-y-auto  p-4"
+            className="font-sans font-bold text-white"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+          >
+            Click to Upload Files
+          </motion.div>
+        </div>
+
+        {showUpload && (
+          <motion.div
+            className="flex w-full flex-grow flex-col overflow-y-auto px-4"
             initial={{ y: "100vh" }}
             animate={{ y: "0" }}
             exit={{}}
             transition={{ type: "spring", duration: 1 }}
           >
             {filesToUpload.map((file, i) => (
-              <motion.div className="h-64 bg-neutral-800 outline outline-1">
-                {file.name}
-              </motion.div>
+              <div className="mb-4 flex flex-shrink-0 items-center text-ellipsis rounded-sm bg-zinc-800 p-3 font-semibold text-white first:mt-4">
+                <div className="flex-1">{file.name}</div>
+                <div className="flex-none pl-2">
+                  <span className="material-symbols-outlined rounded-sm bg-zinc-900">
+                    close
+                  </span>
+                </div>
+              </div>
             ))}
           </motion.div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 };
