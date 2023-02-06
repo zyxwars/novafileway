@@ -1,10 +1,12 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { trpc } from "./utils/trpc";
 
-import { Upload } from "./components/Upload";
+import { UploadModal } from "./components/UploadModal";
 import { Files } from "./components/Files";
 import { useState } from "react";
 import { httpBatchLink } from "@trpc/client";
+import { CompactUploadInput } from "./components/CompactUploadInput";
+import { Modal } from "./components/Modal";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -17,11 +19,15 @@ function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <div className="min-h-screen w-full bg-zinc-900 p-4">
-          <Upload />
+        <div
+          className="grid h-screen grid-flow-row bg-zinc-900"
+          style={{ gridTemplateRows: "3.5rem 1fr" }}
+        >
+          <CompactUploadInput />
           <Files />
         </div>
       </QueryClientProvider>
+      <UploadModal />
     </trpc.Provider>
   );
 }

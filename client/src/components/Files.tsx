@@ -6,7 +6,7 @@ export const Files = () => {
   // if (!files.data) return <div>Loading...</div>;
 
   return (
-    <div className="grid grid-cols-2 gap-4 pt-14">
+    <div className="grid grid-cols-3 gap-4 overflow-y-auto p-4">
       {/* {files.data.map((file) => (
         <div className="font-bold text-violet-800" key={file.id}>
           {file.originalname}
