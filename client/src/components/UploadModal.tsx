@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { HEADER_SIZE } from "./CompactUploadInput";
 import { Modal } from "./Modal";
 import { useStore } from "../utils/store";
@@ -38,24 +38,30 @@ export const UploadModal = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="flex w-full flex-grow flex-col overflow-y-auto px-4">
-          {filesToUpload.map((file, i) => (
-            <div
-              key={file.name}
-              className="mb-4 flex flex-none items-center rounded-sm bg-zinc-800 p-3 font-semibold text-white first:mt-4"
-            >
-              <div className="flex-1" style={{ wordBreak: "break-all" }}>
-                {file.name}
-              </div>
-              <div
-                className="flex-none cursor-pointer pl-2"
-                onClick={() => removeFileToUpload(file)}
+          <AnimatePresence>
+            {filesToUpload.map((file, i) => (
+              <motion.div
+                layout
+                key={file.name}
+                className="mb-4 flex flex-none items-center rounded-sm bg-zinc-800 p-3 font-semibold text-white first:mt-4"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0 }}
               >
-                <span className="material-symbols-outlined rounded-sm bg-zinc-900 p-2">
-                  close
-                </span>
-              </div>
-            </div>
-          ))}
+                <div className="flex-1" style={{ wordBreak: "break-all" }}>
+                  {file.name}
+                </div>
+                <div
+                  className="flex-none cursor-pointer pl-2"
+                  onClick={() => removeFileToUpload(file)}
+                >
+                  <span className="material-symbols-outlined rounded-sm bg-zinc-900 p-2">
+                    close
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
 
         <div className="flex items-center justify-end border-t border-white bg-zinc-900 p-4">

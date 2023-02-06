@@ -16,5 +16,5 @@
 
 - [x] Test tailwind formatting
 - [x] Add trpc
-- [ ] Add animate presence for framer
+- [x] Add animate presence for framer
 - [x] Figure out overflow y, with no height set > Use tons of grids 😦
