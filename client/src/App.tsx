@@ -5,8 +5,10 @@ import { UploadModal } from "./components/UploadModal";
 import { Files } from "./components/Files";
 import { useState } from "react";
 import { httpBatchLink } from "@trpc/client";
-import { CompactUploadInput } from "./components/CompactUploadInput";
-import { Modal } from "./components/Modal";
+import {
+  CompactUploadInput,
+  HEADER_SIZE,
+} from "./components/CompactUploadInput";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -21,13 +23,14 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <div
           className="grid h-screen grid-flow-row bg-zinc-900"
-          style={{ gridTemplateRows: "3.5rem 1fr" }}
+          style={{ gridTemplateRows: `${HEADER_SIZE} 1fr` }}
         >
           <CompactUploadInput />
           <Files />
         </div>
+
+        <UploadModal />
       </QueryClientProvider>
-      <UploadModal />
     </trpc.Provider>
   );
 }

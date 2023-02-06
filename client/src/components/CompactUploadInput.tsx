@@ -1,7 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useStore } from "../utils/store";
+
+export const HEADER_SIZE = "3.5rem";
 
 export const CompactUploadInput = () => {
+  const addFilesToUpload = useStore((state) => state.addFilesToUpload);
+
   return (
     <div className="relative flex flex-none items-center justify-center rounded-b-xl bg-gradient-to-r from-cyan-500 to-blue-500">
       <input
@@ -12,8 +17,7 @@ export const CompactUploadInput = () => {
         // webkitdirectory=""
         // mozdirectory=""
         onChange={(e) => {
-          // handleAddFiles(e.target?.files);
-          // setShowUpload(true);
+          addFilesToUpload(e.target?.files);
         }}
       />
       <motion.div
