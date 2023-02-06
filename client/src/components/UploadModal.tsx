@@ -43,12 +43,13 @@ export const UploadModal = () => {
               <motion.div
                 layout
                 key={file.name}
-                className="mb-4 flex flex-none items-center rounded-sm bg-zinc-800 p-3 font-semibold text-white first:mt-4"
+                className="relative mb-4 flex flex-none items-center rounded-sm bg-zinc-800 p-3 font-semibold text-white first:mt-4"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 exit={{ scale: 0 }}
               >
-                <div className="flex-1" style={{ wordBreak: "break-all" }}>
+                <div className="absolute h-full w-1/4 bg-gradient-to-r from-cyan-500 to-blue-500"></div>
+                <div className="z-10 flex-1" style={{ wordBreak: "break-all" }}>
                   {file.name}
                 </div>
                 <div

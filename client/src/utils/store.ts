@@ -12,10 +12,10 @@ export const useStore = create<State>()((set, get) => ({
   addFilesToUpload: (files) => {
     if (!files) return;
 
-    const fileArray = Array.from(files);
+    let fileArray = Array.from(files);
     // Filter out already inputted files
     // So we can use file.name as a key when rendering
-    fileArray.filter(
+    fileArray = fileArray.filter(
       (fileToAdd) =>
         !get().filesToUpload.find((file) => file.name === fileToAdd.name)
     );
