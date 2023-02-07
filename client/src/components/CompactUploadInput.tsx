@@ -5,7 +5,7 @@ import { useStore } from "../utils/store";
 export const HEADER_SIZE = "3.5rem";
 
 export const CompactUploadInput = () => {
-  const addFilesToUpload = useStore((state) => state.addFilesToUpload);
+  const { addFilesToUpload, filesToUpload } = useStore();
 
   return (
     <div className="relative flex flex-none items-center justify-center rounded-b-xl bg-gradient-to-r from-cyan-500 to-blue-500">
@@ -25,7 +25,9 @@ export const CompactUploadInput = () => {
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
       >
-        Click to Upload Files
+        {filesToUpload.length > 0
+          ? "Add more files"
+          : "Click or drag a File here"}
       </motion.div>
     </div>
   );

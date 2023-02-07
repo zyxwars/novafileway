@@ -21,7 +21,7 @@ export const UploadModal = () => {
   // TODO: Pack into mutation after progress bar is done
   // TODO: Invalidate after await all queries?, use the mutation?
 
-  const { filesToUpload, removeFileToUpload } = useStore();
+  const { filesToUpload, removeFileToUpload, clearFilesToUpload } = useStore();
 
   return (
     <Modal
@@ -48,7 +48,8 @@ export const UploadModal = () => {
                 animate={{ scale: 1 }}
                 exit={{ scale: 0 }}
               >
-                <div className="absolute h-full w-1/4 bg-gradient-to-r from-cyan-500 to-blue-500"></div>
+                {/*
+                <div className="absolute h-full w-1/4 bg-gradient-to-r from-cyan-500 to-blue-500"></div>*/}
                 <div className="z-10 flex-1" style={{ wordBreak: "break-all" }}>
                   {file.name}
                 </div>
@@ -65,7 +66,14 @@ export const UploadModal = () => {
           </AnimatePresence>
         </div>
 
-        <div className="flex items-center justify-end border-t border-white bg-zinc-900 p-4">
+        <div className="flex items-center justify-between border-t border-white bg-zinc-900 p-4">
+          <button
+            onClick={() => clearFilesToUpload()}
+            className="rounded-md bg-zinc-800 py-2 px-4 text-lg font-semibold text-white"
+          >
+            Cancel
+          </button>
+
           <button className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 py-2 px-4 text-lg font-semibold text-white ">
             Upload
           </button>

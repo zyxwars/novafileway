@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { trpc } from "./utils/trpc";
+import { FaPen } from "react-icons/fa";
 
 import { UploadModal } from "./components/UploadModal";
 import { Files } from "./components/Files";
@@ -9,6 +10,7 @@ import {
   CompactUploadInput,
   HEADER_SIZE,
 } from "./components/CompactUploadInput";
+import { Control } from "./components/Control";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -21,14 +23,8 @@ function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <div
-          className="grid h-screen grid-flow-row bg-zinc-900"
-          style={{ gridTemplateRows: `${HEADER_SIZE} 1fr` }}
-        >
-          <CompactUploadInput />
-          <Files />
-        </div>
-
+        <Files />
+        <Control />
         <UploadModal />
       </QueryClientProvider>
     </trpc.Provider>

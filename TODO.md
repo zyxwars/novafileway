@@ -14,7 +14,5 @@
   - Text field creation
   - Peek text
 
-- [x] Test tailwind formatting
-- [x] Add trpc
-- [x] Add animate presence for framer
-- [x] Figure out overflow y, with no height set > Use tons of grids 😦
+- [ ] Fix overscroll on iPad
+- [ ] Fix grid space between row/cols
