@@ -16,6 +16,7 @@ export const UploadModal = () => {
     cancelFileUpload,
     isOpenUploadModal,
     setIsOpenUploadModal,
+    setUploadProgress,
   } = useStore();
 
   const handleUpload = () => {
@@ -27,10 +28,16 @@ export const UploadModal = () => {
 
       axios.postForm("http://localhost:8080/files", formData, {
         onUploadProgress: (e) => {
-          console.log(e);
+          setUploadProgress(file, e?.progress || 0);
+
+          if (e.progress === 1) {
+            removeFileToUpload(file);
+          }
         },
       });
     });
+
+    // TODO: Close modal and invalidate cache
   };
 
   return (
@@ -66,33 +73,43 @@ export const UploadModal = () => {
         </div>
 
         {/* Files */}
-        <div className="flex w-full flex-grow flex-col overflow-y-auto overflow-x-hidden px-4">
+        <div className="flex w-full flex-grow flex-col gap-4 overflow-y-auto overflow-x-hidden p-4">
           <AnimatePresence>
-            {filesToUpload.map((file, i) => (
-              // File
-              <motion.div
-                layout
-                key={file.name}
-                className="relative mb-4 flex flex-none items-center rounded-sm bg-zinc-800 p-3 font-semibold text-white first:mt-4"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                exit={{ scale: 0 }}
-              >
-                {/*
-                <div className="absolute h-full w-1/4 bg-gradient-to-r from-cyan-500 to-blue-500"></div>*/}
-                <div className="z-10 flex-1" style={{ wordBreak: "break-all" }}>
-                  {file.name}
-                </div>
-                <div
-                  className="flex-none cursor-pointer pl-2"
-                  onClick={() => removeFileToUpload(file)}
+            {filesToUpload.map((file, i) => {
+              return (
+                // File
+                <motion.div
+                  layout
+                  key={file.name}
+                  className="relative flex flex-none items-center rounded-sm bg-zinc-800 font-semibold text-white"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
                 >
-                  <div className="material-symbols-outlined rounded-sm bg-zinc-900 p-2">
-                    <FaTimes />
+                  {/* TODO: Make this nicer */}
+                  <div
+                    className="absolute h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all"
+                    style={{
+                      width: `${(file.progress || 0) * 100}%`,
+                    }}
+                  ></div>
+                  <div
+                    className="z-10 flex-1 p-3"
+                    style={{ wordBreak: "break-all" }}
+                  >
+                    {file.name}
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                  <div
+                    className="z-10 flex-none cursor-pointer p-3"
+                    onClick={() => removeFileToUpload(file)}
+                  >
+                    <div className="material-symbols-outlined rounded-sm bg-zinc-900 p-2 duration-500  hover:bg-red-600">
+                      <FaTimes />
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </div>
 
