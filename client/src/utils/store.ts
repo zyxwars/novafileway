@@ -5,6 +5,13 @@ interface State {
   addFilesToUpload: (files: FileList | null) => void;
   removeFileToUpload: (file: File) => void;
   clearFilesToUpload: () => void;
+  cancelFileUpload: () => void;
+
+  isOpenUploadModal: boolean;
+  setIsOpenUploadModal: (show: boolean) => void;
+
+  isOpenNoteModal: boolean;
+  setIsOpenNoteModal: (show: boolean) => void;
 }
 
 export const useStore = create<State>()((set, get) => ({
@@ -31,5 +38,18 @@ export const useStore = create<State>()((set, get) => ({
   },
   clearFilesToUpload: () => {
     set(() => ({ filesToUpload: [] }));
+  },
+  cancelFileUpload: () => {
+    get().clearFilesToUpload();
+    get().setIsOpenUploadModal(false);
+  },
+  isOpenUploadModal: false,
+  setIsOpenUploadModal: (show: boolean) => {
+    set({ isOpenUploadModal: show });
+  },
+
+  isOpenNoteModal: false,
+  setIsOpenNoteModal: (show: boolean) => {
+    set({ isOpenNoteModal: show });
   },
 }));

@@ -6,11 +6,8 @@ import { UploadModal } from "./components/UploadModal";
 import { Files } from "./components/Files";
 import { useState } from "react";
 import { httpBatchLink } from "@trpc/client";
-import {
-  CompactUploadInput,
-  HEADER_SIZE,
-} from "./components/CompactUploadInput";
 import { Control } from "./components/Control";
+import { NoteModal } from "./components/NoteModal";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -26,6 +23,7 @@ function App() {
         <Files />
         <Control />
         <UploadModal />
+        <NoteModal />
       </QueryClientProvider>
     </trpc.Provider>
   );

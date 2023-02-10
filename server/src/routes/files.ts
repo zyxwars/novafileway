@@ -1,37 +1,22 @@
 import { Router } from "express";
 import multer from "multer";
 import { PrismaClient } from "@prisma/client";
+import { sendBadRequest, sendError } from "../logger";
 
 const upload = multer({ dest: "./uploads/" }).single("file");
 const prisma = new PrismaClient();
 
 const router = Router();
 
-router.get("/hello", (req, res) => {
-  res.send("Hello from the server");
-});
-
-router.get("/", async (req, res) => {
-  const files = await prisma.file.findMany();
-  res.json(files);
-});
-
 router.post("/", (req, res) => {
   upload(req, res, async (err) => {
-    if (err instanceof multer.MulterError) {
-      // TODO: Error handle
-      console.log(err);
-      return;
-    } else if (err) {
-      // TODO: Error handle
-      console.log(err);
-      return;
-    }
+    if (err) return sendError(res);
 
     // TODO: Error handle
-    if (!req.file) return;
+    if (!req.file) {
+      return sendBadRequest(res, "No file provided");
+    }
 
-    // Process
     const savedFile = await prisma.file.create({
       data: {
         filename: req.file.filename,
@@ -41,7 +26,7 @@ router.post("/", (req, res) => {
       },
     });
 
-    console.log(savedFile);
+    res.status(200).json(savedFile);
   });
 });
 
