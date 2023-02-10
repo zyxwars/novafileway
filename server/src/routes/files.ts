@@ -10,7 +10,7 @@ const router = Router();
 
 router.post("/", (req, res) => {
   upload(req, res, async (err) => {
-    if (err) return sendError(res);
+    if (err) return sendError(res, err.message);
 
     // TODO: Error handle
     if (!req.file) {

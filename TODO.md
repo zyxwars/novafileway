@@ -8,6 +8,7 @@
 - Used space check
 - Image thumbnails
 - Delete after time, cronjob docker
+- Delete stray cron
 - Open/Download
 - Folder upload, folder navigation 🤔
 - Paste text upload
