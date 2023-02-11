@@ -1,47 +1,53 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Modal } from "./Modal";
-import { useStore } from "../utils/store";
-import { useState } from "react";
+import { FileWithProgress, useStore } from "../utils/store";
 import { FaTimes } from "react-icons/fa";
 import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
+import { useRef } from "react";
 
 export const UploadModal = () => {
-  // TODO: Pack into mutation after progress bar is done
-  // TODO: Invalidate after await all queries?, use the mutation?
-
   const {
     filesToUpload,
     addFilesToUpload,
     removeFileToUpload,
-    cancelFileUpload,
     isOpenUploadModal,
     setIsOpenUploadModal,
-    setUploadProgress,
+    setFileUploadProgress,
+    clearFilesToUpload,
   } = useStore();
 
-  const handleUpload = () => {
-    filesToUpload.forEach((file) => {
-      // TODO: get progress
+  const uploadMutation = useMutation({
+    mutationFn: (file: FileWithProgress) => {
+      console.log("Uploading " + file.name);
 
       const formData = new FormData();
       formData.append("file", file);
 
-      axios.postForm("http://localhost:8080/files", formData, {
+      return axios.postForm("http://localhost:8080/files", formData, {
         onUploadProgress: (e) => {
-          setUploadProgress(file, e?.progress || 0);
+          setFileUploadProgress(file, e?.progress || 0);
 
           if (e.progress === 1) {
             removeFileToUpload(file);
           }
         },
       });
-    });
+    },
+    onSuccess: (data, variables) => {
+      removeFileToUpload(variables);
+    },
+  });
 
-    // TODO: Close modal and invalidate cache
+  const handleClose = () => {
+    clearFilesToUpload();
+    // TODO: Abort
+    // abortController.current.abort();
+    setIsOpenUploadModal(false);
   };
 
   return (
-    <Modal isOpen={isOpenUploadModal} onClose={() => cancelFileUpload()}>
+    <Modal isOpen={isOpenUploadModal} onClose={handleClose}>
       <motion.div
         className="grid h-full w-full grid-flow-row overflow-hidden bg-zinc-900 sm:h-5/6 sm:w-3/5 sm:rounded-md"
         style={{
@@ -86,26 +92,24 @@ export const UploadModal = () => {
                   animate={{ scale: 1 }}
                   exit={{ scale: 0 }}
                 >
-                  {/* TODO: Make this nicer */}
+                  {/* TODO: Make this nicer, overlay the components in a better way */}
                   <div
                     className="absolute h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all"
                     style={{
-                      width: `${(file.progress || 0) * 100}%`,
+                      width: `${file.progress * 100}%`,
                     }}
-                  ></div>
-                  <div
-                    className="z-10 flex-1 p-3"
-                    style={{ wordBreak: "break-all" }}
-                  >
-                    {file.name}
-                  </div>
-                  <div
-                    className="z-10 flex-none cursor-pointer p-3"
-                    onClick={() => removeFileToUpload(file)}
-                  >
-                    <div className="material-symbols-outlined rounded-sm bg-zinc-900 p-2 duration-500  hover:bg-red-600">
-                      <FaTimes />
+                  />
+                  <div className="z-10 flex h-full w-full items-center p-3">
+                    <div className=" flex-1" style={{ wordBreak: "break-all" }}>
+                      {file.name}
                     </div>
+                    <button
+                      disabled={file.progress > 0}
+                      onClick={() => removeFileToUpload(file)}
+                      className="flex-none rounded-sm bg-zinc-900 p-3 duration-500  enabled:hover:bg-red-600 disabled:opacity-25"
+                    >
+                      <FaTimes />
+                    </button>
                   </div>
                 </motion.div>
               );
@@ -116,16 +120,21 @@ export const UploadModal = () => {
         {/* Controls */}
         <div className="flex items-center justify-between border-t border-white bg-zinc-900 p-4">
           <button
-            onClick={() => {
-              cancelFileUpload();
-            }}
+            onClick={handleClose}
             className="rounded-md bg-zinc-800 py-2 px-4 text-lg font-semibold text-white"
           >
             Cancel
           </button>
 
           <button
-            onClick={() => handleUpload()}
+            onClick={async () => {
+              for (const file of filesToUpload) {
+                console.log(filesToUpload.length);
+                console.log(file);
+
+                await uploadMutation.mutateAsync(file);
+              }
+            }}
             className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 py-2 px-4 text-lg font-semibold text-white "
           >
             Upload
