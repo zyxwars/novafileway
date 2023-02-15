@@ -13,7 +13,7 @@ const prisma = new PrismaClient();
 
 const t = initTRPC.create();
 const appRouter = t.router({
-  getFiles: t.procedure.query(async (req) => {
+  files: t.procedure.query(async (req) => {
     const files = await prisma.file.findMany();
 
     return files;

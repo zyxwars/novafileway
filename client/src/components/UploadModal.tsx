@@ -5,8 +5,11 @@ import { FaTimes } from "react-icons/fa";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
+import { trpc } from "../utils/trpc";
 
 export const UploadModal = () => {
+  const utils = trpc.useContext();
+
   const {
     filesToUpload,
     addFilesToUpload,
@@ -51,6 +54,7 @@ export const UploadModal = () => {
       console.log("UPLOAD: Finished uploading " + variables.id);
       removeFileToUpload(variables.id);
       setFree();
+      utils.files.refetch();
     },
   });
 

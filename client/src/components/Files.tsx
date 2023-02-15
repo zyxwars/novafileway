@@ -2,7 +2,7 @@ import { trpc } from "../utils/trpc";
 import { Loader } from "./Loader";
 
 export const Files = () => {
-  const files = trpc.getFiles.useQuery();
+  const files = trpc.files.useQuery();
 
   if (!files.data) return <Loader />;
 
