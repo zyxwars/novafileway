@@ -1,5 +1,6 @@
 import { StateCreator, create } from "zustand";
 import { StoreState } from "./store";
+import { Axios, AxiosProgressEvent } from "axios";
 
 // Needed as the same file uploaded twice is not considered equal
 const getFileId = (file: File) => {
@@ -18,7 +19,7 @@ type UploadFn = (file: SelectedFile) => any;
 export interface UploadSlice {
   selectedFiles: SelectedFile[];
   uploadingFileId: string | null;
-  uploadProgress: number;
+  uploadProgress: AxiosProgressEvent | null;
   uploadAbortController: AbortController;
 
   addFiles: (files: FileList | null) => void;
@@ -26,7 +27,7 @@ export interface UploadSlice {
   startUpload: (uploadFn: UploadFn, queueFiles?: boolean) => void;
   finishUpload: (uploadFn: UploadFn) => void;
   closeUploadModal: () => void;
-  setUploadProgress: (uploadProgress: number) => void;
+  setUploadProgress: (uploadProgress: AxiosProgressEvent) => void;
   abortUpload: () => void;
 }
 
@@ -38,7 +39,7 @@ export const createUploadSlice: StateCreator<
 > = (set, get) => ({
   selectedFiles: [],
   uploadingFileId: null,
-  uploadProgress: 0,
+  uploadProgress: null,
   uploadAbortController: new AbortController(),
 
   addFiles: (files) => {
@@ -76,6 +77,12 @@ export const createUploadSlice: StateCreator<
     set(() => ({ selectedFiles: [], isOpenUploadModal: false }));
   },
   startUpload: (uploadFn, queueFiles = true) => {
+    // If there are no files to upload close the modal
+    if (get().selectedFiles.length === 0) {
+      get().closeUploadModal();
+      return;
+    }
+
     if (queueFiles)
       set((state) => ({
         selectedFiles: state.selectedFiles.map((file) => ({
@@ -93,7 +100,7 @@ export const createUploadSlice: StateCreator<
     // Exit if there are not queued files
     if (!firstToUpload) return;
 
-    set({ uploadingFileId: firstToUpload.id, uploadProgress: 0 });
+    set({ uploadingFileId: firstToUpload.id, uploadProgress: null });
     uploadFn(firstToUpload);
   },
   finishUpload: (uploadFn) => {
@@ -108,7 +115,7 @@ export const createUploadSlice: StateCreator<
     get().startUpload(uploadFn);
   },
   setUploadProgress: (uploadProgress) => {
-    set({ uploadProgress });
+    set({ uploadProgress: uploadProgress });
   },
   abortUpload: () => {
     set((state) => {

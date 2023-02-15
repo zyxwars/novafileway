@@ -32,10 +32,12 @@ export const UploadModal = () => {
       formData.append("file", file.data);
 
       return axios
-        .postForm("http://localhost:8080/files", formData, {
+        .postForm("http://localhost:8080/files/formidable", formData, {
           signal: uploadAbortController.signal,
           onUploadProgress: (e) => {
-            setUploadProgress(e?.progress || 0);
+            console.log(e);
+
+            setUploadProgress(e);
           },
         })
         .catch((err) => {
@@ -99,11 +101,11 @@ export const UploadModal = () => {
                 exit={{ scale: 0 }}
               >
                 {/* Progress bar */}
-                {file.id === uploadingFileId && (
+                {file.id === uploadingFileId && uploadProgress?.progress && (
                   <div
                     className="absolute h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all"
                     style={{
-                      width: `${uploadProgress * 100}%`,
+                      width: `${uploadProgress?.progress * 100}%`,
                     }}
                   />
                 )}
@@ -116,6 +118,14 @@ export const UploadModal = () => {
                   {/* Remove button */}
                   <button
                     onClick={() => removeFile(file.id)}
+                    disabled={
+                      // If estimated upload time is under a certain disable delete button, since the request will probably go through anyway
+                      // Use === undefined as 0 is taken as null as well
+                      file.id === uploadingFileId &&
+                      (uploadProgress?.estimated === undefined
+                        ? Infinity
+                        : uploadProgress.estimated) < 1
+                    }
                     className="flex-none rounded-sm bg-zinc-900 p-3 duration-500  enabled:hover:bg-red-600 disabled:opacity-25"
                   >
                     <FaTimes />
