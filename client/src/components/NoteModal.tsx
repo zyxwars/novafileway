@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "./Modal";
-import { useStore } from "../utils/store";
+import { useStore } from "../utils/store/store";
 import { motion } from "framer-motion";
 
 export const NoteModal = () => {

@@ -1,11 +1,23 @@
 import React, { ComponentPropsWithoutRef, useState } from "react";
-import { FaEllipsisH, FaPen, FaPlus, FaTrash } from "react-icons/fa";
+import {
+  FaBiohazard,
+  FaEllipsisH,
+  FaPen,
+  FaPlus,
+  FaRadiation,
+  FaTrash,
+} from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
-import { useStore } from "../utils/store";
+import { useStore } from "../utils/store/store";
+import { trpc } from "../utils/trpc";
 
 export const Control = () => {
+  const utils = trpc.useContext();
   const [showOptions, setShowOptions] = useState(false);
   const { setIsOpenUploadModal, setIsOpenNoteModal } = useStore();
+  const filesDeleteAllMutation = trpc.filesDeleteAll.useMutation({
+    onSuccess: () => utils.files.invalidate(),
+  });
 
   return (
     <motion.div
@@ -16,6 +28,21 @@ export const Control = () => {
       <AnimatePresence>
         {showOptions && (
           <>
+            <motion.button
+              className="rounded-md bg-gradient-to-r from-emerald-500 to-green-500 p-4 text-2xl text-white"
+              initial={{ opacity: 0, y: "100px" }}
+              animate={{ opacity: 1, y: 0 }}
+              onClick={() => {
+                if (
+                  confirm(
+                    "Are you certain you want to delete all upload files!"
+                  )
+                )
+                  filesDeleteAllMutation.mutate();
+              }}
+            >
+              <FaBiohazard />
+            </motion.button>
             <motion.button
               className="rounded-md bg-gradient-to-r from-pink-500 to-red-500 p-4 text-2xl text-white"
               initial={{ opacity: 0, y: "100px" }}

@@ -1,33 +1,31 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Modal } from "./Modal";
-import { IUploadableFile, useStore } from "../utils/store";
+import { useStore } from "../utils/store/store";
 import { FaTimes } from "react-icons/fa";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
 import { trpc } from "../utils/trpc";
+import { SelectedFile } from "../utils/store/uploadSlice";
 
 export const UploadModal = () => {
   const utils = trpc.useContext();
 
   const {
-    filesToUpload,
-    addFilesToUpload,
     isOpenUploadModal,
-    setIsOpenUploadModal,
-    removeAllFilesToUpload,
-    removeFileToUpload,
-    queueFilesToUpload,
-    setFileUploadProgress,
-    setUploading,
-    setFree,
-    isUploading,
+    closeUploadModal,
+    addFiles,
+    selectedFiles,
+    removeFile,
+    uploadAbortController,
+    setUploadProgress,
+    uploadProgress,
+    uploadingFileId,
+    startUpload,
+    finishUpload,
   } = useStore();
 
-  const abortController = useRef(new AbortController());
-
   const uploadMutation = useMutation({
-    mutationFn: (file: IUploadableFile) => {
+    mutationFn: (file: SelectedFile) => {
       console.log("UPLOAD: Uploading " + file.id);
 
       const formData = new FormData();
@@ -35,15 +33,14 @@ export const UploadModal = () => {
 
       return axios
         .postForm("http://localhost:8080/files", formData, {
-          signal: abortController.current.signal,
+          signal: uploadAbortController.signal,
           onUploadProgress: (e) => {
-            setFileUploadProgress(file.id, e?.progress);
+            setUploadProgress(e?.progress || 0);
           },
         })
         .catch((err) => {
           if (axios.isCancel(err)) {
             console.log("UPLOAD: Aborting upload " + file.id);
-            // TODO: reset abort controller
             return;
           }
 
@@ -52,32 +49,14 @@ export const UploadModal = () => {
     },
     onSuccess: (data, variables) => {
       console.log("UPLOAD: Finished uploading " + variables.id);
-      removeFileToUpload(variables.id);
-      setFree();
+      finishUpload(uploadMutation.mutate);
+      // TODO: Use context and don't run this when upload was aborted
       utils.files.refetch();
     },
   });
 
-  const handleClose = () => {
-    removeAllFilesToUpload();
-    setIsOpenUploadModal(false);
-  };
-
-  useEffect(() => {
-    console.log(isUploading);
-
-    if (isUploading) return;
-
-    const fileToUpload = filesToUpload.find((file) => file.isUploadQueued);
-    if (!fileToUpload) return;
-
-    // TODO:
-    setUploading(fileToUpload.id);
-    uploadMutation.mutate(fileToUpload);
-  }, [filesToUpload]);
-
   return (
-    <Modal isOpen={isOpenUploadModal} onClose={handleClose}>
+    <Modal isOpen={isOpenUploadModal} onClose={closeUploadModal}>
       <motion.div
         className="grid h-full w-full grid-flow-row overflow-hidden bg-zinc-900 sm:h-5/6 sm:w-3/5 sm:rounded-md"
         style={{
@@ -98,20 +77,18 @@ export const UploadModal = () => {
             // webkitdirectory=""
             // mozdirectory=""
             onChange={(e) => {
-              addFilesToUpload(e.target?.files);
+              addFiles(e.target?.files);
             }}
           />
           <div className="font-sans font-bold text-white">
-            {filesToUpload.length > 0
-              ? "Add more files"
-              : "Click or drag a File here"}
+            Click or drag a File here
           </div>
         </div>
 
         {/* Files */}
         <div className="flex w-full flex-grow flex-col gap-4 overflow-y-auto overflow-x-hidden p-4">
           <AnimatePresence>
-            {filesToUpload.map((file, i) => (
+            {selectedFiles.map((file, i) => (
               // File
               <motion.div
                 layout
@@ -122,11 +99,11 @@ export const UploadModal = () => {
                 exit={{ scale: 0 }}
               >
                 {/* Progress bar */}
-                {file.uploadProgress && (
+                {file.id === uploadingFileId && (
                   <div
                     className="absolute h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all"
                     style={{
-                      width: `${file.uploadProgress * 100}%`,
+                      width: `${uploadProgress * 100}%`,
                     }}
                   />
                 )}
@@ -138,13 +115,7 @@ export const UploadModal = () => {
                   </div>
                   {/* Remove button */}
                   <button
-                    onClick={() =>
-                      removeFileToUpload(
-                        file.id,
-                        file.isBeingUploaded,
-                        abortController.current
-                      )
-                    }
+                    onClick={() => removeFile(file.id)}
                     className="flex-none rounded-sm bg-zinc-900 p-3 duration-500  enabled:hover:bg-red-600 disabled:opacity-25"
                   >
                     <FaTimes />
@@ -158,15 +129,15 @@ export const UploadModal = () => {
         {/* Controls */}
         <div className="flex items-center justify-between border-t border-white bg-zinc-900 p-4">
           <button
-            onClick={handleClose}
+            onClick={closeUploadModal}
             className="rounded-md bg-zinc-800 py-2 px-4 text-lg font-semibold text-white"
           >
             Cancel
           </button>
 
           <button
-            onClick={queueFilesToUpload}
-            className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 py-2 px-4 text-lg font-semibold text-white "
+            onClick={() => startUpload(uploadMutation.mutate)}
+            className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 py-2 px-4 text-lg font-semibold text-white"
           >
             Upload
           </button>

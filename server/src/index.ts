@@ -18,6 +18,9 @@ const appRouter = t.router({
 
     return files;
   }),
+  filesDeleteAll: t.procedure.mutation(async (req) => {
+    await prisma.file.deleteMany({});
+  }),
 });
 
 export type AppRouter = typeof appRouter;
