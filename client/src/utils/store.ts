@@ -1,76 +1,128 @@
 import { create } from "zustand";
+import { devtools } from "zustand/middleware";
 
-export type FileWithProgress = File & { progress: number };
+const generateId = (file: File) => {
+  return file.name;
+};
+
+// TODO: Check proper interface naming
+export interface IUploadableFile {
+  data: File;
+  id: string;
+  uploadProgress?: number;
+  isBeingUploaded: boolean;
+  isUploadQueued: boolean;
+}
 
 interface State {
-  filesToUpload: FileWithProgress[];
+  filesToUpload: IUploadableFile[];
+  isUploading: boolean;
 
   isOpenUploadModal: boolean;
-
   isOpenNoteModal: boolean;
 }
 
 interface Actions {
+  // File upload
   addFilesToUpload: (files: FileList | null) => void;
-  removeFileToUpload: (file: FileWithProgress) => void;
-  clearFilesToUpload: () => void;
-  setFileUploadProgress: (file: FileWithProgress, progress: number) => void;
+  removeFileToUpload: (
+    id: string,
+    isBeingUploaded?: boolean,
+    abortController?: AbortController
+  ) => void;
+  // TODO: Add abort controller
+  removeAllFilesToUpload: () => void;
+  queueFilesToUpload: () => void;
+  setFileUploadProgress: (
+    id: string,
+    uploadProgress: number | undefined
+  ) => void;
+  setUploading: (id: string) => void;
+  setFree: () => void;
 
+  // Ui
   setIsOpenUploadModal: (show: boolean) => void;
-
   setIsOpenNoteModal: (show: boolean) => void;
 }
 
-export const useStore = create<State & Actions>()((set, get) => ({
-  filesToUpload: [],
-  addFilesToUpload: (files) => {
-    if (!files) return;
+export const useStore = create<State & Actions>()(
+  devtools((set, get) => ({
+    filesToUpload: [],
+    isUploading: false,
+    addFilesToUpload: (files) => {
+      if (!files) return;
 
-    // TODO: Ugly hack
-    let fileArray = Array.from(files) as FileWithProgress[];
-    fileArray.forEach((file) => (file.progress = 0));
+      let filesToAdd = Array.from(files);
 
-    // Filter out already inputted files
-    // So we can use file.name as a key when rendering
-    fileArray = fileArray.filter(
-      (fileToAdd) =>
-        !get().filesToUpload.find((file) => file.name === fileToAdd.name)
-    );
+      // Don't add files that are already added
+      filesToAdd = filesToAdd.filter(
+        (fileToAdd) =>
+          !get().filesToUpload.find((file) => file.id === generateId(fileToAdd))
+      );
 
-    set((state) => ({ filesToUpload: [...state.filesToUpload, ...fileArray] }));
-  },
-  removeFileToUpload: (fileToRemove) => {
-    set((state) => ({
-      filesToUpload: state.filesToUpload.filter(
-        (file) => file.name !== fileToRemove.name
-      ),
-    }));
-  },
-  clearFilesToUpload: () => {
-    set(() => ({ filesToUpload: [] }));
-  },
-  setFileUploadProgress: (fileToChange, progress) => {
-    set((state) => ({
-      filesToUpload: state.filesToUpload.map((file) => {
-        if (file.name !== fileToChange.name) return file;
+      // Add required fields
+      const filesToAddComplete: IUploadableFile[] = filesToAdd.map((file) => ({
+        data: file,
+        id: generateId(file),
+        isBeingUploaded: false,
+        isUploadQueued: false,
+      }));
 
-        const changedFile = new File([fileToChange], fileToChange.name, {
-          type: fileToChange.type,
-        }) as FileWithProgress;
-        changedFile.progress = progress;
+      set((state) => ({
+        filesToUpload: [...state.filesToUpload, ...filesToAddComplete],
+      }));
+    },
+    removeFileToUpload: (id, isBeingUploaded, abortController) => {
+      if (isBeingUploaded) {
+        abortController?.abort();
+      }
 
-        return changedFile;
-      }),
-    }));
-  },
+      set((state) => ({
+        filesToUpload: state.filesToUpload.filter((file) => file.id !== id),
+      }));
+    },
+    removeAllFilesToUpload: () => {
+      set(() => ({ filesToUpload: [] }));
+    },
+    queueFilesToUpload: () => {
+      set((state) => ({
+        filesToUpload: state.filesToUpload.map((file) => ({
+          ...file,
+          isUploadQueued: true,
+        })),
+      }));
+    },
+    setUploading: (id) => {
+      set((state) => ({
+        filesToUpload: state.filesToUpload.map((file) => {
+          if (file.id !== id) return file;
 
-  isOpenUploadModal: false,
-  setIsOpenUploadModal: (show: boolean) => {
-    set({ isOpenUploadModal: show });
-  },
+          return { ...file, isBeingUploaded: true };
+        }),
+        isUploading: true,
+      }));
+    },
+    setFree: () => {
+      set((state) => ({ isUploading: false }));
+    },
+    setFileUploadProgress: (id, uploadProgress) => {
+      set((state) => ({
+        filesToUpload: state.filesToUpload.map((file) => {
+          if (file.id !== id) return file;
 
-  isOpenNoteModal: false,
-  setIsOpenNoteModal: (show: boolean) => {
-    set({ isOpenNoteModal: show });
-  },
-}));
+          return { ...file, uploadProgress };
+        }),
+      }));
+    },
+
+    isOpenUploadModal: false,
+    setIsOpenUploadModal: (show: boolean) => {
+      set({ isOpenUploadModal: show });
+    },
+
+    isOpenNoteModal: false,
+    setIsOpenNoteModal: (show: boolean) => {
+      set({ isOpenNoteModal: show });
+    },
+  }))
+);

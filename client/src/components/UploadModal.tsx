@@ -1,50 +1,76 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Modal } from "./Modal";
-import { FileWithProgress, useStore } from "../utils/store";
+import { IUploadableFile, useStore } from "../utils/store";
 import { FaTimes } from "react-icons/fa";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const UploadModal = () => {
   const {
     filesToUpload,
     addFilesToUpload,
-    removeFileToUpload,
     isOpenUploadModal,
     setIsOpenUploadModal,
+    removeAllFilesToUpload,
+    removeFileToUpload,
+    queueFilesToUpload,
     setFileUploadProgress,
-    clearFilesToUpload,
+    setUploading,
+    setFree,
+    isUploading,
   } = useStore();
 
+  const abortController = useRef(new AbortController());
+
   const uploadMutation = useMutation({
-    mutationFn: (file: FileWithProgress) => {
-      console.log("Uploading " + file.name);
+    mutationFn: (file: IUploadableFile) => {
+      console.log("UPLOAD: Uploading " + file.id);
 
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", file.data);
 
-      return axios.postForm("http://localhost:8080/files", formData, {
-        onUploadProgress: (e) => {
-          setFileUploadProgress(file, e?.progress || 0);
-
-          if (e.progress === 1) {
-            removeFileToUpload(file);
+      return axios
+        .postForm("http://localhost:8080/files", formData, {
+          signal: abortController.current.signal,
+          onUploadProgress: (e) => {
+            setFileUploadProgress(file.id, e?.progress);
+          },
+        })
+        .catch((err) => {
+          if (axios.isCancel(err)) {
+            console.log("UPLOAD: Aborting upload " + file.id);
+            // TODO: reset abort controller
+            return;
           }
-        },
-      });
+
+          throw err;
+        });
     },
     onSuccess: (data, variables) => {
-      removeFileToUpload(variables);
+      console.log("UPLOAD: Finished uploading " + variables.id);
+      removeFileToUpload(variables.id);
+      setFree();
     },
   });
 
   const handleClose = () => {
-    clearFilesToUpload();
-    // TODO: Abort
-    // abortController.current.abort();
+    removeAllFilesToUpload();
     setIsOpenUploadModal(false);
   };
+
+  useEffect(() => {
+    console.log(isUploading);
+
+    if (isUploading) return;
+
+    const fileToUpload = filesToUpload.find((file) => file.isUploadQueued);
+    if (!fileToUpload) return;
+
+    // TODO:
+    setUploading(fileToUpload.id);
+    uploadMutation.mutate(fileToUpload);
+  }, [filesToUpload]);
 
   return (
     <Modal isOpen={isOpenUploadModal} onClose={handleClose}>
@@ -81,39 +107,47 @@ export const UploadModal = () => {
         {/* Files */}
         <div className="flex w-full flex-grow flex-col gap-4 overflow-y-auto overflow-x-hidden p-4">
           <AnimatePresence>
-            {filesToUpload.map((file, i) => {
-              return (
-                // File
-                <motion.div
-                  layout
-                  key={file.name}
-                  className="relative flex flex-none items-center rounded-sm bg-zinc-800 font-semibold text-white"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0 }}
-                >
-                  {/* TODO: Make this nicer, overlay the components in a better way */}
+            {filesToUpload.map((file, i) => (
+              // File
+              <motion.div
+                layout
+                key={file.id}
+                className="relative flex flex-none items-center rounded-sm bg-zinc-800 font-semibold text-white"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0 }}
+              >
+                {/* Progress bar */}
+                {file.uploadProgress && (
                   <div
                     className="absolute h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all"
                     style={{
-                      width: `${file.progress * 100}%`,
+                      width: `${file.uploadProgress * 100}%`,
                     }}
                   />
-                  <div className="z-10 flex h-full w-full items-center p-3">
-                    <div className=" flex-1" style={{ wordBreak: "break-all" }}>
-                      {file.name}
-                    </div>
-                    <button
-                      disabled={file.progress > 0}
-                      onClick={() => removeFileToUpload(file)}
-                      className="flex-none rounded-sm bg-zinc-900 p-3 duration-500  enabled:hover:bg-red-600 disabled:opacity-25"
-                    >
-                      <FaTimes />
-                    </button>
+                )}
+                {/* TODO: Add file size, image thumbnail */}
+                <div className="z-10 flex h-full w-full items-center p-3">
+                  {/* Info */}
+                  <div className=" flex-1" style={{ wordBreak: "break-all" }}>
+                    {file.data.name}
                   </div>
-                </motion.div>
-              );
-            })}
+                  {/* Remove button */}
+                  <button
+                    onClick={() =>
+                      removeFileToUpload(
+                        file.id,
+                        file.isBeingUploaded,
+                        abortController.current
+                      )
+                    }
+                    className="flex-none rounded-sm bg-zinc-900 p-3 duration-500  enabled:hover:bg-red-600 disabled:opacity-25"
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
           </AnimatePresence>
         </div>
 
@@ -127,14 +161,7 @@ export const UploadModal = () => {
           </button>
 
           <button
-            onClick={async () => {
-              for (const file of filesToUpload) {
-                console.log(filesToUpload.length);
-                console.log(file);
-
-                await uploadMutation.mutateAsync(file);
-              }
-            }}
+            onClick={queueFilesToUpload}
             className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 py-2 px-4 text-lg font-semibold text-white "
           >
             Upload
