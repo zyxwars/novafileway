@@ -30,6 +30,7 @@
 
 ## Server:
 
-- [ ] File gets uploaded half way on abort? > maybe use checksum
+- [x] File gets uploaded half way on abort? > maybe use checksum
 - [ ] More dynamic error catching, without crashing the server
 - [ ] Delete files on delete
+- [ ] Server static folder wtih uploads
