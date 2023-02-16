@@ -17,3 +17,9 @@ model File {
   size         Int
   mimetype     String
 }
+
+model Note {
+  id   Int    @id @default(autoincrement())
+  name String
+  text String
+}

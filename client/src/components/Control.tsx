@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithoutRef, useState } from "react";
+import React, { ComponentPropsWithoutRef, useRef, useState } from "react";
 import {
   FaBiohazard,
   FaEllipsisH,
@@ -14,7 +14,10 @@ import { trpc } from "../utils/trpc";
 export const Control = () => {
   const utils = trpc.useContext();
   const [showOptions, setShowOptions] = useState(false);
-  const { setIsOpenUploadModal, setIsOpenNoteModal } = useStore();
+  const { setIsOpenUploadModal, setIsOpenNoteModal, addFilesToUpload } =
+    useStore();
+  const uploadInputRef = useRef<HTMLInputElement | null>(null);
+
   const filesDeleteAllMutation = trpc.filesDeleteAll.useMutation({
     onSuccess: () => utils.files.invalidate(),
   });
@@ -28,6 +31,7 @@ export const Control = () => {
       <AnimatePresence>
         {showOptions && (
           <>
+            {/* Delete all */}
             <motion.button
               className="rounded-md bg-gradient-to-r from-emerald-500 to-green-500 p-4 text-2xl text-white"
               initial={{ opacity: 0, y: "100px" }}
@@ -43,6 +47,7 @@ export const Control = () => {
             >
               <FaBiohazard />
             </motion.button>
+            {/* TODO: Delete */}
             <motion.button
               className="rounded-md bg-gradient-to-r from-pink-500 to-red-500 p-4 text-2xl text-white"
               initial={{ opacity: 0, y: "100px" }}
@@ -50,6 +55,7 @@ export const Control = () => {
             >
               <FaTrash />
             </motion.button>
+            {/* Notes */}
             <motion.button
               onClick={() => {
                 setIsOpenNoteModal(true);
@@ -63,6 +69,7 @@ export const Control = () => {
           </>
         )}
       </AnimatePresence>
+      {/* Show more */}
       <motion.button
         className="rounded-md bg-zinc-800 p-4 text-2xl text-white"
         onClick={() => setShowOptions((showOptions) => !showOptions)}
@@ -70,12 +77,25 @@ export const Control = () => {
       >
         <FaEllipsisH />
       </motion.button>
+      {/* Upload */}
       <motion.button
         onClick={() => {
-          setIsOpenUploadModal(true);
+          // Open file input
+          if (!uploadInputRef?.current) return;
+          uploadInputRef.current.click();
         }}
         className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 p-4 text-2xl text-white"
       >
+        <input
+          ref={uploadInputRef}
+          type="file"
+          className="hidden"
+          onChange={(e) => {
+            // Open modal and add files
+            setIsOpenUploadModal(true);
+            addFilesToUpload(e.target?.files);
+          }}
+        />
         <FaPlus />
       </motion.button>
     </motion.div>

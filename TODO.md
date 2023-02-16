@@ -14,12 +14,13 @@
 - Paste text auto upload
 - Text field creation ✅
 - Peek text
+- Note upload size 🤔
 
 ## Client:
 
 - [ ] Fix overscroll on iPad
 - [ ] Fix grid space between row/cols
-- [ ] Open upload directly
+- [x] Open upload directly
 - [ ] Fix mobile click selecting blue
 - [x] Upload files to backend
 - [ ] Make progress bar less hacky

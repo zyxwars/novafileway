@@ -15,5 +15,5 @@ npx prisma migrate dev
 ### Run migration
 
 ```
-npx prisma migrate dev --name init
+npx prisma migrate dev --name message
 ```

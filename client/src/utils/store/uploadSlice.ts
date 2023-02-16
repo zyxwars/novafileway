@@ -8,22 +8,22 @@ const getFileId = (file: File) => {
 };
 
 // TODO: Check proper interface naming
-export interface SelectedFile {
+export interface FileToUpload {
   data: File;
   id: string;
   isUploadQueued: boolean;
 }
 
-type UploadFn = (file: SelectedFile) => any;
+type UploadFn = (file: FileToUpload) => any;
 
 export interface UploadSlice {
-  selectedFiles: SelectedFile[];
-  uploadingFileId: string | null;
+  filesToUpload: FileToUpload[];
+  currentUploadFileId: string | null;
   uploadProgress: AxiosProgressEvent | null;
   uploadAbortController: AbortController;
 
-  addFiles: (files: FileList | null) => void;
-  removeFile: (id: string) => void;
+  addFilesToUpload: (files: FileList | null) => void;
+  removeFileToUpload: (id: string) => void;
   startUpload: (uploadFn: UploadFn, queueFiles?: boolean) => void;
   finishUpload: (uploadFn: UploadFn) => void;
   closeUploadModal: () => void;
@@ -37,12 +37,12 @@ export const createUploadSlice: StateCreator<
   [],
   UploadSlice
 > = (set, get) => ({
-  selectedFiles: [],
-  uploadingFileId: null,
+  filesToUpload: [],
+  currentUploadFileId: null,
   uploadProgress: null,
   uploadAbortController: new AbortController(),
 
-  addFiles: (files) => {
+  addFilesToUpload: (files) => {
     if (!files) return;
 
     let newFiles = Array.from(files);
@@ -50,11 +50,11 @@ export const createUploadSlice: StateCreator<
     // Don't add files that are already added
     newFiles = newFiles.filter(
       (fileToAdd) =>
-        !get().selectedFiles.find((file) => file.id === getFileId(fileToAdd))
+        !get().filesToUpload.find((file) => file.id === getFileId(fileToAdd))
     );
 
     // Add required fields
-    const newFilesMapped: SelectedFile[] = newFiles.map((file) => ({
+    const newFilesMapped: FileToUpload[] = newFiles.map((file) => ({
       data: file,
       id: getFileId(file),
       isBeingUploaded: false,
@@ -62,53 +62,53 @@ export const createUploadSlice: StateCreator<
     }));
 
     set((state) => ({
-      selectedFiles: [...state.selectedFiles, ...newFilesMapped],
+      filesToUpload: [...state.filesToUpload, ...newFilesMapped],
     }));
   },
-  removeFile: (id) => {
-    if (id === get().uploadingFileId) get().abortUpload();
+  removeFileToUpload: (id) => {
+    if (id === get().currentUploadFileId) get().abortUpload();
 
     set((state) => ({
-      selectedFiles: state.selectedFiles.filter((file) => file.id !== id),
+      filesToUpload: state.filesToUpload.filter((file) => file.id !== id),
     }));
   },
   closeUploadModal: () => {
     get().abortUpload();
-    set(() => ({ selectedFiles: [], isOpenUploadModal: false }));
+    set(() => ({ filesToUpload: [], isOpenUploadModal: false }));
   },
   startUpload: (uploadFn, queueFiles = true) => {
     // If there are no files to upload close the modal
-    if (get().selectedFiles.length === 0) {
+    if (get().filesToUpload.length === 0) {
       get().closeUploadModal();
       return;
     }
 
     if (queueFiles)
       set((state) => ({
-        selectedFiles: state.selectedFiles.map((file) => ({
+        filesToUpload: state.filesToUpload.map((file) => ({
           ...file,
           isUploadQueued: true,
         })),
       }));
 
     // Start new upload if there is no ongoing upload
-    if (get().uploadingFileId) return;
+    if (get().currentUploadFileId) return;
 
-    const firstToUpload = get().selectedFiles.find(
+    const firstToUpload = get().filesToUpload.find(
       (file) => file.isUploadQueued
     );
     // Exit if there are not queued files
     if (!firstToUpload) return;
 
-    set({ uploadingFileId: firstToUpload.id, uploadProgress: null });
+    set({ currentUploadFileId: firstToUpload.id, uploadProgress: null });
     uploadFn(firstToUpload);
   },
   finishUpload: (uploadFn) => {
     // Remove uploaded file and start next upload
     set((state) => ({
-      uploadingFileId: null,
-      selectedFiles: state.selectedFiles.filter(
-        (file) => file.id !== state.uploadingFileId
+      currentUploadFileId: null,
+      filesToUpload: state.filesToUpload.filter(
+        (file) => file.id !== state.currentUploadFileId
       ),
     }));
 

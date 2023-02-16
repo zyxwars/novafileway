@@ -1,35 +1,17 @@
 import express from "express";
 import cors from "cors";
-import { initTRPC } from "@trpc/server";
 import * as trpcExpress from "@trpc/server/adapters/express";
-import { z } from "zod";
 import { PrismaClient } from "@prisma/client";
-import filesRouter from "./routes/files";
+import filesRouter from "./routes/upload";
+import { appRouter } from "./routes/_app";
 
 const PORT = 8080;
-
-// TODO: Move trpc to its own file
-const prisma = new PrismaClient();
-
-const t = initTRPC.create();
-const appRouter = t.router({
-  files: t.procedure.query(async (req) => {
-    const files = await prisma.file.findMany();
-
-    return files;
-  }),
-  filesDeleteAll: t.procedure.mutation(async (req) => {
-    await prisma.file.deleteMany({});
-  }),
-});
-
-export type AppRouter = typeof appRouter;
 
 const app = express();
 
 app.use(cors());
 
-app.use("/files", filesRouter);
+app.use("/upload", filesRouter);
 
 app.use(
   "/trpc",
