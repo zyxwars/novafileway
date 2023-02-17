@@ -1,8 +1,51 @@
-import { FaFilePdf } from "react-icons/fa";
+import {
+  FaFile,
+  FaBook,
+  FaFilePdf,
+  FaCode,
+  FaHtml5,
+  FaCss3,
+  FaJs,
+  FaPython,
+} from "react-icons/fa";
+import { BsSoundwave, BsTextLeft } from "react-icons/bs";
+import { TbBinary } from "react-icons/tb";
 import { trpc } from "../utils/trpc";
 import { Loader } from "./Loader";
 import { AnimatePresence, motion } from "framer-motion";
 import { useStore } from "../utils/store/store";
+
+const getFileIcon = (filename: string, mimetype: string) => {
+  const size = 64;
+
+  switch (filename.split(".").pop()) {
+    case "pdf":
+      return <FaFilePdf size={size} />;
+    case "html":
+      return <FaHtml5 size={size} />;
+    case "css":
+      return <FaCss3 size={size} />;
+    case "js":
+      return <FaJs size={size} />;
+    case "py":
+      return <FaPython size={size} />;
+    case "c":
+      return <FaCode size={size} />;
+    case "zip" || "rar" || "gz" || "tar":
+      return <FaBook size={size} />;
+    default:
+      switch (mimetype.split("/").shift()) {
+        case "text":
+          return <BsTextLeft size={size} />;
+        case "audio":
+          return <BsSoundwave size={size} />;
+
+        default:
+          if (filename.includes(".")) return <FaFile size={size} />;
+          return <TbBinary size={size} />;
+      }
+  }
+};
 
 export const Files = () => {
   const utils = trpc.useContext();
@@ -26,9 +69,8 @@ export const Files = () => {
   return (
     <>
       <div
-        className="grid h-full w-full grid-cols-4 gap-4 justify-self-start overflow-y-auto p-4"
-        // TODO: Fix height
-        style={{ gridTemplateRows: "14rem" }}
+        className="grid h-full w-full grid-cols-4  gap-4 justify-self-start overflow-y-auto p-4"
+        style={{ gridAutoRows: "15rem" }}
       >
         {notes.data.map((file) => (
           <div className="bg-red-500 font-bold text-violet-800" key={file.id}>
@@ -64,14 +106,14 @@ export const Files = () => {
                 )}
               </AnimatePresence>
               <div className="flex flex-grow items-center justify-center bg-zinc-700 text-white">
-                <FaFilePdf size={64} />
+                {getFileIcon(file.originalname, file.mimetype)}
               </div>
-              <div
-                className="flex-none bg-zinc-800 p-4"
-                style={{ wordBreak: "break-all" }}
+              <motion.div
+                className="w-full flex-none overflow-hidden text-ellipsis whitespace-nowrap bg-zinc-800 p-4"
+                // style={{ wordBreak: "break-all" }}
               >
                 {file.originalname}
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </AnimatePresence>

@@ -28,7 +28,7 @@ export const Control = () => {
 
   return (
     <motion.div
-      className="fixed bottom-8 right-6 flex flex-col gap-4"
+      className="fixed bottom-8 right-6 flex flex-col gap-4 "
       // TODO: Fix the stagger
       animate={{ transition: { staggerChildren: 0.5 } }}
     >
@@ -76,7 +76,7 @@ export const Control = () => {
       </AnimatePresence>
       {/* Show more */}
       <motion.button
-        className="rounded-md bg-zinc-800 p-4 text-2xl text-white"
+        className="rounded-md border-2 border-white bg-zinc-800 p-4 text-2xl text-white"
         onClick={() => setShowOptions((showOptions) => !showOptions)}
         animate={showOptions ? { rotate: 90 } : { rotate: 0 }}
       >

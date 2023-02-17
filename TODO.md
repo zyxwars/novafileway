@@ -28,6 +28,7 @@
 - [ ] Style files
 - [ ] Delete files
 - [ ] Undo delete
+- [ ] Remove/rework upload during delete, test open file upload when modal auto closed
 
 ## Server:
 

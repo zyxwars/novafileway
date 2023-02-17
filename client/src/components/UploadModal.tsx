@@ -65,7 +65,7 @@ export const UploadModal = () => {
       <motion.div
         className="grid h-full w-full grid-flow-row overflow-hidden bg-zinc-900 sm:h-5/6 sm:w-3/5 sm:rounded-md"
         style={{
-          gridTemplateRows: "3.5rem 1fr auto",
+          gridTemplateRows: "1fr auto",
         }}
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -73,7 +73,7 @@ export const UploadModal = () => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Input */}
-        <div className="relative flex flex-none items-center justify-center rounded-b-xl bg-gradient-to-r from-cyan-500 to-blue-500">
+        {/* <div className="relative flex flex-none items-center justify-center rounded-b-xl bg-gradient-to-r from-cyan-500 to-blue-500">
           <input
             className="absolute top-0 left-0 bottom-0 w-full opacity-0"
             type="file"
@@ -88,7 +88,7 @@ export const UploadModal = () => {
           <div className="font-sans font-bold text-white">
             Click or drag a File here
           </div>
-        </div>
+        </div> */}
 
         {/* Files */}
         <div className="flex w-full flex-grow flex-col gap-4 overflow-y-auto overflow-x-hidden p-4">
@@ -141,7 +141,7 @@ export const UploadModal = () => {
         </div>
 
         {/* Controls */}
-        <div className="flex items-center justify-between border-t border-white bg-zinc-900 p-4">
+        <div className="flex items-center justify-end border-t border-white bg-zinc-900 p-4">
           <button
             onClick={closeUploadModal}
             className="rounded-md bg-zinc-800 py-2 px-4 text-lg font-semibold text-white"
@@ -149,12 +149,12 @@ export const UploadModal = () => {
             Cancel
           </button>
 
-          <button
+          {/* <button
             onClick={() => startUpload(uploadMutation.mutate)}
             className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 py-2 px-4 text-lg font-semibold text-white"
           >
             Upload
-          </button>
+          </button> */}
         </div>
       </motion.div>
     </Modal>
