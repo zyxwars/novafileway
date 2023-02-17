@@ -11,7 +11,14 @@ export const fileRouter = router({
 
     return files;
   }),
+  deleteById: publicProcedure.input(z.number()).mutation(async ({ input }) => {
+    const deleted = await prisma.file.delete({ where: { id: input } });
+
+    return deleted;
+  }),
   deleteAll: publicProcedure.mutation(async (req) => {
     await prisma.file.deleteMany({});
+
+    return;
   }),
 });

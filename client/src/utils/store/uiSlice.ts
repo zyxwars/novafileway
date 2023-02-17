@@ -4,9 +4,12 @@ import { StoreState } from "./store";
 export interface UiSlice {
   isOpenUploadModal: boolean;
   isOpenNoteModal: boolean;
+  isDeleting: boolean;
 
   setIsOpenUploadModal: (show: boolean) => void;
   setIsOpenNoteModal: (show: boolean) => void;
+  setIsDeleting: (show: boolean) => void;
+  toggleIsDeleting: () => void;
 }
 
 export const createUiSlice: StateCreator<StoreState, [], [], UiSlice> = (
@@ -14,11 +17,18 @@ export const createUiSlice: StateCreator<StoreState, [], [], UiSlice> = (
 ) => ({
   isOpenUploadModal: false,
   isOpenNoteModal: false,
+  isDeleting: false,
 
-  setIsOpenUploadModal: (show: boolean) => {
+  setIsOpenUploadModal: (show) => {
     set({ isOpenUploadModal: show });
   },
-  setIsOpenNoteModal: (show: boolean) => {
+  setIsOpenNoteModal: (show) => {
     set({ isOpenNoteModal: show });
+  },
+  setIsDeleting: (show) => {
+    set({ isDeleting: show });
+  },
+  toggleIsDeleting: () => {
+    set((state) => ({ isDeleting: !state.isDeleting }));
   },
 });

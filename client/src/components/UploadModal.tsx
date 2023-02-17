@@ -6,6 +6,7 @@ import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { trpc } from "../utils/trpc";
 import { FileToUpload } from "../utils/store/uploadSlice";
+import { useEffect } from "react";
 
 export const UploadModal = () => {
   const utils = trpc.useContext();
@@ -26,8 +27,6 @@ export const UploadModal = () => {
 
   const uploadMutation = useMutation({
     mutationFn: (file: FileToUpload) => {
-      console.log("UPLOAD: Uploading " + file.id);
-
       const formData = new FormData();
       formData.append("file", file.data);
 
@@ -35,8 +34,6 @@ export const UploadModal = () => {
         .postForm("http://localhost:8080/upload", formData, {
           signal: uploadAbortController.signal,
           onUploadProgress: (e) => {
-            console.log(e);
-
             setUploadProgress(e);
           },
         })
@@ -56,6 +53,12 @@ export const UploadModal = () => {
       utils.file.list.invalidate();
     },
   });
+
+  useEffect(() => {
+    if (!isOpenUploadModal) return;
+
+    startUpload(uploadMutation.mutate);
+  }, [isOpenUploadModal]);
 
   return (
     <Modal isOpen={isOpenUploadModal} onClose={closeUploadModal}>

@@ -14,12 +14,16 @@ import { trpc } from "../utils/trpc";
 export const Control = () => {
   const utils = trpc.useContext();
   const [showOptions, setShowOptions] = useState(false);
-  const { setIsOpenUploadModal, setIsOpenNoteModal, addFilesToUpload } =
-    useStore();
+  const {
+    setIsOpenUploadModal,
+    setIsOpenNoteModal,
+    toggleIsDeleting,
+    addFilesToUpload,
+  } = useStore();
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
 
-  const filesDeleteAllMutation = trpc.filesDeleteAll.useMutation({
-    onSuccess: () => utils.files.invalidate(),
+  const filesDeleteAllMutation = trpc.file.deleteAll.useMutation({
+    onSuccess: () => utils.file.list.invalidate(),
   });
 
   return (
@@ -52,6 +56,7 @@ export const Control = () => {
               className="rounded-md bg-gradient-to-r from-pink-500 to-red-500 p-4 text-2xl text-white"
               initial={{ opacity: 0, y: "100px" }}
               animate={{ opacity: 1, y: 0 }}
+              onClick={toggleIsDeleting}
             >
               <FaTrash />
             </motion.button>
@@ -89,6 +94,7 @@ export const Control = () => {
         <input
           ref={uploadInputRef}
           type="file"
+          multiple
           className="hidden"
           onChange={(e) => {
             // Open modal and add files
