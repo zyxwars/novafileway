@@ -69,11 +69,11 @@ export const Files = () => {
   return (
     <>
       <div
-        className="grid h-full w-full auto-rows-[15rem] grid-cols-2 gap-4 justify-self-start overflow-y-auto p-4 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+        className="grid h-full w-full auto-rows-[15rem] grid-cols-2 gap-4 justify-self-start overflow-y-auto p-4 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
         // TODO: Media queries, 15 rem
       >
         {notes.data.map((file) => (
-          <div className="bg-red-500 font-bold text-violet-800" key={file.id}>
+          <div className="bg-red-500   text-violet-800" key={file.id}>
             {file.name}
             {file.text}
           </div>
@@ -81,7 +81,7 @@ export const Files = () => {
         <AnimatePresence>
           {files.data.map((file) => (
             <motion.div
-              className="flex flex-col overflow-hidden rounded-sm border-x border-b  bg-zinc-800 font-bold text-white"
+              className="flex flex-col overflow-hidden rounded-sm  bg-zinc-800  text-white"
               key={file.id}
               layout
               initial={{ scale: 0, opacity: 0 }}
@@ -96,7 +96,7 @@ export const Files = () => {
                     onClick={() => {
                       deleteMutation.mutate(file.id);
                     }}
-                    className="flex flex-none items-center justify-center overflow-hidden border-t bg-red-500 hover:bg-red-400"
+                    className="flex flex-none items-center justify-center overflow-hidden bg-red-500  font-bold hover:bg-red-400"
                     initial={{ height: "0" }}
                     animate={{ height: "3rem" }}
                     exit={{ height: "0" }}
@@ -108,11 +108,11 @@ export const Files = () => {
               <a
                 href={`${import.meta.env.VITE_FILE_SERVER}/upload/${file.id}`}
                 target="_blank"
-                className="flex min-h-0 flex-auto items-center justify-center border-y bg-zinc-700 text-white"
+                className="flex min-h-0 flex-auto items-center justify-center  bg-zinc-700 text-white"
               >
                 {file.mimetype.includes("image") ? (
                   <img
-                    className="h-full w-full border-zinc-700 object-cover"
+                    className="h-full w-full  object-cover"
                     src={`${import.meta.env.VITE_FILE_SERVER}/upload/${
                       file.id
                     }`}
@@ -122,7 +122,7 @@ export const Files = () => {
                 )}
               </a>
               <motion.div
-                className="w-full flex-none overflow-hidden text-ellipsis whitespace-nowrap bg-zinc-800 p-4"
+                className="whitespace-nowrap+ w-full flex-none overflow-hidden text-ellipsis whitespace-nowrap bg-zinc-800 p-4  text-sm font-semibold"
                 // style={{ wordBreak: "break-all" }}
               >
                 {file.originalname}

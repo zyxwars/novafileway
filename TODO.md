@@ -9,7 +9,7 @@
 - Image thumbnails
 - Delete after time, cronjob docker
 - Delete stray cron
-- Open/Download
+- Open/Download ✅
 - Folder upload, folder navigation 🤔
 - Paste text auto upload
 - Text field creation ✅
@@ -26,6 +26,8 @@
 - [x] Upload not working from other devices
 - [ ] Add attachment download toggle, ?attachment query
 - [ ] Move styling to tailwind brackets []
+- [ ] Add error toasts
+- [ ] Sync files without user reload
 
 ## Server:
 
@@ -33,3 +35,4 @@
 - [ ] Delete files on delete
 - [ ] Merge files and notes for the client side
 - [x] Server static folder wtih uploads
+- [ ] Add images compressor for thumbnails(sharp)
