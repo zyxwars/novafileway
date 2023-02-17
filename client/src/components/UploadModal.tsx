@@ -31,7 +31,7 @@ export const UploadModal = () => {
       formData.append("file", file.data);
 
       return axios
-        .postForm("http://localhost:8080/upload", formData, {
+        .postForm(import.meta.env.VITE_FILE_SERVER + "/upload", formData, {
           signal: uploadAbortController.signal,
           onUploadProgress: (e) => {
             setUploadProgress(e);

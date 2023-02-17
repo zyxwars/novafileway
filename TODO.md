@@ -23,10 +23,11 @@
 - [ ] Fix mobile click selecting blue
 - [ ] Undo delete
 - [ ] Remove/rework upload during delete, test open file upload when modal auto closed
-- [ ] Upload not working from other devices
+- [x] Upload not working from other devices
 
 ## Server:
 
 - [ ] More dynamic error catching, without crashing the server
 - [ ] Delete files on delete
+- [ ] Merge files and notes for the client side
 - [ ] Server static folder wtih uploads

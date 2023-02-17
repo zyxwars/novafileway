@@ -23,7 +23,9 @@ function App() {
   );
   const [trpcClient] = useState(() =>
     trpc.createClient({
-      links: [httpBatchLink({ url: import.meta.env.VITE_TRPC_SERVER })],
+      links: [
+        httpBatchLink({ url: import.meta.env.VITE_TRPC_SERVER + "/trpc" }),
+      ],
     })
   );
 

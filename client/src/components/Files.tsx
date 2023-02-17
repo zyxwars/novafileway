@@ -69,9 +69,8 @@ export const Files = () => {
   return (
     <>
       <div
-        className="grid h-full w-full grid-cols-1 gap-4 justify-self-start overflow-y-auto p-4"
+        className="grid h-full w-full auto-rows-[15rem] grid-cols-2 gap-4 justify-self-start overflow-y-auto p-4 sm:grid-cols-3 md:grid-cols-4"
         // TODO: Media queries, 15 rem
-        style={{ gridAutoRows: "10rem" }}
       >
         {notes.data.map((file) => (
           <div className="bg-red-500 font-bold text-violet-800" key={file.id}>
@@ -82,7 +81,7 @@ export const Files = () => {
         <AnimatePresence>
           {files.data.map((file) => (
             <motion.div
-              className="flex flex-col overflow-hidden rounded-md bg-zinc-800 font-bold text-white"
+              className="flex flex-col overflow-hidden rounded-sm border-x border-b  bg-zinc-800 font-bold text-white"
               key={file.id}
               layout
               initial={{ scale: 0, opacity: 0 }}
@@ -97,7 +96,7 @@ export const Files = () => {
                     onClick={() => {
                       deleteMutation.mutate(file.id);
                     }}
-                    className="flex items-center justify-center overflow-hidden bg-red-500"
+                    className="flex flex-none items-center justify-center overflow-hidden bg-red-500 hover:bg-red-400"
                     initial={{ height: "0" }}
                     animate={{ height: "3rem" }}
                     exit={{ height: "0" }}
@@ -106,8 +105,17 @@ export const Files = () => {
                   </motion.button>
                 )}
               </AnimatePresence>
-              <div className="flex flex-grow items-center justify-center bg-zinc-700 text-white">
-                {getFileIcon(file.originalname, file.mimetype)}
+              <div className="flex min-h-0 flex-auto items-center justify-center border-y bg-zinc-700 text-white">
+                {file.mimetype.includes("image") ? (
+                  <img
+                    className="h-full w-full border-zinc-700 object-cover"
+                    src={`${import.meta.env.VITE_FILE_SERVER}/uploads/${
+                      file.filename
+                    }`}
+                  />
+                ) : (
+                  getFileIcon(file.originalname, file.mimetype)
+                )}
               </div>
               <motion.div
                 className="w-full flex-none overflow-hidden text-ellipsis whitespace-nowrap bg-zinc-800 p-4"

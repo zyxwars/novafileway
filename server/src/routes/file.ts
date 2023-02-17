@@ -9,7 +9,7 @@ export const fileRouter = router({
   list: publicProcedure.query(async (req) => {
     const files = await prisma.file.findMany();
 
-    return files;
+    return files.reverse();
   }),
   deleteById: publicProcedure.input(z.number()).mutation(async ({ input }) => {
     const deleted = await prisma.file.delete({ where: { id: input } });
