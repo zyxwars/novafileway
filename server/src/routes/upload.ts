@@ -3,15 +3,19 @@ import { PrismaClient } from "@prisma/client";
 import { sendBadRequest, sendError } from "../logger";
 import formidable from "formidable";
 import fs from "fs";
+import path from "path";
+import { UPLOADS_DIR } from "..";
 
 const prisma = new PrismaClient();
 
 const router = Router();
 
 router.post("/", (req, res) => {
+  if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR);
+
   const form = formidable({
     // TODO: Create folder beforehand, use _dirname ?
-    uploadDir: "./uploads",
+    uploadDir: UPLOADS_DIR,
     maxFiles: 1,
     maxFields: 1,
     maxFileSize: 500 * 1000 ** 2,
@@ -52,6 +56,24 @@ router.post("/", (req, res) => {
 
     res.status(200).json(savedFile);
   });
+});
+
+router.get("/:id", async (req, res) => {
+  const file = await prisma.file.findUnique({
+    where: { id: Number(req.params.id) },
+  });
+  if (!file)
+    return res.status(404).send(`File with id ${req.params.id} not found`);
+
+  res.set("Content-Type", file.mimetype);
+
+  if (req.query?.download)
+    return res.download(
+      path.join(UPLOADS_DIR, file.filename),
+      file.originalname
+    );
+
+  res.sendFile(path.join(UPLOADS_DIR, file.filename), file.originalname);
 });
 
 export default router;

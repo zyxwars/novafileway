@@ -24,10 +24,12 @@
 - [ ] Undo delete
 - [ ] Remove/rework upload during delete, test open file upload when modal auto closed
 - [x] Upload not working from other devices
+- [ ] Add attachment download toggle, ?attachment query
+- [ ] Move styling to tailwind brackets []
 
 ## Server:
 
 - [ ] More dynamic error catching, without crashing the server
 - [ ] Delete files on delete
 - [ ] Merge files and notes for the client side
-- [ ] Server static folder wtih uploads
+- [x] Server static folder wtih uploads

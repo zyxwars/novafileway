@@ -69,7 +69,7 @@ export const Files = () => {
   return (
     <>
       <div
-        className="grid h-full w-full auto-rows-[15rem] grid-cols-2 gap-4 justify-self-start overflow-y-auto p-4 sm:grid-cols-3 md:grid-cols-4"
+        className="grid h-full w-full auto-rows-[15rem] grid-cols-2 gap-4 justify-self-start overflow-y-auto p-4 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
         // TODO: Media queries, 15 rem
       >
         {notes.data.map((file) => (
@@ -96,7 +96,7 @@ export const Files = () => {
                     onClick={() => {
                       deleteMutation.mutate(file.id);
                     }}
-                    className="flex flex-none items-center justify-center overflow-hidden bg-red-500 hover:bg-red-400"
+                    className="flex flex-none items-center justify-center overflow-hidden border-t bg-red-500 hover:bg-red-400"
                     initial={{ height: "0" }}
                     animate={{ height: "3rem" }}
                     exit={{ height: "0" }}
@@ -105,18 +105,22 @@ export const Files = () => {
                   </motion.button>
                 )}
               </AnimatePresence>
-              <div className="flex min-h-0 flex-auto items-center justify-center border-y bg-zinc-700 text-white">
+              <a
+                href={`${import.meta.env.VITE_FILE_SERVER}/upload/${file.id}`}
+                target="_blank"
+                className="flex min-h-0 flex-auto items-center justify-center border-y bg-zinc-700 text-white"
+              >
                 {file.mimetype.includes("image") ? (
                   <img
                     className="h-full w-full border-zinc-700 object-cover"
-                    src={`${import.meta.env.VITE_FILE_SERVER}/uploads/${
-                      file.filename
+                    src={`${import.meta.env.VITE_FILE_SERVER}/upload/${
+                      file.id
                     }`}
                   />
                 ) : (
                   getFileIcon(file.originalname, file.mimetype)
                 )}
-              </div>
+              </a>
               <motion.div
                 className="w-full flex-none overflow-hidden text-ellipsis whitespace-nowrap bg-zinc-800 p-4"
                 // style={{ wordBreak: "break-all" }}
