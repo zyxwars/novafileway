@@ -37,7 +37,7 @@ export const Control = () => {
           <>
             {/* Delete all */}
             <motion.button
-              className="rounded-md bg-gradient-to-r from-emerald-500 to-green-500 p-4 text-2xl text-white"
+              className="rounded-md border-2 border-white bg-gradient-to-r from-emerald-500 to-green-500 p-4 text-2xl text-white shadow-md"
               initial={{ opacity: 0, y: "100px" }}
               animate={{ opacity: 1, y: 0 }}
               onClick={() => {
@@ -53,7 +53,7 @@ export const Control = () => {
             </motion.button>
             {/* TODO: Delete */}
             <motion.button
-              className="rounded-md bg-gradient-to-r from-pink-500 to-red-500 p-4 text-2xl text-white"
+              className="rounded-md border-2 border-white bg-gradient-to-r from-pink-500 to-red-500 p-4 text-2xl text-white shadow-md"
               initial={{ opacity: 0, y: "100px" }}
               animate={{ opacity: 1, y: 0 }}
               onClick={toggleIsDeleting}
@@ -65,7 +65,7 @@ export const Control = () => {
               onClick={() => {
                 setIsOpenNoteModal(true);
               }}
-              className="rounded-md bg-gradient-to-r from-yellow-300 to-amber-500 p-4 text-2xl text-white"
+              className="rounded-md border-2 border-white bg-gradient-to-r from-yellow-300 to-amber-500 p-4 text-2xl text-white shadow-md"
               initial={{ opacity: 0, y: "100px" }}
               animate={{ opacity: 1, y: 0 }}
             >
@@ -76,7 +76,7 @@ export const Control = () => {
       </AnimatePresence>
       {/* Show more */}
       <motion.button
-        className="rounded-md border-2 border-white bg-zinc-800 p-4 text-2xl text-white"
+        className="rounded-md border-2  border-white bg-zinc-800 p-4 text-2xl text-white shadow-md"
         onClick={() => setShowOptions((showOptions) => !showOptions)}
         animate={showOptions ? { rotate: 90 } : { rotate: 0 }}
       >
@@ -89,7 +89,7 @@ export const Control = () => {
           if (!uploadInputRef?.current) return;
           uploadInputRef.current.click();
         }}
-        className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 p-4 text-2xl text-white"
+        className="rounded-md border-2 border-white bg-gradient-to-r from-cyan-500 to-blue-500 p-4 text-2xl text-white shadow-md"
       >
         <input
           ref={uploadInputRef}

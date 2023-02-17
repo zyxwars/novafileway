@@ -20,19 +20,13 @@
 
 - [ ] Fix overscroll on iPad
 - [ ] Fix grid space between row/cols
-- [x] Open upload directly
 - [ ] Fix mobile click selecting blue
-- [x] Upload files to backend
-- [ ] Make progress bar less hacky
-- [ ] Revalidate on upload modal close/every file upload
-- [ ] Style files
-- [ ] Delete files
 - [ ] Undo delete
 - [ ] Remove/rework upload during delete, test open file upload when modal auto closed
+- [ ] Upload not working from other devices
 
 ## Server:
 
-- [x] File gets uploaded half way on abort? > maybe use checksum
 - [ ] More dynamic error catching, without crashing the server
 - [ ] Delete files on delete
 - [ ] Server static folder wtih uploads

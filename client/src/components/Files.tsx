@@ -69,8 +69,9 @@ export const Files = () => {
   return (
     <>
       <div
-        className="grid h-full w-full grid-cols-4  gap-4 justify-self-start overflow-y-auto p-4"
-        style={{ gridAutoRows: "15rem" }}
+        className="grid h-full w-full grid-cols-1 gap-4 justify-self-start overflow-y-auto p-4"
+        // TODO: Media queries, 15 rem
+        style={{ gridAutoRows: "10rem" }}
       >
         {notes.data.map((file) => (
           <div className="bg-red-500 font-bold text-violet-800" key={file.id}>
@@ -81,7 +82,7 @@ export const Files = () => {
         <AnimatePresence>
           {files.data.map((file) => (
             <motion.div
-              className="flex flex-col overflow-hidden rounded-sm bg-zinc-800 font-bold text-white"
+              className="flex flex-col overflow-hidden rounded-md bg-zinc-800 font-bold text-white"
               key={file.id}
               layout
               initial={{ scale: 0, opacity: 0 }}
