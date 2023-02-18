@@ -14,6 +14,7 @@ import { trpc } from "../utils/trpc";
 import { Loader } from "./Loader";
 import { AnimatePresence, motion } from "framer-motion";
 import { useStore } from "../utils/store/store";
+import { toast } from "react-toastify";
 
 const getFileIcon = (filename: string, mimetype: string) => {
   const size = 64;
@@ -59,6 +60,9 @@ export const Files = () => {
     onSuccess: () => {
       utils.file.list.invalidate();
     },
+    onError: (err) => {
+      toast.error(err.message);
+    },
   });
 
   if (files.isLoading) return <Loader />;
@@ -66,6 +70,7 @@ export const Files = () => {
 
   if (files.isError) return <div>{files.error.message}</div>;
   if (notes.isError) return <div>{notes.error.message}</div>;
+
   return (
     <>
       <div

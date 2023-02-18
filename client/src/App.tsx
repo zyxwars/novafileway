@@ -6,6 +6,8 @@ import { useState } from "react";
 import { httpBatchLink } from "@trpc/client";
 import { Control } from "./components/Control";
 import { NoteModal } from "./components/NoteModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [queryClient] = useState(
@@ -41,6 +43,11 @@ function App() {
         {/* Modal */}
         <UploadModal />
         <NoteModal />
+        <ToastContainer
+          theme="colored"
+          hideProgressBar
+          position="bottom-center"
+        />
       </QueryClientProvider>
     </trpc.Provider>
   );

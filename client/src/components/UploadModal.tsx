@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { trpc } from "../utils/trpc";
 import { FileToUpload } from "../utils/store/uploadSlice";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 export const UploadModal = () => {
   const utils = trpc.useContext();
@@ -51,6 +52,9 @@ export const UploadModal = () => {
       finishUpload(uploadMutation.mutate);
       // TODO: Use context and don't run this when upload was aborted
       utils.file.list.invalidate();
+    },
+    onError: (err) => {
+      toast.error(err.message);
     },
   });
 
