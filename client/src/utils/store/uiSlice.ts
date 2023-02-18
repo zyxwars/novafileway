@@ -9,7 +9,6 @@ export interface UiSlice {
   setIsOpenUploadModal: (show: boolean) => void;
   setIsOpenNoteModal: (show: boolean) => void;
   setIsDeleting: (show: boolean) => void;
-  toggleIsDeleting: () => void;
 }
 
 export const createUiSlice: StateCreator<StoreState, [], [], UiSlice> = (
@@ -27,8 +26,5 @@ export const createUiSlice: StateCreator<StoreState, [], [], UiSlice> = (
   },
   setIsDeleting: (show) => {
     set({ isDeleting: show });
-  },
-  toggleIsDeleting: () => {
-    set((state) => ({ isDeleting: !state.isDeleting }));
   },
 });

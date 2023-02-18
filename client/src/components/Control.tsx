@@ -17,8 +17,9 @@ export const Control = () => {
   const {
     setIsOpenUploadModal,
     setIsOpenNoteModal,
-    toggleIsDeleting,
     addFilesToUpload,
+    setIsDeleting,
+    isDeleting,
   } = useStore();
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -56,7 +57,7 @@ export const Control = () => {
               className="rounded-md border-2 border-white bg-gradient-to-r from-pink-500 to-red-500 p-4 text-2xl text-white shadow-md"
               initial={{ opacity: 0, y: "100px" }}
               animate={{ opacity: 1, y: 0 }}
-              onClick={toggleIsDeleting}
+              onClick={() => setIsDeleting(!isDeleting)}
             >
               <FaTrash />
             </motion.button>
@@ -77,7 +78,10 @@ export const Control = () => {
       {/* Show more */}
       <motion.button
         className="rounded-md border-2  border-white bg-zinc-800 p-4 text-2xl text-white shadow-md"
-        onClick={() => setShowOptions((showOptions) => !showOptions)}
+        onClick={() => {
+          setShowOptions((showOptions) => !showOptions);
+          setIsDeleting(false);
+        }}
         animate={showOptions ? { rotate: 90 } : { rotate: 0 }}
       >
         <FaEllipsisH />
