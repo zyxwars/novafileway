@@ -11,15 +11,17 @@ datasource db {
 }
 
 model File {
-  id           Int    @id @default(autoincrement())
-  originalname String
-  filename     String
-  size         Int
-  mimetype     String
+  id        Int      @id @default(autoincrement())
+  type      String   @default("file")
+  name      String
+  size      Int
+  mimetype  String
+  createdAt DateTime @default(now())
 }
 
 model Note {
-  id   Int    @id @default(autoincrement())
-  name String
-  text String
+  id        Int      @id @default(autoincrement())
+  type      String   @default("note")
+  text      String
+  createdAt DateTime @default(now())
 }

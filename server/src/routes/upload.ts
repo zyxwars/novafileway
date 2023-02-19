@@ -47,12 +47,16 @@ router.post("/", (req, res) => {
 
     const savedFile = await prisma.file.create({
       data: {
-        filename: file.newFilename,
-        originalname: file.originalFilename || "Unnamed file",
+        name: file.originalFilename || "Unnamed file",
         size: file.size,
         mimetype: file.mimetype || "",
       },
     });
+
+    fs.renameSync(
+      file.filepath,
+      path.join(file.filepath, "../" + savedFile.id)
+    );
 
     res.status(200).json(savedFile);
   });
@@ -68,12 +72,10 @@ router.get("/:id", async (req, res) => {
   res.set("Content-Type", file.mimetype);
 
   if (req.query?.download)
-    return res.download(
-      path.join(UPLOADS_DIR, file.filename),
-      file.originalname
-    );
+    return res.download(path.join(UPLOADS_DIR, String(file.id)), file.name);
 
-  res.sendFile(path.join(UPLOADS_DIR, file.filename), file.originalname);
+  // TODO: Set file name header or something
+  res.sendFile(path.join(UPLOADS_DIR, String(file.id)));
 });
 
 export default router;

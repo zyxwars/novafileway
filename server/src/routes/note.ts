@@ -13,13 +13,10 @@ export const noteRouter = router({
   add: publicProcedure
     .input(
       z.object({
-        name: z.string(),
         text: z.string(),
       })
     )
     .mutation(async ({ input }) => {
-      console.log(input);
-
       const newNote = await prisma.note.create({ data: { ...input } });
 
       return newNote;

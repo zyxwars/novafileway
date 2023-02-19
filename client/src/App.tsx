@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { trpc } from "./utils/trpc";
 import { UploadModal } from "./components/UploadModal";
-import { Files } from "./components/Files";
+import { FilesAndNotes } from "./components/FilesAndNotes";
 import { useState } from "react";
 import { httpBatchLink } from "@trpc/client";
 import { Control } from "./components/Control";
@@ -36,7 +36,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         {/* Content */}
         <div className="flex h-screen w-full items-center justify-center bg-zinc-900">
-          <Files />
+          <FilesAndNotes />
         </div>
         {/* Floating */}
         <Control />

@@ -28,6 +28,8 @@
 - [ ] Move styling to tailwind brackets []
 - [ ] Add error toasts
 - [ ] Sync files without user reload
+- [ ] Remove notes on nuke
+- [ ] Animate copy on click
 
 ## Server:
 

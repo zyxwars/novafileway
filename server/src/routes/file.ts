@@ -19,8 +19,8 @@ export const fileRouter = router({
     // TODO: Custom error message
     if (!toDelete) return null;
 
-    if (fs.existsSync(path.join(UPLOADS_DIR, toDelete.filename)))
-      fs.unlinkSync(path.join(UPLOADS_DIR, toDelete.filename));
+    if (fs.existsSync(path.join(UPLOADS_DIR, String(toDelete.id))))
+      fs.unlinkSync(path.join(UPLOADS_DIR, String(toDelete.id)));
 
     const deleted = await prisma.file.delete({ where: { id: input } });
 
@@ -30,8 +30,8 @@ export const fileRouter = router({
     const allFiles = await prisma.file.findMany();
 
     for (const file of allFiles) {
-      if (fs.existsSync(path.join(UPLOADS_DIR, file.filename)))
-        fs.unlinkSync(path.join(UPLOADS_DIR, file.filename));
+      if (fs.existsSync(path.join(UPLOADS_DIR, String(file.id))))
+        fs.unlinkSync(path.join(UPLOADS_DIR, String(file.id)));
 
       await prisma.file.delete({ where: { id: file.id } });
     }
