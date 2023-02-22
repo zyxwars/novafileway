@@ -58,6 +58,7 @@ export const NoteModal = () => {
           </button>
 
           <button
+            autoFocus
             type="submit"
             className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 py-2 px-4 text-lg font-semibold text-white "
           >

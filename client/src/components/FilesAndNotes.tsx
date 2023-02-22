@@ -14,12 +14,16 @@ import {
 } from "react-icons/fa";
 import { BsSoundwave, BsTextLeft } from "react-icons/bs";
 import { TbBinary } from "react-icons/tb";
-import { trpc } from "../utils/trpc";
+import { RouterOutput, trpc } from "../utils/trpc";
 import { Loader } from "./Loader";
 import { AnimatePresence, motion } from "framer-motion";
 import { useStore } from "../utils/store/store";
 import { toast } from "react-toastify";
 import { useMemo } from "react";
+
+const isNote = (item: any): item is RouterOutput["note"]["list"][number] => {
+  return item?.text !== undefined;
+};
 
 const getFileIcon = (filename: string, mimetype: string) => {
   const size = 64;
@@ -55,13 +59,12 @@ const getFileIcon = (filename: string, mimetype: string) => {
 
 export const FilesAndNotes = () => {
   const utils = trpc.useContext();
-
   const { isDeleting } = useStore();
 
   const files = trpc.file.list.useQuery();
   const notes = trpc.note.list.useQuery();
 
-  const deleteMutation = trpc.file.deleteById.useMutation({
+  const fileDeleteMutation = trpc.file.deleteById.useMutation({
     onSuccess: () => {
       utils.file.list.invalidate();
     },
@@ -70,7 +73,16 @@ export const FilesAndNotes = () => {
     },
   });
 
-  const filesAndNotes = useMemo(() => {
+  const noteDeleteMutation = trpc.note.deleteById.useMutation({
+    onSuccess: () => {
+      utils.note.list.invalidate();
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  const orderedFilesAndNotes = useMemo(() => {
     if (!files.data || !notes.data) return [];
 
     return [...files.data, ...notes.data].sort((a, b) =>
@@ -91,7 +103,7 @@ export const FilesAndNotes = () => {
         // TODO: Media queries, 15 rem
       >
         <AnimatePresence>
-          {filesAndNotes.map((item) => {
+          {orderedFilesAndNotes.map((item) => {
             return (
               <motion.div
                 className="flex flex-col overflow-hidden rounded-sm  bg-zinc-800  text-white"
@@ -107,12 +119,16 @@ export const FilesAndNotes = () => {
                   {isDeleting && (
                     <motion.button
                       onClick={() => {
-                        //TODO: file vs note depending on type
-                        if (item.type === "file")
-                          deleteMutation.mutate(item.id);
-                        else if (item.type === "note")
-                          // TODO: Delete note
-                          return;
+                        // TODO: Make delete cancelable
+                        toast("Delete file?", {
+                          hideProgressBar: false,
+                          theme: "dark",
+                        });
+                        // TODO:
+                        if (isNote(item))
+                          return noteDeleteMutation.mutate(item.id);
+
+                        fileDeleteMutation.mutate(item.id);
                       }}
                       className="flex flex-none items-center justify-center overflow-hidden bg-red-500  font-bold hover:bg-red-400"
                       initial={{ height: "0" }}
@@ -123,7 +139,7 @@ export const FilesAndNotes = () => {
                     </motion.button>
                   )}
                 </AnimatePresence>
-                {item.type === "note" ? (
+                {isNote(item) ? (
                   <div className="relative flex-grow bg-zinc-800 p-2 text-white">
                     <button
                       onClick={() => {
@@ -140,34 +156,32 @@ export const FilesAndNotes = () => {
                     </div>
                   </div>
                 ) : (
-                  item.type === "file" && (
-                    <>
-                      <a
-                        href={`${import.meta.env.VITE_FILE_SERVER}/upload/${
-                          item.id
-                        }`}
-                        target="_blank"
-                        className="flex min-h-0 flex-auto items-center justify-center  bg-zinc-700 text-white"
-                      >
-                        {item.mimetype.includes("image") ? (
-                          <img
-                            className="h-full w-full  object-cover"
-                            src={`${import.meta.env.VITE_FILE_SERVER}/upload/${
-                              item.id
-                            }`}
-                          />
-                        ) : (
-                          getFileIcon(item.name, item.mimetype)
-                        )}
-                      </a>
-                      <div
-                        className="whitespace-nowrap+ w-full flex-none overflow-hidden text-ellipsis whitespace-nowrap bg-zinc-800 p-4  text-sm font-semibold"
-                        // style={{ wordBreak: "break-all" }}
-                      >
-                        {item.name}
-                      </div>
-                    </>
-                  )
+                  <>
+                    <a
+                      href={`${import.meta.env.VITE_FILE_SERVER}/upload/${
+                        item.id
+                      }`}
+                      target="_blank"
+                      className="flex min-h-0 flex-auto items-center justify-center  bg-zinc-700 text-white"
+                    >
+                      {item.mimetype.includes("image") ? (
+                        <img
+                          className="h-full w-full  object-cover"
+                          src={`${import.meta.env.VITE_FILE_SERVER}/upload/${
+                            item.id
+                          }`}
+                        />
+                      ) : (
+                        getFileIcon(item.name, item.mimetype)
+                      )}
+                    </a>
+                    <div
+                      className="whitespace-nowrap+ w-full flex-none overflow-hidden text-ellipsis whitespace-nowrap bg-zinc-800 p-4  text-sm font-semibold"
+                      // style={{ wordBreak: "break-all" }}
+                    >
+                      {item.name}
+                    </div>
+                  </>
                 )}
               </motion.div>
             );

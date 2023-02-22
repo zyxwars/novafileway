@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { router, publicProcedure } from "../trpc";
+import { router, publicProcedure, throwPrismaDeleteError } from "../trpc";
 import { PrismaClient } from "@prisma/client";
 import fs from "fs";
 import { UPLOADS_DIR } from "..";
@@ -15,16 +15,14 @@ export const fileRouter = router({
     return files.reverse();
   }),
   deleteById: publicProcedure.input(z.number()).mutation(async ({ input }) => {
-    const toDelete = await prisma.file.findUnique({ where: { id: input } });
-    // TODO: Custom error message
-    if (!toDelete) return null;
+    if (fs.existsSync(path.join(UPLOADS_DIR, String(input))))
+      fs.unlinkSync(path.join(UPLOADS_DIR, String(input)));
 
-    if (fs.existsSync(path.join(UPLOADS_DIR, String(toDelete.id))))
-      fs.unlinkSync(path.join(UPLOADS_DIR, String(toDelete.id)));
+    const deletedFile = await prisma.file
+      .delete({ where: { id: input } })
+      .catch((e) => throwPrismaDeleteError(e));
 
-    const deleted = await prisma.file.delete({ where: { id: input } });
-
-    return deleted;
+    return deletedFile;
   }),
   deleteAll: publicProcedure.mutation(async (req) => {
     const allFiles = await prisma.file.findMany();

@@ -18,23 +18,24 @@
 
 ## Client:
 
-- [ ] Fix overscroll on iPad
+### Style:
+
 - [ ] Fix grid space between row/cols
 - [ ] Fix mobile click selecting blue
+- [ ] Fix overscroll on iPad
+- [ ] Move styling to tailwind brackets []
+- [ ] Animate copy on click => Spin animation
+
+### Functionality
+
 - [ ] Undo delete
 - [ ] Remove/rework upload during delete, test open file upload when modal auto closed
-- [x] Upload not working from other devices
-- [ ] Add attachment download toggle, ?attachment query
-- [ ] Move styling to tailwind brackets []
-- [ ] Add error toasts
 - [ ] Sync files without user reload
+- [ ] Add attachment download toggle, ?attachment query
 - [ ] Remove notes on nuke
-- [ ] Animate copy on click
+- [ ] Create env for npm run host
 
 ## Server:
 
-- [ ] More dynamic error catching, without crashing the server
-- [ ] Delete files on delete
-- [ ] Merge files and notes for the client side
-- [x] Server static folder wtih uploads
+- [ ] Wrap every function in try catch and report as internal server error
 - [ ] Add images compressor for thumbnails(sharp)

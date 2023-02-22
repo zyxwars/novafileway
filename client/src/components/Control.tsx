@@ -10,6 +10,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { useStore } from "../utils/store/store";
 import { trpc } from "../utils/trpc";
+import { toast } from "react-toastify";
 
 export const Control = () => {
   const utils = trpc.useContext();
@@ -25,6 +26,12 @@ export const Control = () => {
 
   const filesDeleteAllMutation = trpc.file.deleteAll.useMutation({
     onSuccess: () => utils.file.list.invalidate(),
+    onError: (e) => toast.error(e.message),
+  });
+
+  const notesDeleteAllMutation = trpc.note.deleteAll.useMutation({
+    onSuccess: () => utils.note.list.invalidate(),
+    onError: (e) => toast.error(e.message),
   });
 
   return (
@@ -44,10 +51,12 @@ export const Control = () => {
               onClick={() => {
                 if (
                   confirm(
-                    "Are you certain you want to delete all upload files!"
+                    "Are you certain you want to delete all uploaded files and notes?"
                   )
-                )
+                ) {
                   filesDeleteAllMutation.mutate();
+                  notesDeleteAllMutation.mutate();
+                }
               }}
             >
               <FaBiohazard />

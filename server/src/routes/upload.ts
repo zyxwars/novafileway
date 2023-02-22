@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
-import { sendBadRequest, sendError } from "../logger";
+import { sendBadRequest, sendError } from "../nonTrpcErrorHanlder";
 import formidable from "formidable";
 import fs from "fs";
 import path from "path";

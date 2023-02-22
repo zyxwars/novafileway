@@ -1,6 +1,8 @@
 import { z } from "zod";
-import { router, publicProcedure } from "../trpc";
+import { router, publicProcedure, throwPrismaDeleteError } from "../trpc";
 import { PrismaClient } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
+import { TRPC_ERROR_CODES_BY_NUMBER } from "@trpc/server/dist/rpc";
 
 export const prisma = new PrismaClient();
 
@@ -21,4 +23,14 @@ export const noteRouter = router({
 
       return newNote;
     }),
+  deleteById: publicProcedure.input(z.number()).mutation(async ({ input }) => {
+    const deletedNote = await prisma.note
+      .delete({ where: { id: input } })
+      .catch((e) => throwPrismaDeleteError(e));
+    return deletedNote;
+  }),
+  deleteAll: publicProcedure.mutation(async () => {
+    const deletedCount = await prisma.note.deleteMany();
+    return;
+  }),
 });
