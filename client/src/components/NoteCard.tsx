@@ -25,7 +25,10 @@ export const NoteCard = ({
 
   return (
     <DeletableCard deleteFn={() => mutation.mutate(note.id)}>
-      <div className="relative flex-grow bg-zinc-800 p-2 text-white">
+      <div
+        className="relative min-h-0 flex-grow bg-zinc-800 p-2
+      text-white"
+      >
         <button
           onClick={async () => {
             navigator.clipboard.writeText(note.text);
@@ -54,7 +57,7 @@ export const NoteCard = ({
             <FaCheck size={24} />
           </motion.div>
         </button>
-        <div className="h-full w-full overflow-auto whitespace-pre-wrap">
+        <div className="h-full w-full overflow-auto whitespace-pre-wrap break-words">
           {note.text}
         </div>
       </div>
