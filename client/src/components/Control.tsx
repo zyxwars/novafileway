@@ -77,7 +77,7 @@ export const Control = () => {
             <>
               {/* Delete all */}
               <motion.button
-                className="rounded-md border-2 border-white bg-gradient-to-r from-emerald-500 to-green-500 p-4 text-2xl text-white shadow-md"
+                className="rounded-md   bg-gradient-to-r from-emerald-500 to-green-500 p-5 text-2xl text-white shadow-2xl shadow-black"
                 initial={{ opacity: 0, y: "100px" }}
                 animate={{ opacity: 1, y: 0 }}
                 onClick={() => {
@@ -95,7 +95,7 @@ export const Control = () => {
               </motion.button>
               {/* TODO: Delete */}
               <motion.button
-                className="rounded-md border-2 border-white bg-gradient-to-r from-pink-500 to-red-500 p-4 text-2xl text-white shadow-md"
+                className="rounded-md bg-gradient-to-r from-pink-500 to-red-500 p-5 text-2xl text-white shadow-2xl shadow-black"
                 initial={{ opacity: 0, y: "100px" }}
                 animate={{ opacity: 1, y: 0 }}
                 onClick={() => setIsDeleting(!isDeleting)}
@@ -107,7 +107,7 @@ export const Control = () => {
                 onClick={() => {
                   setIsOpenNoteModal(true);
                 }}
-                className="rounded-md border-2 border-white bg-gradient-to-r from-yellow-300 to-amber-500 p-4 text-2xl text-white shadow-md"
+                className="rounded-md   bg-gradient-to-r from-yellow-500 to-amber-500 p-5 text-2xl text-white shadow-2xl shadow-black"
                 initial={{ opacity: 0, y: "100px" }}
                 animate={{ opacity: 1, y: 0 }}
               >
@@ -118,7 +118,7 @@ export const Control = () => {
         </AnimatePresence>
         {/* Show more */}
         <motion.button
-          className="rounded-md border-2  border-white bg-zinc-800 p-4 text-2xl text-white shadow-md"
+          className="rounded-md bg-zinc-800 p-5 text-2xl text-white shadow-2xl shadow-black"
           onClick={() => {
             setShowOptions((showOptions) => !showOptions);
             setIsDeleting(false);
@@ -134,7 +134,7 @@ export const Control = () => {
             if (!uploadInputRef?.current) return;
             uploadInputRef.current.click();
           }}
-          className="rounded-md border-2 border-white bg-gradient-to-r from-cyan-500 to-blue-500 p-4 text-2xl text-white shadow-md"
+          className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 p-5 text-2xl text-white shadow-2xl shadow-black"
         >
           <input
             ref={uploadInputRef}
@@ -152,24 +152,31 @@ export const Control = () => {
         </motion.button>
       </motion.div>
 
-      {isDraggingFile && (
-        <motion.div className="fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center border-8 border-dashed bg-black opacity-25">
-          <input
-            className="fixed top-0 bottom-0 left-0 right-0 h-full w-full opacity-0"
-            type="file"
-            multiple
-            onChange={(e) => {
-              // Open modal and add files
-              setIsDraggingFile(false);
-              setIsOpenUploadModal(true);
-              addFilesToUpload(e.target?.files);
-            }}
-          />
-          <div className="text-2xl font-bold text-white">
-            Drop a file to upload
-          </div>
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {isDraggingFile && (
+          <motion.div
+            className="fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center border-8 border-dashed bg-black"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.25 }}
+            exit={{ opacity: 0 }}
+          >
+            <input
+              className="fixed top-0 bottom-0 left-0 right-0 h-full w-full opacity-0"
+              type="file"
+              multiple
+              onChange={(e) => {
+                // Open modal and add files
+                setIsDraggingFile(false);
+                setIsOpenUploadModal(true);
+                addFilesToUpload(e.target?.files);
+              }}
+            />
+            <div className="text-2xl font-bold text-white">
+              Drop a file to upload
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

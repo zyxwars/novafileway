@@ -3,10 +3,12 @@ import React from "react";
 import {
   FaBook,
   FaCode,
+  FaCompress,
   FaCopy,
   FaCss3,
   FaFile,
   FaFilePdf,
+  FaFileWord,
   FaHtml5,
   FaJs,
   FaPython,
@@ -20,9 +22,12 @@ import { TbBinary } from "react-icons/tb";
 const getFileIcon = (filename: string, mimetype: string) => {
   const size = 64;
 
+  // TODO: Multitple extensions for one file icon
   switch (filename.split(".").pop()) {
     case "pdf":
       return <FaFilePdf size={size} />;
+    case "docx":
+      return <FaFileWord size={size} />;
     case "html":
       return <FaHtml5 size={size} />;
     case "css":
@@ -33,7 +38,8 @@ const getFileIcon = (filename: string, mimetype: string) => {
       return <FaPython size={size} />;
     case "c":
       return <FaCode size={size} />;
-    case "zip" || "rar" || "gz" || "tar":
+    // TODO: Zipper icon
+    case "zip":
       return <FaBook size={size} />;
     default:
       switch (mimetype.split("/").shift()) {
@@ -70,7 +76,8 @@ export const FileCard = ({
       <a
         href={`${import.meta.env.VITE_FILE_SERVER}/upload/${file.id}`}
         target="_blank"
-        className="flex min-h-0 flex-auto items-center justify-center bg-zinc-700 text-white transition duration-500 ease-in hover:bg-zinc-600"
+        // TODO: Set color based on filetype
+        className="flex min-h-0 flex-auto items-center justify-center bg-zinc-700 bg-gradient-to-r from-slate-500 to-zinc-500  text-white transition duration-500 ease-in hover:bg-zinc-600"
       >
         {file.mimetype.includes("image") ? (
           <img
@@ -85,7 +92,7 @@ export const FileCard = ({
         )}
       </a>
       <div
-        className="w-full flex-none overflow-hidden text-ellipsis whitespace-nowrap bg-zinc-800 p-4 text-sm  font-semibold"
+        className="w-full flex-none overflow-hidden text-ellipsis whitespace-nowrap bg-zinc-800 bg-gradient-to-r from-slate-700  to-zinc-700 p-4 text-sm font-semibold"
         // style={{ wordBreak: "break-all" }}
       >
         {file.name}
