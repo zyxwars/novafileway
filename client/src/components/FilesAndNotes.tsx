@@ -1,24 +1,6 @@
-import {
-  FaFile,
-  FaBook,
-  FaFilePdf,
-  FaCode,
-  FaHtml5,
-  FaCss3,
-  FaJs,
-  FaPython,
-  FaClipboard,
-  FaCopy,
-  FaCopyright,
-  FaRegCopy,
-} from "react-icons/fa";
-import { BsSoundwave, BsTextLeft } from "react-icons/bs";
-import { TbBinary } from "react-icons/tb";
 import { RouterOutput, trpc } from "../utils/trpc";
 import { Loader } from "./Loader";
 import { AnimatePresence, motion } from "framer-motion";
-import { useStore } from "../store/store";
-import { toast } from "react-toastify";
 import { useMemo } from "react";
 import { NoteCard } from "./NoteCard";
 import { FileCard } from "./FileCard";

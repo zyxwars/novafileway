@@ -1,7 +1,8 @@
-import { FaCopy } from "react-icons/fa";
+import { FaCheck, FaCopy } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { DeletableCard } from "./DeletableCard";
 import { RouterOutput, trpc } from "../utils/trpc";
+import { motion, useAnimationControls } from "framer-motion";
 
 export const NoteCard = ({
   note,
@@ -19,20 +20,41 @@ export const NoteCard = ({
     },
   });
 
+  const clipboardControls = useAnimationControls();
+  const checkmarkControls = useAnimationControls();
+
   return (
-    <DeletableCard deleteFn={() => mutation.mutate()}>
+    <DeletableCard deleteFn={() => mutation.mutate(note.id)}>
       <div className="relative flex-grow bg-zinc-800 p-2 text-white">
         <button
-          onClick={() => {
+          onClick={async () => {
             navigator.clipboard.writeText(note.text);
-            toast("Text copied!", { autoClose: 1000 });
+            clipboardControls.start({ rotate: 360, opacity: 0 });
+            await checkmarkControls.start({ rotate: 360, opacity: 1 });
+
+            await checkmarkControls.start({
+              opacity: 0,
+              transition: { delay: 3 },
+            });
+            clipboardControls.start({ opacity: 1 });
+            clipboardControls.set({ rotate: 0 });
+            checkmarkControls.set({ rotate: 0 });
           }}
-          className="rigth-2 absolute right-2 rounded-md p-2"
+          className="absolute right-2 rounded-md p-2"
           style={{ background: "rgba(0, 0, 0, 0.25)" }}
         >
-          <FaCopy size={32} />
+          <motion.div animate={clipboardControls}>
+            <FaCopy size={32} />
+          </motion.div>
+          <motion.div
+            className="absolute top-0 right-0 left-0 bottom-0 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={checkmarkControls}
+          >
+            <FaCheck size={24} />
+          </motion.div>
         </button>
-        <div className="h-full w-full overflow-auto whitespace-pre">
+        <div className="h-full w-full overflow-auto whitespace-pre-wrap">
           {note.text}
         </div>
       </div>

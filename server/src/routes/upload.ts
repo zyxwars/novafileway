@@ -74,7 +74,7 @@ router.get("/:id", async (req, res) => {
   if (req.query?.download)
     return res.download(path.join(UPLOADS_DIR, String(file.id)), file.name);
 
-  // TODO: Set file name header or something
+  res.set("Content-Disposition", "inline; filename=" + file.name);
   res.sendFile(path.join(UPLOADS_DIR, String(file.id)));
 });
 

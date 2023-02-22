@@ -66,11 +66,11 @@ export const FileCard = ({
   });
 
   return (
-    <DeletableCard deleteFn={() => mutation.mutate()}>
+    <DeletableCard deleteFn={() => mutation.mutate(file.id)}>
       <a
         href={`${import.meta.env.VITE_FILE_SERVER}/upload/${file.id}`}
         target="_blank"
-        className="files-center flex min-h-0 flex-auto justify-center  bg-zinc-700 text-white"
+        className="flex min-h-0 flex-auto items-center justify-center  bg-zinc-700 text-white"
       >
         {file.mimetype.includes("image") ? (
           <img

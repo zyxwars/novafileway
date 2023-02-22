@@ -13,7 +13,7 @@
 - Folder upload, folder navigation 🤔
 - Paste text auto upload
 - Text field creation ✅
-- Peek text
+- Peek text ✅
 - Note upload size 🤔
 
 ## Client:
@@ -28,11 +28,9 @@
 
 ### Functionality
 
-- [ ] Undo delete
 - [ ] Remove/rework upload during delete, test open file upload when modal auto closed
 - [ ] Sync files without user reload
 - [ ] Add attachment download toggle, ?attachment query
-- [ ] Remove notes on nuke
 - [ ] Create env for npm run host
 
 ## Server:

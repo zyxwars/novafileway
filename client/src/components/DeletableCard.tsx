@@ -2,7 +2,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import React, { PropsWithChildren } from "react";
 import { useStore } from "../store/store";
 import { toast } from "react-toastify";
-import { UndoDeleteToast } from "./UndoDeleteToast";
 
 export const DeletableCard = ({
   children,
@@ -23,12 +22,7 @@ export const DeletableCard = ({
       <AnimatePresence>
         {isDeleting && (
           <motion.button
-            onClick={() =>
-              toast(UndoDeleteToast, {
-                hideProgressBar: false,
-                theme: "dark",
-              })
-            }
+            onClick={() => deleteFn()}
             className="flex flex-none items-center justify-center overflow-hidden bg-red-500  font-bold hover:bg-red-400"
             initial={{ height: "0" }}
             animate={{ height: "3rem" }}
