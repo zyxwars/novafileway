@@ -29,7 +29,6 @@ export const NoteModal = () => {
     // TODO: Decide whether uploading a file or text
     // TODO: Move this to the top of the app
     window.addEventListener("paste", handlePaste);
-    window.addEventListener("dragover", (e) => console.log(e));
     return () => window.removeEventListener("paste", handlePaste);
   }, []);
 
