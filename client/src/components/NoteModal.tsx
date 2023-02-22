@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "./Modal";
-import { useStore } from "../utils/store/store";
+import { useStore } from "../store/store";
 import { motion } from "framer-motion";
 import { trpc } from "../utils/trpc";
 import { useForm } from "react-hook-form";

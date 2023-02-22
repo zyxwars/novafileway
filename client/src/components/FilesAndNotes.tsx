@@ -17,70 +17,19 @@ import { TbBinary } from "react-icons/tb";
 import { RouterOutput, trpc } from "../utils/trpc";
 import { Loader } from "./Loader";
 import { AnimatePresence, motion } from "framer-motion";
-import { useStore } from "../utils/store/store";
+import { useStore } from "../store/store";
 import { toast } from "react-toastify";
 import { useMemo } from "react";
+import { NoteCard } from "./NoteCard";
+import { FileCard } from "./FileCard";
 
 const isNote = (item: any): item is RouterOutput["note"]["list"][number] => {
   return item?.text !== undefined;
 };
 
-const getFileIcon = (filename: string, mimetype: string) => {
-  const size = 64;
-
-  switch (filename.split(".").pop()) {
-    case "pdf":
-      return <FaFilePdf size={size} />;
-    case "html":
-      return <FaHtml5 size={size} />;
-    case "css":
-      return <FaCss3 size={size} />;
-    case "js":
-      return <FaJs size={size} />;
-    case "py":
-      return <FaPython size={size} />;
-    case "c":
-      return <FaCode size={size} />;
-    case "zip" || "rar" || "gz" || "tar":
-      return <FaBook size={size} />;
-    default:
-      switch (mimetype.split("/").shift()) {
-        case "text":
-          return <BsTextLeft size={size} />;
-        case "audio":
-          return <BsSoundwave size={size} />;
-
-        default:
-          if (filename.includes(".")) return <FaFile size={size} />;
-          return <TbBinary size={size} />;
-      }
-  }
-};
-
 export const FilesAndNotes = () => {
-  const utils = trpc.useContext();
-  const { isDeleting } = useStore();
-
   const files = trpc.file.list.useQuery();
   const notes = trpc.note.list.useQuery();
-
-  const fileDeleteMutation = trpc.file.deleteById.useMutation({
-    onSuccess: () => {
-      utils.file.list.invalidate();
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
-
-  const noteDeleteMutation = trpc.note.deleteById.useMutation({
-    onSuccess: () => {
-      utils.note.list.invalidate();
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
 
   const orderedFilesAndNotes = useMemo(() => {
     if (!files.data || !notes.data) return [];
@@ -103,89 +52,13 @@ export const FilesAndNotes = () => {
         // TODO: Media queries, 15 rem
       >
         <AnimatePresence>
-          {orderedFilesAndNotes.map((item) => {
-            return (
-              <motion.div
-                className="flex flex-col overflow-hidden rounded-sm  bg-zinc-800  text-white"
-                key={item.id + item.createdAt}
-                layout
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0, opacity: 0 }}
-                // TODO: Change layout transition duration
-                transition={{ duration: 0.1 }}
-              >
-                <AnimatePresence>
-                  {isDeleting && (
-                    <motion.button
-                      onClick={() => {
-                        // TODO: Make delete cancelable
-                        toast("Delete file?", {
-                          hideProgressBar: false,
-                          theme: "dark",
-                        });
-                        // TODO:
-                        if (isNote(item))
-                          return noteDeleteMutation.mutate(item.id);
-
-                        fileDeleteMutation.mutate(item.id);
-                      }}
-                      className="flex flex-none items-center justify-center overflow-hidden bg-red-500  font-bold hover:bg-red-400"
-                      initial={{ height: "0" }}
-                      animate={{ height: "3rem" }}
-                      exit={{ height: "0" }}
-                    >
-                      Delete
-                    </motion.button>
-                  )}
-                </AnimatePresence>
-                {isNote(item) ? (
-                  <div className="relative flex-grow bg-zinc-800 p-2 text-white">
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(item.text);
-                        toast("Text copied!", { autoClose: 1000 });
-                      }}
-                      className="rigth-2 absolute right-2 rounded-md p-2"
-                      style={{ background: "rgba(0, 0, 0, 0.25)" }}
-                    >
-                      <FaCopy size={32} />
-                    </button>
-                    <div className="h-full w-full overflow-auto whitespace-pre">
-                      {item.text}
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <a
-                      href={`${import.meta.env.VITE_FILE_SERVER}/upload/${
-                        item.id
-                      }`}
-                      target="_blank"
-                      className="flex min-h-0 flex-auto items-center justify-center  bg-zinc-700 text-white"
-                    >
-                      {item.mimetype.includes("image") ? (
-                        <img
-                          className="h-full w-full  object-cover"
-                          src={`${import.meta.env.VITE_FILE_SERVER}/upload/${
-                            item.id
-                          }`}
-                        />
-                      ) : (
-                        getFileIcon(item.name, item.mimetype)
-                      )}
-                    </a>
-                    <div
-                      className="whitespace-nowrap+ w-full flex-none overflow-hidden text-ellipsis whitespace-nowrap bg-zinc-800 p-4  text-sm font-semibold"
-                      // style={{ wordBreak: "break-all" }}
-                    >
-                      {item.name}
-                    </div>
-                  </>
-                )}
-              </motion.div>
-            );
-          })}
+          {orderedFilesAndNotes.map((item) =>
+            isNote(item) ? (
+              <NoteCard key={item.id + item.createdAt} note={item} />
+            ) : (
+              <FileCard key={item.id + item.createdAt} file={item} />
+            )
+          )}
         </AnimatePresence>
       </div>
     </>

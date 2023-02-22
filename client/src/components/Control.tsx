@@ -8,7 +8,7 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
-import { useStore } from "../utils/store/store";
+import { useStore } from "../store/store";
 import { trpc } from "../utils/trpc";
 import { toast } from "react-toastify";
 

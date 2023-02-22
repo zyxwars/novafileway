@@ -1,11 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Modal } from "./Modal";
-import { useStore } from "../utils/store/store";
+import { useStore } from "../store/store";
 import { FaTimes } from "react-icons/fa";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { trpc } from "../utils/trpc";
-import { FileToUpload } from "../utils/store/uploadSlice";
+import { FileToUpload } from "../store/uploadSlice";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
