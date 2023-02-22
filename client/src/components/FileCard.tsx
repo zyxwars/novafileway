@@ -70,11 +70,11 @@ export const FileCard = ({
       <a
         href={`${import.meta.env.VITE_FILE_SERVER}/upload/${file.id}`}
         target="_blank"
-        className="flex min-h-0 flex-auto items-center justify-center  bg-zinc-700 text-white"
+        className="flex min-h-0 flex-auto items-center justify-center bg-zinc-700  text-white transition duration-500 ease-in hover:bg-zinc-600"
       >
         {file.mimetype.includes("image") ? (
           <img
-            className="h-full w-full  object-cover"
+            className="h-full w-full object-cover"
             src={`${import.meta.env.VITE_FILE_SERVER}/upload/${file.id}`}
           />
         ) : (
@@ -82,7 +82,7 @@ export const FileCard = ({
         )}
       </a>
       <div
-        className="whitespace-nowrap+ w-full flex-none overflow-hidden text-ellipsis whitespace-nowrap bg-zinc-800 p-4  text-sm font-semibold"
+        className="whitespace-nowrap+ w-full flex-none overflow-hidden text-ellipsis whitespace-nowrap bg-zinc-800 p-4 text-sm  font-semibold"
         // style={{ wordBreak: "break-all" }}
       >
         {file.name}

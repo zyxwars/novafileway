@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useState } from "react";
 import { useStore } from "../store/store";
 import { toast } from "react-toastify";
 
@@ -8,6 +8,7 @@ export const DeletableCard = ({
   deleteFn,
 }: { deleteFn: () => any } & PropsWithChildren) => {
   const { isDeleting } = useStore();
+  const [isAlreadyDeleted, setIsAlreadyDeleted] = useState(false);
 
   return (
     <motion.div
@@ -22,8 +23,14 @@ export const DeletableCard = ({
       <AnimatePresence>
         {isDeleting && (
           <motion.button
-            onClick={() => deleteFn()}
-            className="flex flex-none items-center justify-center overflow-hidden bg-red-500  font-bold hover:bg-red-400"
+            // Disable multi delete while animation is still playing
+            // If undo is ever added this will need to be reworked a bit
+            disabled={isAlreadyDeleted}
+            onClick={() => {
+              deleteFn();
+              setIsAlreadyDeleted(true);
+            }}
+            className="ease flex flex-none items-center justify-center overflow-hidden bg-red-500 font-bold transition duration-200 hover:bg-red-400 disabled:bg-red-600"
             initial={{ height: "0" }}
             animate={{ height: "3rem" }}
             exit={{ height: "0" }}

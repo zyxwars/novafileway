@@ -4,6 +4,7 @@ import { useStore } from "../store/store";
 import { motion } from "framer-motion";
 import { trpc } from "../utils/trpc";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 export const NoteUploadModal = () => {
   const utils = trpc.useContext();
@@ -15,6 +16,7 @@ export const NoteUploadModal = () => {
       utils.note.list.invalidate();
       setIsOpenNoteModal(false);
     },
+    onError: (err) => toast.error(err.message),
   });
 
   return (
@@ -53,7 +55,7 @@ export const NoteUploadModal = () => {
           <button
             autoFocus
             className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 py-2 px-4 text-lg font-semibold text-white "
-            onClick={() => mutation.mutate({ text })}
+            onClick={() => mutation.mutate({ text: noteText })}
           >
             Upload
           </button>
