@@ -8,6 +8,7 @@ import path from "path";
 
 const PORT = 8080;
 export const UPLOADS_DIR = path.join(__dirname, "../uploads");
+export const THUMBNAILS_DIR = path.join(UPLOADS_DIR, "thumbnails");
 
 const app = express();
 

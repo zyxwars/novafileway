@@ -8,6 +8,7 @@ import { Control } from "./components/Control";
 import { NoteUploadModal } from "./components/NoteUploadModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { motion } from "framer-motion";
 
 function App() {
   const [queryClient] = useState(
@@ -35,7 +36,7 @@ function App() {
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         {/* Content */}
-        <div className="flex h-screen w-full items-center justify-center bg-zinc-900">
+        <div className="flex h-screen w-full flex-col items-center justify-center bg-zinc-900">
           <FilesAndNotes />
         </div>
         {/* Floating */}

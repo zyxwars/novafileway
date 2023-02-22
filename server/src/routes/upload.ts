@@ -1,10 +1,13 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
-import { sendBadRequest, sendError } from "../nonTrpcErrorHanlder";
+import { sendBadRequest, sendError } from "../nonTrpcErrorHandler";
 import formidable from "formidable";
 import fs from "fs";
 import path from "path";
-import { UPLOADS_DIR } from "..";
+import { THUMBNAILS_DIR, UPLOADS_DIR } from "..";
+import sharp from "sharp";
+import os from "os";
+import { v4 as uuidv4 } from "uuid";
 
 const prisma = new PrismaClient();
 
@@ -12,10 +15,10 @@ const router = Router();
 
 router.post("/", (req, res) => {
   if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR);
+  if (!fs.existsSync(THUMBNAILS_DIR)) fs.mkdirSync(THUMBNAILS_DIR);
 
   const form = formidable({
-    // TODO: Create folder beforehand, use _dirname ?
-    uploadDir: UPLOADS_DIR,
+    uploadDir: os.tmpdir(),
     maxFiles: 1,
     maxFields: 1,
     maxFileSize: 500 * 1000 ** 2,
@@ -45,26 +48,49 @@ router.post("/", (req, res) => {
       return sendBadRequest(res, "No file provided");
     }
 
+    // The database entry can be accessed by client query before the thumbnail exists
+    // so create the thumbnail before creating the db record
+
+    // TODO: replace by uuid or create db, but set as being processed until thumbnail is generated
+    const newId = uuidv4();
+
+    const newFilepath = path.join(UPLOADS_DIR, newId);
+
+    // Move file from tmp to permanent storage
+    fs.renameSync(file.filepath, newFilepath);
+
+    // Create thumbnail
+    if (file.mimetype?.startsWith("image/")) {
+      await sharp(fs.readFileSync(newFilepath))
+        .resize(300)
+        .toFile(path.join(THUMBNAILS_DIR, newId));
+    }
+
     const savedFile = await prisma.file.create({
       data: {
+        id: newId,
         name: file.originalFilename || "Unnamed file",
         size: file.size,
         mimetype: file.mimetype || "",
       },
     });
 
-    fs.renameSync(
-      file.filepath,
-      path.join(file.filepath, "../" + savedFile.id)
-    );
-
-    res.status(200).json(savedFile);
+    return res.status(200).json(savedFile);
   });
+});
+
+router.get("/thumbnails/:id", async (req, res) => {
+  if (!fs.existsSync(path.join(THUMBNAILS_DIR, req.params.id)))
+    return res
+      .status(404)
+      .send(`Thumbnail for file with id ${req.params.id} not found`);
+
+  res.sendFile(path.join(THUMBNAILS_DIR, req.params.id));
 });
 
 router.get("/:id", async (req, res) => {
   const file = await prisma.file.findUnique({
-    where: { id: Number(req.params.id) },
+    where: { id: req.params.id },
   });
   if (!file)
     return res.status(404).send(`File with id ${req.params.id} not found`);
@@ -72,10 +98,10 @@ router.get("/:id", async (req, res) => {
   res.set("Content-Type", file.mimetype);
 
   if (req.query?.download)
-    return res.download(path.join(UPLOADS_DIR, String(file.id)), file.name);
+    return res.download(path.join(UPLOADS_DIR, file.id), file.name);
 
   res.set("Content-Disposition", "inline; filename=" + file.name);
-  res.sendFile(path.join(UPLOADS_DIR, String(file.id)));
+  res.sendFile(path.join(UPLOADS_DIR, file.id));
 });
 
 export default router;

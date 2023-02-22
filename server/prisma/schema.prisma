@@ -11,7 +11,7 @@ datasource db {
 }
 
 model File {
-  id        Int      @id @default(autoincrement())
+  id        String   @id
   name      String
   size      Int
   mimetype  String
@@ -19,7 +19,7 @@ model File {
 }
 
 model Note {
-  id        Int      @id @default(autoincrement())
+  id        String   @id
   text      String
   createdAt DateTime @default(now())
 }

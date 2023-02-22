@@ -6,7 +6,7 @@
 - Max size
 - Used space indicator
 - Used space check
-- Image thumbnails
+- Image thumbnails ✅
 - Delete after time, cronjob docker
 - Delete stray cron
 - Open/Download ✅
@@ -36,4 +36,3 @@
 ## Server:
 
 - [ ] Wrap every function in try catch and report as internal server error
-- [ ] Add images compressor for thumbnails(sharp)

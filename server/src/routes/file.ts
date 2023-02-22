@@ -2,7 +2,7 @@ import { z } from "zod";
 import { router, publicProcedure, throwPrismaDeleteError } from "../trpc";
 import { PrismaClient } from "@prisma/client";
 import fs from "fs";
-import { UPLOADS_DIR } from "..";
+import { THUMBNAILS_DIR, UPLOADS_DIR } from "..";
 import path from "path";
 
 export const prisma = new PrismaClient();
@@ -14,9 +14,12 @@ export const fileRouter = router({
 
     return files.reverse();
   }),
-  deleteById: publicProcedure.input(z.number()).mutation(async ({ input }) => {
-    if (fs.existsSync(path.join(UPLOADS_DIR, String(input))))
-      fs.unlinkSync(path.join(UPLOADS_DIR, String(input)));
+  deleteById: publicProcedure.input(z.string()).mutation(async ({ input }) => {
+    if (fs.existsSync(path.join(UPLOADS_DIR, input)))
+      fs.unlinkSync(path.join(UPLOADS_DIR, input));
+
+    if (fs.existsSync(path.join(THUMBNAILS_DIR, input)))
+      fs.unlinkSync(path.join(THUMBNAILS_DIR, input));
 
     const deletedFile = await prisma.file
       .delete({ where: { id: input } })
@@ -28,8 +31,11 @@ export const fileRouter = router({
     const allFiles = await prisma.file.findMany();
 
     for (const file of allFiles) {
-      if (fs.existsSync(path.join(UPLOADS_DIR, String(file.id))))
-        fs.unlinkSync(path.join(UPLOADS_DIR, String(file.id)));
+      if (fs.existsSync(path.join(UPLOADS_DIR, file.id)))
+        fs.unlinkSync(path.join(UPLOADS_DIR, file.id));
+
+      if (fs.existsSync(path.join(THUMBNAILS_DIR, file.id)))
+        fs.unlinkSync(path.join(THUMBNAILS_DIR, file.id));
 
       await prisma.file.delete({ where: { id: file.id } });
     }
