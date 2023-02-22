@@ -26,6 +26,9 @@ export const Control = () => {
     addFilesToUpload,
     setIsDeleting,
     isDeleting,
+    isOpenNoteModal,
+    isOpenUploadModal,
+    setNoteText,
   } = useStore();
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -42,14 +45,23 @@ export const Control = () => {
 
   const handleDragOver = () => setIsDraggingFile(true);
   const handleDragLeave = () => setIsDraggingFile(false);
+  const handlePaste = (e: ClipboardEvent) => {
+    // TODO: Add file paste
+    if (isOpenNoteModal || isOpenUploadModal) return;
+
+    setIsOpenNoteModal(true);
+    setNoteText(e.clipboardData?.getData("text") || "");
+  };
 
   useEffect(() => {
     window.document.body.addEventListener("dragover", handleDragOver);
     window.document.body.addEventListener("dragleave", handleDragLeave);
+    window.document.body.addEventListener("paste", handlePaste);
 
     return () => {
       window.document.body.removeEventListener("dragover", handleDragOver);
       window.document.body.removeEventListener("dragleave", handleDragLeave);
+      // window.removeEventListener("paste", handlePaste);
     };
   }, []);
 

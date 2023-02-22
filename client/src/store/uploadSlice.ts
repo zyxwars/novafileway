@@ -21,6 +21,7 @@ export interface UploadSlice {
   currentUploadFileId: string | null;
   uploadProgress: AxiosProgressEvent | null;
   uploadAbortController: AbortController;
+  noteText: string;
 
   addFilesToUpload: (files: FileList | null) => void;
   removeFileToUpload: (id: string) => void;
@@ -29,6 +30,7 @@ export interface UploadSlice {
   closeUploadModal: () => void;
   setUploadProgress: (uploadProgress: AxiosProgressEvent) => void;
   abortUpload: () => void;
+  setNoteText: (noteText: string) => void;
 }
 
 export const createUploadSlice: StateCreator<
@@ -41,6 +43,7 @@ export const createUploadSlice: StateCreator<
   currentUploadFileId: null,
   uploadProgress: null,
   uploadAbortController: new AbortController(),
+  noteText: "",
 
   addFilesToUpload: (files) => {
     if (!files) return;
@@ -121,6 +124,11 @@ export const createUploadSlice: StateCreator<
     set((state) => {
       state.uploadAbortController.abort();
       return { uploadAbortController: new AbortController() };
+    });
+  },
+  setNoteText: (noteText) => {
+    set({
+      noteText,
     });
   },
 });

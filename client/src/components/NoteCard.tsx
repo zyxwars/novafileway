@@ -43,8 +43,7 @@ export const NoteCard = ({
             clipboardControls.set({ rotate: 0 });
             checkmarkControls.set({ rotate: 0 });
           }}
-          className="absolute right-2 rounded-md p-2"
-          style={{ background: "rgba(0, 0, 0, 0.25)" }}
+          className="absolute right-2 rounded-md bg-zinc-900 p-2 transition hover:bg-zinc-700"
         >
           <motion.div animate={clipboardControls}>
             <FaCopy size={32} />

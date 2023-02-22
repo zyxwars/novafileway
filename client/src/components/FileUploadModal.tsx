@@ -9,7 +9,7 @@ import { FileToUpload } from "../store/uploadSlice";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
-export const UploadModal = () => {
+export const FileUploadModal = () => {
   const utils = trpc.useContext();
 
   const {
