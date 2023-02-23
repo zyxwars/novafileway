@@ -36,3 +36,6 @@
 ## Server:
 
 - [ ] Wrap every function in try catch and report as internal server error
+- [ ] Error logging
+- [ ] Most used filetypes, average size analytics
+- [ ] Show used space, total uploaded, etc
