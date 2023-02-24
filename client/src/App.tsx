@@ -9,6 +9,7 @@ import { NoteUploadModal } from "./components/NoteUploadModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { motion } from "framer-motion";
+import { InfoBar } from "./components/InfoBar";
 
 function App() {
   const [queryClient] = useState(
@@ -37,6 +38,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         {/* Content */}
         <div className="flex h-screen w-full flex-col items-center justify-center bg-zinc-900">
+          <InfoBar />
           <FilesAndNotes />
         </div>
         {/* Floating */}
