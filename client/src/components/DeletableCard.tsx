@@ -12,7 +12,7 @@ export const DeletableCard = ({
 
   return (
     <motion.div
-      className="flex flex-col rounded-sm  bg-zinc-800  text-white"
+      className="flex flex-col overflow-hidden rounded-sm  bg-zinc-800  text-white"
       layout
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
