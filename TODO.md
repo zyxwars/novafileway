@@ -3,7 +3,7 @@
 - Single file upload ✅
 - Multi file upload loop ✅
 - Upload progress ✅
-- Max size
+- Max size check if file system if full
 - Used space indicator
 - Used space check
 - Image thumbnails ✅

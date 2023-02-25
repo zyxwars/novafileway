@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import fs from "fs";
 import { THUMBNAILS_DIR, UPLOADS_DIR } from "..";
 import path from "path";
+import { getDiskUsage } from "../diskUsage";
 
 export const prisma = new PrismaClient();
 

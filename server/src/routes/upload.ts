@@ -8,6 +8,9 @@ import { THUMBNAILS_DIR, UPLOADS_DIR } from "..";
 import sharp from "sharp";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
+import { getDiskUsage } from "../diskUsage";
+
+const MAX_FILE_SIZE = 500 * 1000 ** 2;
 
 const prisma = new PrismaClient();
 
@@ -21,7 +24,7 @@ router.post("/", (req, res) => {
     uploadDir: os.tmpdir(),
     maxFiles: 1,
     maxFields: 1,
-    maxFileSize: 500 * 1000 ** 2,
+    maxFileSize: MAX_FILE_SIZE,
   });
   let filePath: string | null = null;
 
@@ -50,8 +53,6 @@ router.post("/", (req, res) => {
 
     // The database entry can be accessed by client query before the thumbnail exists
     // so create the thumbnail before creating the db record
-
-    // TODO: replace by uuid or create db, but set as being processed until thumbnail is generated
     const newId = uuidv4();
 
     const newFilepath = path.join(UPLOADS_DIR, newId);
