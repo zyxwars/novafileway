@@ -25,6 +25,7 @@
 - [ ] Fix overscroll on iPad
 - [ ] Move styling to tailwind brackets []
 - [ ] Animate copy on click => Spin animation
+- [ ] Pulse add up and down if no files or notes are uploaded > framer loop animation
 
 ### Functionality
 

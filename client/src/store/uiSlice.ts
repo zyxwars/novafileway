@@ -5,10 +5,12 @@ export interface UiSlice {
   isOpenUploadModal: boolean;
   isOpenNoteModal: boolean;
   isDeleting: boolean;
+  isFilesAndNotesEmpty: boolean;
 
-  setIsOpenUploadModal: (show: boolean) => void;
-  setIsOpenNoteModal: (show: boolean) => void;
-  setIsDeleting: (show: boolean) => void;
+  setIsOpenUploadModal: (isOpenUploadModal: boolean) => void;
+  setIsOpenNoteModal: (isOpenNoteModal: boolean) => void;
+  setIsDeleting: (isDeleting: boolean) => void;
+  setIsFilesAndNotesEmpty: (isFilesAndNotesEmpty: boolean) => void;
 }
 
 export const createUiSlice: StateCreator<StoreState, [], [], UiSlice> = (
@@ -17,14 +19,17 @@ export const createUiSlice: StateCreator<StoreState, [], [], UiSlice> = (
   isOpenUploadModal: false,
   isOpenNoteModal: false,
   isDeleting: false,
+  isFilesAndNotesEmpty: false,
 
-  setIsOpenUploadModal: (show) => {
-    set({ isOpenUploadModal: show });
+  setIsOpenUploadModal: (isOpenUploadModal) => {
+    set({ isOpenUploadModal });
   },
-  setIsOpenNoteModal: (show) => {
-    set({ isOpenNoteModal: show });
+  setIsOpenNoteModal: (isOpenNoteModal) => {
+    set({ isOpenNoteModal });
   },
-  setIsDeleting: (show) => {
-    set({ isDeleting: show });
+  setIsDeleting: (isDeleting) => {
+    set({ isDeleting });
   },
+  setIsFilesAndNotesEmpty: (isFilesAndNotesEmpty) =>
+    set({ isFilesAndNotesEmpty }),
 });

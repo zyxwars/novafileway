@@ -12,14 +12,14 @@ import {
   FaRadiation,
   FaTrash,
 } from "react-icons/fa";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useAnimationControls } from "framer-motion";
 import { useStore } from "../store/store";
 import { trpc } from "../utils/trpc";
 import { toast } from "react-toastify";
 
 export const Control = () => {
   const utils = trpc.useContext();
-  const [showOptions, setShowOptions] = useState(false);
+  const [isOpenOptions, setIsOpenOptions] = useState(false);
   const {
     setIsOpenUploadModal,
     setIsOpenNoteModal,
@@ -29,6 +29,7 @@ export const Control = () => {
     isOpenNoteModal,
     isOpenUploadModal,
     setNoteText,
+    isFilesAndNotesEmpty,
   } = useStore();
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -68,16 +69,18 @@ export const Control = () => {
   return (
     <>
       <motion.div
-        className="fixed bottom-8 right-6 flex flex-col gap-4 "
+        className={`fixed bottom-8 right-6 flex ${
+          isFilesAndNotesEmpty && !isOpenOptions ? "animate-bounce" : ""
+        } flex-col gap-4`}
         // TODO: Fix the stagger
         animate={{ transition: { staggerChildren: 0.5 } }}
       >
         <AnimatePresence>
-          {showOptions && (
+          {isOpenOptions && (
             <>
               {/* Delete all */}
               <motion.button
-                className="rounded-md   bg-gradient-to-r from-emerald-500 to-green-500 p-5 text-2xl text-white shadow-2xl shadow-black"
+                className="rounded-md bg-gradient-to-r from-emerald-500 to-green-500 p-5 text-2xl text-white shadow-2xl shadow-black"
                 initial={{ opacity: 0, y: "100px" }}
                 animate={{ opacity: 1, y: 0 }}
                 onClick={() => {
@@ -120,10 +123,10 @@ export const Control = () => {
         <motion.button
           className="rounded-md bg-zinc-800 p-5 text-2xl text-white shadow-2xl shadow-black"
           onClick={() => {
-            setShowOptions((showOptions) => !showOptions);
+            setIsOpenOptions((showOptions) => !showOptions);
             setIsDeleting(false);
           }}
-          animate={showOptions ? { rotate: 90 } : { rotate: 0 }}
+          animate={isOpenOptions ? { rotate: 90 } : { rotate: 0 }}
         >
           <FaEllipsisH />
         </motion.button>
