@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useMemo } from "react";
 import { NoteCard } from "./NoteCard";
 import { FileCard } from "./FileCard";
+import { FaSadCry, FaSadTear } from "react-icons/fa";
 
 const isNote = (item: any): item is RouterOutput["note"]["list"][number] => {
   return item?.text !== undefined;
@@ -29,17 +30,24 @@ export const FilesAndNotes = () => {
 
   return (
     <>
-      <div className="grid h-full w-full border-spacing-2 auto-rows-[15rem] grid-cols-2 gap-4 justify-self-start overflow-y-auto p-4 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-        <AnimatePresence>
-          {orderedFilesAndNotes.map((item) =>
-            isNote(item) ? (
-              <NoteCard key={item.id + item.createdAt} note={item} />
-            ) : (
-              <FileCard key={item.id + item.createdAt} file={item} />
-            )
-          )}
-        </AnimatePresence>
-      </div>
+      {orderedFilesAndNotes.length === 0 ? (
+        <div className="flex flex-grow flex-col items-center justify-center gap-4 text-zinc-700">
+          <FaSadTear size={128} />
+          <div className="text-xl font-semibold">Nothing uploaded</div>
+        </div>
+      ) : (
+        <div className="grid h-full w-full border-spacing-2 auto-rows-[15rem] grid-cols-2 gap-4 justify-self-start overflow-y-auto p-4 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+          <AnimatePresence>
+            {orderedFilesAndNotes.map((item) =>
+              isNote(item) ? (
+                <NoteCard key={item.id + item.createdAt} note={item} />
+              ) : (
+                <FileCard key={item.id + item.createdAt} file={item} />
+              )
+            )}
+          </AnimatePresence>
+        </div>
+      )}
     </>
   );
 };
