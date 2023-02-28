@@ -6,10 +6,17 @@ import React, {
 } from "react";
 import {
   FaBiohazard,
+  FaCloud,
+  FaDownload,
   FaEllipsisH,
+  FaEye,
+  FaEyeSlash,
+  FaFirefoxBrowser,
+  FaFolderOpen,
   FaPen,
   FaPlus,
   FaRadiation,
+  FaServer,
   FaTrash,
 } from "react-icons/fa";
 import { AnimatePresence, motion, useAnimationControls } from "framer-motion";
@@ -30,6 +37,8 @@ export const Control = () => {
     isOpenUploadModal,
     setNoteText,
     isFilesAndNotesEmpty,
+    isDownloadInline,
+    setIsDownloadInline,
   } = useStore();
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -47,10 +56,10 @@ export const Control = () => {
   const handleDragOver = () => setIsDraggingFile(true);
   const handleDragLeave = () => setIsDraggingFile(false);
   const handlePaste = (e: ClipboardEvent) => {
-    // TODO: Add file paste
     if (isOpenNoteModal || isOpenUploadModal) return;
 
     setIsOpenNoteModal(true);
+    // TODO: Add file paste, not working on linux?
     setNoteText(e.clipboardData?.getData("text") || "");
   };
 
@@ -72,7 +81,7 @@ export const Control = () => {
         className={`fixed bottom-8 right-6 flex ${
           isFilesAndNotesEmpty && !isOpenOptions ? "animate-bounce" : ""
         } flex-col gap-4`}
-        // TODO: Fix the stagger
+        // TODO: Fix stagger animation for children
         animate={{ transition: { staggerChildren: 0.5 } }}
       >
         <AnimatePresence>
@@ -96,7 +105,16 @@ export const Control = () => {
               >
                 <FaBiohazard />
               </motion.button>
-              {/* TODO: Delete */}
+              {/* Open/Download */}
+              <motion.button
+                className="rounded-md bg-gradient-to-r from-purple-500 to-violet-500 p-5 text-2xl text-white shadow-2xl shadow-black"
+                initial={{ opacity: 0, y: "100px" }}
+                animate={{ opacity: 1, y: 0 }}
+                onClick={() => setIsDownloadInline(!isDownloadInline)}
+              >
+                {isDownloadInline ? <FaCloud /> : <FaDownload />}
+              </motion.button>
+              {/* Delete */}
               <motion.button
                 className="rounded-md bg-gradient-to-r from-pink-500 to-red-500 p-5 text-2xl text-white shadow-2xl shadow-black"
                 initial={{ opacity: 0, y: "100px" }}

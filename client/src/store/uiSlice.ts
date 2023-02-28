@@ -6,11 +6,13 @@ export interface UiSlice {
   isOpenNoteModal: boolean;
   isDeleting: boolean;
   isFilesAndNotesEmpty: boolean;
+  isDownloadInline: boolean;
 
   setIsOpenUploadModal: (isOpenUploadModal: boolean) => void;
   setIsOpenNoteModal: (isOpenNoteModal: boolean) => void;
   setIsDeleting: (isDeleting: boolean) => void;
   setIsFilesAndNotesEmpty: (isFilesAndNotesEmpty: boolean) => void;
+  setIsDownloadInline: (isDownloadInline: boolean) => void;
 }
 
 export const createUiSlice: StateCreator<StoreState, [], [], UiSlice> = (
@@ -20,6 +22,7 @@ export const createUiSlice: StateCreator<StoreState, [], [], UiSlice> = (
   isOpenNoteModal: false,
   isDeleting: false,
   isFilesAndNotesEmpty: false,
+  isDownloadInline: true,
 
   setIsOpenUploadModal: (isOpenUploadModal) => {
     set({ isOpenUploadModal });
@@ -32,4 +35,5 @@ export const createUiSlice: StateCreator<StoreState, [], [], UiSlice> = (
   },
   setIsFilesAndNotesEmpty: (isFilesAndNotesEmpty) =>
     set({ isFilesAndNotesEmpty }),
+  setIsDownloadInline: (isDownloadInline) => set({ isDownloadInline }),
 });

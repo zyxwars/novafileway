@@ -50,7 +50,7 @@ export const FileUploadModal = () => {
     onSuccess: (data, variables) => {
       console.log("UPLOAD: Finished uploading " + variables.id);
       finishUpload(uploadMutation.mutate);
-      // TODO: Use context and don't run this when upload was aborted
+      // TODO: Use query context and don't run this when upload was aborted
 
       utils.file.list.invalidate();
     },

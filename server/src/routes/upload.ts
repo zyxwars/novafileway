@@ -75,7 +75,7 @@ router.post("/", (req, res) => {
       },
     });
 
-    io.emit('filesMutated')
+    io.emit("filesMutated");
     return res.status(200).json(savedFile);
   });
 });
@@ -98,11 +98,14 @@ router.get("/:id", async (req, res) => {
 
   res.set("Content-Type", file.mimetype);
 
-  if (req.query?.download)
-    return res.download(path.join(UPLOADS_DIR, file.id), file.name);
+  if (req.query?.openInBrowser === "true") {
+    // EncodeURI to avoid crashing with weird characters
+    res.set("Content-Disposition", "inline; filename=" + encodeURI(file.name));
+    res.sendFile(path.join(UPLOADS_DIR, file.id));
+    return;
+  }
 
-  res.set("Content-Disposition", "inline; filename=" + file.name);
-  res.sendFile(path.join(UPLOADS_DIR, file.id));
+  res.download(path.join(UPLOADS_DIR, file.id), file.name);
 });
 
 export default router;

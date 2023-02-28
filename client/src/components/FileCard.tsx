@@ -18,6 +18,7 @@ import { DeletableCard } from "./DeletableCard";
 import { RouterOutput, trpc } from "../utils/trpc";
 import { BsTextLeft, BsSoundwave } from "react-icons/bs";
 import { TbBinary } from "react-icons/tb";
+import { useStore } from "../store/store";
 
 const getFileIcon = (filename: string, mimetype: string) => {
   const size = 64;
@@ -61,6 +62,7 @@ export const FileCard = ({
   file: RouterOutput["file"]["list"][number];
 }) => {
   const utils = trpc.useContext();
+  const { isDownloadInline } = useStore();
 
   const mutation = trpc.file.deleteById.useMutation({
     onSuccess: () => {
@@ -74,7 +76,9 @@ export const FileCard = ({
   return (
     <DeletableCard deleteFn={() => mutation.mutate(file.id)}>
       <a
-        href={`${import.meta.env.VITE_SERVER_IP}/upload/${file.id}`}
+        href={`${import.meta.env.VITE_SERVER_IP}/upload/${
+          file.id
+        }?openInBrowser=${isDownloadInline}`}
         target="_blank"
         // TODO: Set color based on filetype
         className="flex min-h-0 flex-auto items-center justify-center bg-zinc-700 bg-gradient-to-r from-slate-500 to-zinc-500  text-white transition duration-500 ease-in hover:bg-zinc-600"

@@ -12,9 +12,8 @@ import { motion } from "framer-motion";
 import { InfoBar } from "./components/InfoBar";
 import { io } from "socket.io-client";
 
-// TODO: Add address
+// TODO: Add proper typing for env variables
 export const socket = io(import.meta.env.VITE_SERVER_IP);
-// TODO: Fix connection
 socket.connect();
 
 function App() {

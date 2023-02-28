@@ -2,7 +2,8 @@ import { execSync } from "child_process";
 
 // How of the actual free space will be offered to the app as a fraction eg. 1/2
 // Currently used for testing filled disk
-export const allowedDiskSpace = 1 / 3;
+// TODO: Make env variable
+export const allowedDiskSpace = 1;
 
 export const getDiskUsage = () => {
   // const totalSpace = Number(

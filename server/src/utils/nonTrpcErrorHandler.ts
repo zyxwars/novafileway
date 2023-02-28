@@ -11,7 +11,7 @@ export const sendError = (
   res: Response,
   message: string = "Internal error"
 ) => {
-  // TODO: remove from prod
+  // TODO: remove from prod, add error logger
   console.log(message);
   res.status(500).send(message);
 };

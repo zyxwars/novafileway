@@ -11,7 +11,6 @@ export const Modal = ({
   onClose: () => void;
 } & ComponentPropsWithoutRef<"div">) => {
   return (
-    // TODO: Do not propagate the on click event back from the children
     <AnimatePresence>
       {isOpen && (
         <div

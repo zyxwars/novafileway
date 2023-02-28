@@ -12,12 +12,12 @@ export const DeletableCard = ({
 
   return (
     <motion.div
-      className="flex flex-col overflow-hidden rounded-sm  bg-zinc-800  text-white"
+      className="relative flex flex-col overflow-hidden rounded-sm  bg-zinc-800  text-white"
       layout
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0, opacity: 0 }}
-      // TODO: Change layout transition duration
+      // TODO: Change layout transition duration, speed up when deleting rapidly?
       transition={{ duration: 0.1 }}
     >
       <AnimatePresence>
@@ -40,6 +40,7 @@ export const DeletableCard = ({
         )}
       </AnimatePresence>
       {children}
+      {/* <div className="absolute top-2 left-2 bg-black opacity-25">Auto delete in 15h</div> */}
     </motion.div>
   );
 };
