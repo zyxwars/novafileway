@@ -79,7 +79,7 @@ export const FileCard = ({
         href={`${import.meta.env.VITE_SERVER_IP}/upload/${
           file.id
         }?openInBrowser=${isDownloadInline}`}
-        target="_blank"
+        target={isDownloadInline ? "_blank" : "_self"}
         // TODO: Set color based on filetype
         className="flex min-h-0 flex-auto items-center justify-center bg-zinc-700 bg-gradient-to-r from-slate-500 to-zinc-500  text-white transition duration-500 ease-in hover:bg-zinc-600"
       >

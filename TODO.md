@@ -28,7 +28,7 @@
 
 - [ ] Remove/rework upload during delete, test open file upload when modal auto closed
 - [ ] Sync files without user reload
-- [ ] Add attachment download toggle, ?attachment query
+- [x] Add attachment download toggle, ?attachment query
 
 ## Server:
 
