@@ -1,13 +1,8 @@
-import { PrismaClient } from "@prisma/client";
-import { UPLOADS_DIR } from "..";
-import { publicProcedure, router } from "../trpc";
-import fs from "fs";
-import { getDiskUsage } from "../diskUsage";
-
-const prisma = new PrismaClient();
+import { publicProcedure, router } from "../utils/trpc";
+import { getDiskUsage } from "../utils/diskUsage";
 
 export const infoRouter = router({
-  diskUsage: publicProcedure.query(async (req) => {
+  diskUsage: publicProcedure.query((req) => {
     return getDiskUsage();
   }),
 });

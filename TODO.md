@@ -20,19 +20,16 @@
 
 ### Style:
 
-- [ ] Fix grid space between row/cols
 - [ ] Fix mobile click selecting blue
 - [ ] Fix overscroll on iPad
-- [ ] Move styling to tailwind brackets []
-- [ ] Animate copy on click => Spin animation
-- [ ] Pulse add up and down if no files or notes are uploaded > framer loop animation
+- [ ] Toast for all errors
 
 ### Functionality
 
 - [ ] Remove/rework upload during delete, test open file upload when modal auto closed
 - [ ] Sync files without user reload
 - [ ] Add attachment download toggle, ?attachment query
-- [ ] Create env for npm run host
+- [x] Add env types for vite
 
 ## Server:
 

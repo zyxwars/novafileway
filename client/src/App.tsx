@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { trpc } from "./utils/trpc";
+import { RouterOutput, trpc } from "./utils/trpc";
 import { FileUploadModal } from "./components/FileUploadModal";
 import { FilesAndNotes } from "./components/FilesAndNotes";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { httpBatchLink } from "@trpc/client";
 import { Control } from "./components/Control";
 import { NoteUploadModal } from "./components/NoteUploadModal";
@@ -10,6 +10,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { motion } from "framer-motion";
 import { InfoBar } from "./components/InfoBar";
+import { io } from "socket.io-client";
+
+// TODO: Add address
+export const socket = io(import.meta.env.VITE_SERVER_IP);
+// TODO: Fix connection
+socket.connect();
 
 function App() {
   const [queryClient] = useState(
@@ -27,11 +33,11 @@ function App() {
   );
   const [trpcClient] = useState(() =>
     trpc.createClient({
-      links: [
-        httpBatchLink({ url: import.meta.env.VITE_TRPC_SERVER + "/trpc" }),
-      ],
+      links: [httpBatchLink({ url: import.meta.env.VITE_SERVER_IP + "/trpc" })],
     })
   );
+
+  console.log(import.meta.env.MODE, import.meta.env.DEV);
 
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>

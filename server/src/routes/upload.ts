@@ -1,14 +1,13 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
-import { sendBadRequest, sendError } from "../nonTrpcErrorHandler";
+import { sendBadRequest, sendError } from "../utils/nonTrpcErrorHandler";
 import formidable from "formidable";
 import fs from "fs";
 import path from "path";
-import { THUMBNAILS_DIR, UPLOADS_DIR } from "..";
+import { THUMBNAILS_DIR, UPLOADS_DIR, io } from "..";
 import sharp from "sharp";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
-import { getDiskUsage } from "../diskUsage";
 
 const MAX_FILE_SIZE = 500 * 1000 ** 2;
 
@@ -76,6 +75,7 @@ router.post("/", (req, res) => {
       },
     });
 
+    io.emit('filesMutated')
     return res.status(200).json(savedFile);
   });
 });

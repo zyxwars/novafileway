@@ -6,6 +6,7 @@ import { NoteCard } from "./NoteCard";
 import { FileCard } from "./FileCard";
 import { FaSadCry, FaSadTear } from "react-icons/fa";
 import { useStore } from "../store/store";
+import { socket } from "../App";
 
 const isNote = (item: any): item is RouterOutput["note"]["list"][number] => {
   return item?.text !== undefined;
@@ -14,6 +15,7 @@ const isNote = (item: any): item is RouterOutput["note"]["list"][number] => {
 export const FilesAndNotes = () => {
   const files = trpc.file.list.useQuery();
   const notes = trpc.note.list.useQuery();
+
   const { setIsFilesAndNotesEmpty } = useStore();
 
   const orderedFilesAndNotes = useMemo(() => {
@@ -28,6 +30,25 @@ export const FilesAndNotes = () => {
     // If length is 0 set to true
     setIsFilesAndNotesEmpty(!orderedFilesAndNotes.length);
   }, [orderedFilesAndNotes]);
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("connected");
+    });
+    socket.on("filesMutated", () => {
+      files.refetch();
+    });
+
+    socket.on("notesMutated", () => {
+      notes.refetch();
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("filesMutated");
+      socket.off("notesMutated");
+    };
+  }, []);
 
   if (files.isLoading) return <Loader />;
   if (notes.isLoading) return <Loader />;

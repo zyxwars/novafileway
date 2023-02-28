@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "host": "vite --host",
+    "host": "vite --host --mode host",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
@@ -25,6 +25,7 @@
     "react-hook-form": "^7.43.1",
     "react-icons": "^4.7.1",
     "react-toastify": "^9.1.1",
+    "socket.io-client": "^4.6.1",
     "zustand": "^4.3.2"
   },
   "devDependencies": {

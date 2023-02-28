@@ -1,10 +1,9 @@
 import { z } from "zod";
-import { router, publicProcedure, throwPrismaDeleteError } from "../trpc";
+import { router, publicProcedure, throwPrismaDeleteError } from "../utils/trpc";
 import { PrismaClient } from "@prisma/client";
 import fs from "fs";
-import { THUMBNAILS_DIR, UPLOADS_DIR } from "..";
+import { THUMBNAILS_DIR, UPLOADS_DIR, io } from "..";
 import path from "path";
-import { getDiskUsage } from "../diskUsage";
 
 export const prisma = new PrismaClient();
 
@@ -26,6 +25,7 @@ export const fileRouter = router({
       .delete({ where: { id: input } })
       .catch((e) => throwPrismaDeleteError(e));
 
+    io.emit("filesMutated");
     return deletedFile;
   }),
   deleteAll: publicProcedure.mutation(async (req) => {
@@ -41,6 +41,7 @@ export const fileRouter = router({
       await prisma.file.delete({ where: { id: file.id } });
     }
 
+    io.emit("filesMutated");
     return;
   }),
 });

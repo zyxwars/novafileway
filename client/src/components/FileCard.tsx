@@ -74,7 +74,7 @@ export const FileCard = ({
   return (
     <DeletableCard deleteFn={() => mutation.mutate(file.id)}>
       <a
-        href={`${import.meta.env.VITE_FILE_SERVER}/upload/${file.id}`}
+        href={`${import.meta.env.VITE_SERVER_IP}/upload/${file.id}`}
         target="_blank"
         // TODO: Set color based on filetype
         className="flex min-h-0 flex-auto items-center justify-center bg-zinc-700 bg-gradient-to-r from-slate-500 to-zinc-500  text-white transition duration-500 ease-in hover:bg-zinc-600"
@@ -83,7 +83,7 @@ export const FileCard = ({
           <img
             className="h-full w-full object-cover"
             alt="thumbnail"
-            src={`${import.meta.env.VITE_FILE_SERVER}/upload/thumbnails/${
+            src={`${import.meta.env.VITE_SERVER_IP}/upload/thumbnails/${
               file.id
             }`}
           />
