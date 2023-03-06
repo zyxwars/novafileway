@@ -13,7 +13,6 @@ export const NoteUploadModal = () => {
 
   const mutation = trpc.note.add.useMutation({
     onSuccess: () => {
-      utils.note.list.invalidate();
       setIsOpenNoteModal(false);
     },
     onError: (err) => toast.error(err.message),

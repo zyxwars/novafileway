@@ -43,12 +43,10 @@ export const Control = () => {
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
 
   const filesDeleteAllMutation = trpc.file.deleteAll.useMutation({
-    onSuccess: () => utils.file.list.invalidate(),
     onError: (e) => toast.error(e.message),
   });
 
   const notesDeleteAllMutation = trpc.note.deleteAll.useMutation({
-    onSuccess: () => utils.note.list.invalidate(),
     onError: (e) => toast.error(e.message),
   });
   const [isDraggingFile, setIsDraggingFile] = useState(false);

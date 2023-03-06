@@ -27,12 +27,8 @@
 ### Functionality
 
 - [ ] Remove/rework upload during delete, test open file upload when modal auto closed
-- [ ] Sync files without user reload
-- [x] Add attachment download toggle, ?attachment query
 
 ## Server:
 
 - [ ] Wrap every function in try catch and report as internal server error
 - [ ] Error logging, install proper error logger for production, check if app auto restarts on crash
-- [ ] Most used filetypes, average size analytics
-- [ ] Show used space, total uploaded, etc

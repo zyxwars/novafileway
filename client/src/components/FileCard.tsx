@@ -65,9 +65,6 @@ export const FileCard = ({
   const { isDownloadInline } = useStore();
 
   const mutation = trpc.file.deleteById.useMutation({
-    onSuccess: () => {
-      utils.file.list.invalidate();
-    },
     onError: (err) => {
       toast.error(err.message);
     },

@@ -12,9 +12,6 @@ export const NoteCard = ({
   const utils = trpc.useContext();
 
   const mutation = trpc.note.deleteById.useMutation({
-    onSuccess: () => {
-      utils.note.list.invalidate();
-    },
     onError: (err) => {
       toast.error(err.message);
     },
