@@ -16,11 +16,6 @@
 - Peek text ✅
 - Note upload size 🤔
 
-- [ ] Dockerize for prod
-- [ ] Serve frontend from nginx
-- [ ] Serve backend through nginx reverse proxy
-- [ ] Check best place for nginx config
-
 ## Client:
 
 ### Style:
@@ -39,3 +34,8 @@
 - [ ] Wrap every function in try catch and report as internal server error
 - [ ] Error logging, install proper error logger for production, check if app auto restarts on crash
 - [ ] Delete after time docker cron/npm cron
+
+## Production
+
+- [ ] Share build between docker files
+- [ ] Docker host ip

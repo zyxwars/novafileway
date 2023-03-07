@@ -31,3 +31,11 @@ so you don't have to change between localhost and the current network ip every t
 ```
 npm run host
 ```
+
+## Production
+
+⚠️ SERVER_IP in client needs /api/ added to it due to reverse proxy mapping
+
+```
+sudo docker compose up -d --build
+```
