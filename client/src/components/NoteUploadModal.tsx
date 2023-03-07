@@ -15,7 +15,7 @@ export const NoteUploadModal = () => {
     onSuccess: () => {
       setIsOpenNoteModal(false);
     },
-    onError: (err) => toast.error(err.message),
+    onError: (err) => toast.error(err?.message),
   });
 
   return (

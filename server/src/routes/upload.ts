@@ -40,7 +40,7 @@ router.post("/", (req, res) => {
 
   form.parse(req, async (err, fields, files) => {
     if (err) {
-      if (err) return sendError(res, err.message);
+      if (err) return sendError(res, err?.message);
     }
 
     // The file shouldn't be an array as specified in formidable options

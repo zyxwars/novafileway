@@ -16,6 +16,11 @@
 - Peek text ✅
 - Note upload size 🤔
 
+- [ ] Dockerize for prod
+- [ ] Serve frontend from nginx
+- [ ] Serve backend through nginx reverse proxy
+- [ ] Check best place for nginx config
+
 ## Client:
 
 ### Style:
@@ -23,6 +28,7 @@
 - [ ] Fix mobile click selecting blue
 - [ ] Fix overscroll on iPad
 - [ ] Toast for all errors
+- [ ] Progress bar still not on top when file load error
 
 ### Functionality
 
@@ -32,3 +38,4 @@
 
 - [ ] Wrap every function in try catch and report as internal server error
 - [ ] Error logging, install proper error logger for production, check if app auto restarts on crash
+- [ ] Delete after time docker cron/npm cron

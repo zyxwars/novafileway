@@ -66,7 +66,7 @@ export const FileCard = ({
 
   const mutation = trpc.file.deleteById.useMutation({
     onError: (err) => {
-      toast.error(err.message);
+      toast.error(err?.message);
     },
   });
 

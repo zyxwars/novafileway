@@ -54,8 +54,8 @@ export const FileUploadModal = () => {
 
       utils.file.list.invalidate();
     },
-    onError: (err) => {
-      toast.error(err.message);
+    onError: (err: any) => {
+      toast.error(err?.message);
     },
   });
 

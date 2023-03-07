@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 export const InfoBar = () => {
   const space = trpc.info.diskUsage.useQuery(undefined, {
     onError: (err) => {
-      toast.error(err.message);
+      toast.error(err?.message);
     },
   });
 

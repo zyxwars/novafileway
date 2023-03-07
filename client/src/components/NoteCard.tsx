@@ -13,7 +13,7 @@ export const NoteCard = ({
 
   const mutation = trpc.note.deleteById.useMutation({
     onError: (err) => {
-      toast.error(err.message);
+      toast.error(err?.message);
     },
   });
 
