@@ -1,17 +1,16 @@
 import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
 import { sendBadRequest, sendError } from "../utils/nonTrpcErrorHandler";
 import formidable from "formidable";
 import fs from "fs";
 import path from "path";
-import { THUMBNAILS_DIR, UPLOADS_DIR, io } from "..";
+import { io } from "..";
 import sharp from "sharp";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
+import { DELETE_AFTER, THUMBNAILS_DIR, UPLOADS_DIR } from "../constants";
+import prisma from "../utils/prisma";
 
 const MAX_FILE_SIZE = 500 * 1000 ** 2;
-
-const prisma = new PrismaClient();
 
 const router = Router();
 
@@ -50,6 +49,9 @@ router.post("/", (req, res) => {
       return sendBadRequest(res, "No file provided");
     }
 
+    // TODO: Use zod
+    const deleteAfter = Math.abs(Number(fields?.deleteAfter) || DELETE_AFTER);
+
     // The database entry can be accessed by client query before the thumbnail exists
     // so create the thumbnail before creating the db record
     const newId = uuidv4();
@@ -72,6 +74,7 @@ router.post("/", (req, res) => {
         name: file.originalFilename || "Unnamed file",
         size: file.size,
         mimetype: file.mimetype || "",
+        deleteAt: new Date(new Date().getTime() + deleteAfter),
       },
     });
 

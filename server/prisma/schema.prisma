@@ -16,10 +16,12 @@ model File {
   size      Int
   mimetype  String
   createdAt DateTime @default(now())
+  deleteAt  DateTime
 }
 
 model Note {
   id        String   @id
   text      String
   createdAt DateTime @default(now())
+  deleteAt  DateTime
 }

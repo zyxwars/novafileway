@@ -66,7 +66,7 @@ export const FileUploadModal = () => {
   }, [isOpenUploadModal]);
 
   return (
-    <Modal isOpen={isOpenUploadModal} onClose={closeUploadModal}>
+    <Modal isOpen={isOpenUploadModal} onClickOutside={closeUploadModal}>
       <motion.div
         className="grid h-full w-full grid-flow-row overflow-hidden bg-zinc-900 sm:h-5/6 sm:w-3/5 sm:rounded-md"
         style={{

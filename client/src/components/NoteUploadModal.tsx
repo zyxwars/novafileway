@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
 import { Modal } from "./Modal";
 import { useStore } from "../store/store";
 import { motion } from "framer-motion";
 import { trpc } from "../utils/trpc";
-import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 export const NoteUploadModal = () => {
-  const utils = trpc.useContext();
   const { isOpenNoteModal, setIsOpenNoteModal, setNoteText, noteText } =
     useStore();
 
@@ -21,9 +18,11 @@ export const NoteUploadModal = () => {
   return (
     <Modal
       isOpen={isOpenNoteModal}
+      onClickOutside={() => {
+        setIsOpenNoteModal(false);
+      }}
       onClose={() => {
         setNoteText("");
-        setIsOpenNoteModal(false);
       }}
     >
       <motion.div

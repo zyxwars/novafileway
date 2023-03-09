@@ -1,12 +1,9 @@
 import { z } from "zod";
 import { router, publicProcedure, throwPrismaDeleteError } from "../utils/trpc";
-import { PrismaClient } from "@prisma/client";
-import { TRPCError } from "@trpc/server";
-import { TRPC_ERROR_CODES_BY_NUMBER } from "@trpc/server/dist/rpc";
 import { v4 as uuidv4 } from "uuid";
 import { io } from "..";
-
-export const prisma = new PrismaClient();
+import { DELETE_AFTER } from "../constants";
+import prisma from "../utils/prisma";
 
 export const noteRouter = router({
   list: publicProcedure.query(async (req) => {
@@ -18,11 +15,16 @@ export const noteRouter = router({
     .input(
       z.object({
         text: z.string(),
+        deleteAfter: z.number().positive().optional().default(DELETE_AFTER),
       })
     )
     .mutation(async ({ input }) => {
       const newNote = await prisma.note.create({
-        data: { id: uuidv4(), ...input },
+        data: {
+          id: uuidv4(),
+          text: input.text,
+          deleteAt: new Date(new Date().getTime() + input.deleteAfter),
+        },
       });
 
       io.emit("notesMutated");
