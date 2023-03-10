@@ -24,6 +24,7 @@
 - [ ] Fix overscroll on iPad
 - [ ] Toast for all errors
 - [ ] Progress bar still not on top when file load error
+- [ ] Make error text into a component and stretch like loader and change color to white
 
 ### Functionality
 
@@ -34,8 +35,15 @@
 - [ ] Wrap every function in try catch and report as internal server error
 - [ ] Error logging, install proper error logger for production, check if app auto restarts on crash
 - [ ] Delete after time docker cron/npm cron
+- [ ] Refresh used space on mutation
 
 ## Production
 
 - [ ] Share build between docker files
 - [ ] Docker host ip
+- [ ] Test docker on fresh clone
+- [ ] Save files and database
+- [ ] Use production ready database
+- [ ] Move server port from constants to .env
+- [ ] Reload after mutation doesn't work
+- [ ] 502 status file upload

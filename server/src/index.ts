@@ -6,6 +6,7 @@ import { appRouter } from "./routes/_app";
 import http from "http";
 import { Server } from "socket.io";
 import { PORT } from "./constants";
+import morgan from "morgan";
 
 const app = express();
 const server = http.createServer(app);
@@ -16,6 +17,7 @@ export const io = new Server(server, {
 });
 
 app.use(cors());
+app.use(morgan("tiny"));
 
 app.use("/upload", filesRouter);
 

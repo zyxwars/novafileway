@@ -13,7 +13,7 @@ import { InfoBar } from "./components/InfoBar";
 import { io } from "socket.io-client";
 
 // TODO: Add proper typing for env variables
-export const socket = io(import.meta.env.VITE_SERVER_IP);
+export const socket = io(import.meta.env.VITE_API_URL);
 socket.connect();
 
 function App() {
@@ -32,7 +32,7 @@ function App() {
   );
   const [trpcClient] = useState(() =>
     trpc.createClient({
-      links: [httpBatchLink({ url: import.meta.env.VITE_SERVER_IP + "/trpc" })],
+      links: [httpBatchLink({ url: import.meta.env.VITE_API_URL + "/trpc" })],
     })
   );
 

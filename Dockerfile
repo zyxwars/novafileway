@@ -2,8 +2,9 @@ FROM node
 WORKDIR /app
 COPY ./server ./server
 WORKDIR /app/client
-COPY ./client ./
+COPY ./client/package*.json ./
 RUN npm i
+COPY ./client ./
 RUN npm run build
 
 FROM nginx

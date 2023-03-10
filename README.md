@@ -1,41 +1,54 @@
-### First setup
-
-```
-bash init.sh
-```
-
-### After pull
-
-```
-bash update.sh
-```
-
-## Running in development mode
+## Running in development
 
 ### Server
 
 ```
+// Update dependencies
+npm i
+
+// Update database
+npx prisma migrate dev
+
+// Start server
 npm run dev
 ```
 
 ### Client
 
 ```
+// Update dependencies
+npm i
+
+// Start client
 npm run dev
 ```
 
-Expose to local network<br>
-Create .env.host.local, which is loaded by "vite --mode host" and include the local network ip,<br>
-so you don't have to change between localhost and the current network ip every time
-
 ```
+// Expose client to network
+// loads .env.host.local, convenient for defining VITE_API_URL with the current network ip
 npm run host
 ```
 
-## Production
+## Running in production
 
-⚠️ SERVER_IP in client needs /api/ added to it due to reverse proxy mapping
+⚠️ VITE_API_URL in client api url needs /api/ added to it due to reverse proxy mapping
 
 ```
 sudo docker compose up -d --build
 ```
+
+## Environment variables
+
+Copy .env.example
+
+### Client
+
+Use .env.local to avoid version control
+Load .env.development on npm run dev, .env.host on npm run host and .env.production on npm run build
+
+### Server
+
+single .env file
+set NODE_ENV to production or development
+
+### Docker

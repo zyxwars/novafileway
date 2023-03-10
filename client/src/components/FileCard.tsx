@@ -73,7 +73,7 @@ export const FileCard = ({
   return (
     <DeletableCard deleteFn={() => mutation.mutate(file.id)}>
       <a
-        href={`${import.meta.env.VITE_SERVER_IP}/upload/${
+        href={`${import.meta.env.VITE_API_URL}/upload/${
           file.id
         }?openInBrowser=${isDownloadInline}`}
         target={isDownloadInline ? "_blank" : "_self"}
@@ -84,9 +84,7 @@ export const FileCard = ({
           <img
             className="h-full w-full object-cover"
             alt="thumbnail"
-            src={`${import.meta.env.VITE_SERVER_IP}/upload/thumbnails/${
-              file.id
-            }`}
+            src={`${import.meta.env.VITE_API_URL}/upload/thumbnails/${file.id}`}
           />
         ) : (
           getFileIcon(file.name, file.mimetype)

@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  web:
+  static:
     build: .
     ports:
       - 80:80
@@ -10,5 +10,7 @@ services:
     build: ./server
     expose: 
       - 8080
+    volumes: 
+      - ./server/persist:/app/persist
     restart: unless-stopped
 
