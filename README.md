@@ -9,6 +9,9 @@ npm i
 // Update database
 npx prisma migrate dev
 
+// Update prisma client
+prisma generate
+
 // Start server
 npm run dev
 ```
@@ -25,7 +28,7 @@ npm run dev
 
 ```
 // Expose client to network
-// loads .env.host.local, convenient for defining VITE_API_URL with the current network ip
+// loads .env.host, convenient for defining VITE_API_URL with the current network ip
 npm run host
 ```
 
@@ -43,12 +46,10 @@ Copy .env.example
 
 ### Client
 
-Use .env.local to avoid version control
 Load .env.development on npm run dev, .env.host on npm run host and .env.production on npm run build
 
 ### Server
 
-single .env file
-set NODE_ENV to production or development
+Load .env.development on npm run dev and npm run migrate, .env.production on npm start
 
 ### Docker

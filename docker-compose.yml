@@ -8,9 +8,11 @@ services:
     restart: unless-stopped
   api:
     build: ./server
+    # Expose server to other containers in compose
     expose: 
       - 8080
-    volumes: 
-      - ./server/persist:/app/persist
+    ports:
+      - 8080:8080
+
     restart: unless-stopped
 

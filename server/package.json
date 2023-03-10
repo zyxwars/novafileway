@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/index.js",
-    "dev": "nodemon ./src/index.ts",
+    "start": "npx dotenv -e .env.production -- node ./dist/index.js",
+    "dev": "npx dotenv -e .env.development -- nodemon ./src/index.ts",
     "build": "npx tsc",
+    "migrate": "npx dotenv -e .env.development -- npx prisma migrate deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -31,6 +32,7 @@
     "@types/cors": "^2.8.13",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
+    "dotenv-cli": "^7.1.0",
     "express": "^4.18.2",
     "formidable": "^2.1.1",
     "mongoose": "^6.9.0",

@@ -13,7 +13,9 @@ import { InfoBar } from "./components/InfoBar";
 import { io } from "socket.io-client";
 
 // TODO: Add proper typing for env variables
+// Socket io totally ignore path after port so ../api/socket.io won't work
 export const socket = io(import.meta.env.VITE_API_URL);
+
 socket.connect();
 
 function App() {

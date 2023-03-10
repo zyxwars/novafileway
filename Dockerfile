@@ -1,5 +1,6 @@
 FROM node
 WORKDIR /app
+# Required for building client trpc
 COPY ./server ./server
 WORKDIR /app/client
 COPY ./client/package*.json ./
