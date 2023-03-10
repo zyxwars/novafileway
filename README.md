@@ -34,8 +34,6 @@ npm run host
 
 ## Running in production
 
-⚠️ VITE_API_URL in client api url needs /api/ added to it due to reverse proxy mapping
-
 ```
 sudo docker compose up -d --build
 ```
