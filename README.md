@@ -35,8 +35,6 @@ npm run host
 ## Running in production
 
 ```
-// Since docker volume overwrites Dockerfile build we need to migrate the db manually
-cd ./server && npx dotenv -e .env.production -- npx prisma migrate deploy && npx prisma generate
 sudo docker compose up -d --build
 ```
 

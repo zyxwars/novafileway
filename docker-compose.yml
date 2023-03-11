@@ -4,7 +4,8 @@ services:
   static:
     build: .
     ports:
-      - ${NGINX_IP_AND_PORT}:80
+      - ${NGINX_IP}:80:80
+      - ${NGINX_IP}:8080:8080
     restart: unless-stopped
   api:
     build: ./server

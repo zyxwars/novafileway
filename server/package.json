@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx dotenv -e .env.production -- node ./dist/index.js",
     "dev": "npx dotenv -e .env.development -- nodemon ./src/index.ts",
     "build": "npx tsc",
-    "migrate": "npx dotenv -e .env.development -- npx prisma migrate deploy",
+    "migrate:dev": "npx dotenv -e .env.development -- npx prisma migrate dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

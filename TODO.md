@@ -39,6 +39,7 @@
 
 ## Production
 
+- [ ] MIGRATE PRISMA INSIDE OF DOCKER
 - [ ] Share build between docker files
 - [ ] Docker host ip
 - [ ] Test docker on fresh clone
