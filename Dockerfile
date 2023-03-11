@@ -1,8 +1,12 @@
 FROM node
-WORKDIR /app
-# Server files required for building client trpc
-COPY ./server ./server
-RUN cd ./server && npm i
+
+# Server files are required for building client trpc
+WORKDIR /app/server
+COPY ./server/package*.json ./
+RUN npm i
+COPY ./server ./
+RUN npx dotenv -e .env.production -- npx prisma migrate dev
+
 WORKDIR /app/client
 COPY ./client/package*.json ./
 RUN npm i

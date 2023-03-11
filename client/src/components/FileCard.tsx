@@ -65,6 +65,15 @@ export const FileCard = ({
   const { isDownloadInline } = useStore();
 
   const mutation = trpc.file.deleteById.useMutation({
+    // TODO:
+    onMutate: (deletedId) => {
+      utils.file.list.setData(
+        undefined,
+        (utils.file.list.getData() || []).filter(
+          (file) => file.id !== deletedId
+        )
+      );
+    },
     onError: (err) => {
       toast.error(err?.message);
     },

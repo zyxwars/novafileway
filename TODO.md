@@ -29,6 +29,7 @@
 ### Functionality
 
 - [ ] Remove/rework upload during delete, test open file upload when modal auto closed
+- [ ] Optimistic update, like FileCard
 
 ## Server:
 
