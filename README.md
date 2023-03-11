@@ -40,14 +40,8 @@ sudo docker compose up -d --build
 
 ## Environment variables
 
-Copy .env.example
+Follow .env.example
 
 ### Client
 
-Load .env.development on npm run dev, .env.host on npm run host and .env.production on npm run build
-
-### Server
-
-Load .env.development on npm run dev and npm run migrate, .env.production on npm start
-
-### Docker
+Loads .env.development on npm run dev, .env.host on npm run host and .env.production on npm run build

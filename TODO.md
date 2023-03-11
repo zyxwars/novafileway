@@ -40,12 +40,5 @@
 
 ## Production
 
-- [ ] MIGRATE PRISMA INSIDE OF DOCKER
 - [ ] Share build between docker files
-- [ ] Docker host ip
-- [ ] Test docker on fresh clone
-- [ ] Save files and database
-- [ ] Use production ready database
 - [ ] Move server port from constants to .env
-- [ ] Reload after mutation doesn't work
-- [ ] 502 status file upload
