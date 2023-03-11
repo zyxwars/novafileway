@@ -9,6 +9,7 @@ import os from "os";
 import { v4 as uuidv4 } from "uuid";
 import { DELETE_AFTER, THUMBNAILS_DIR, UPLOADS_DIR } from "../constants";
 import prisma from "../utils/prisma";
+import { moveFile } from "../utils/move";
 
 const MAX_FILE_SIZE = 500 * 1000 ** 2;
 
@@ -59,7 +60,7 @@ router.post("/", (req, res) => {
     const newFilepath = path.join(UPLOADS_DIR, newId);
 
     // Move file from tmp to permanent storage
-    fs.renameSync(file.filepath, newFilepath);
+    moveFile(file.filepath, newFilepath);
 
     // Create thumbnail
     if (file.mimetype?.startsWith("image/")) {
