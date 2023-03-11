@@ -1,9 +1,8 @@
 FROM node
 WORKDIR /app
 # Server files required for building client trpc
-COPY ./server/package*.json ./server
-RUN cd ./server && npm i
 COPY ./server ./server
+RUN cd ./server && npm i
 WORKDIR /app/client
 COPY ./client/package*.json ./
 RUN npm i
