@@ -5,7 +5,9 @@ WORKDIR /app/server
 COPY ./server/package*.json ./
 RUN npm i
 COPY ./server ./
-RUN npx dotenv -e .env.production -- npx prisma migrate dev
+# RUN npx dotenv -e .env.production -- npx prisma migrate dev
+# Database doesn't need to really exist, just the types
+RUN npx prisma generate
 
 WORKDIR /app/client
 COPY ./client/package*.json ./
