@@ -1,4 +1,4 @@
 node_modules
-data/
+persist_data/
 *.db
 *.db-journal
