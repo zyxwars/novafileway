@@ -25,11 +25,12 @@
 - [ ] Toast for all errors
 - [ ] Progress bar still not on top when file load error
 - [ ] Make error text into a component and stretch like loader and change color to white
+- [ ] Scroll bar appears for a second after delete
 
 ### Functionality
 
 - [ ] Remove/rework upload during delete, test open file upload when modal auto closed
-- [ ] Optimistic update, like FileCard
+- [ ] Optimistic update, like in FileCard
 
 ## Server:
 
@@ -37,6 +38,7 @@
 - [ ] Error logging, install proper error logger for production, check if app auto restarts on crash
 - [ ] Delete after time docker cron/npm cron
 - [ ] Refresh used space on mutation
+- [ ] Sharp crashes when .ico is uploaded
 
 ## Production
 

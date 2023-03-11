@@ -2,17 +2,20 @@ version: "3"
 
 services:
   static:
-    build: .
+    build:
+      context: .
+      dockerfile: static.Dockerfile
     ports:
       - ${NGINX_IP}:80:80
       - ${NGINX_IP}:8080:8080
     restart: unless-stopped
   api:
-    build: ./server
-    # Expose server to other containers in compose
-    expose: 
+    build:
+      context: .
+      dockerfile: api.Dockerfile
+    # Expose server to other containers in compose, but not the host
+    expose:
       - 8080
     volumes:
-      - ./server/data:/app/data
+      - ./persist_data:/app/persist_data
     restart: unless-stopped
-
