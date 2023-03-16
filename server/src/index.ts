@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import * as trpcExpress from "@trpc/server/adapters/express";
-import filesRouter from "./routes/upload";
+import uploadsRouter from "./routes/upload";
 import { appRouter } from "./routes/_app";
 import http from "http";
 import { Server } from "socket.io";
@@ -19,7 +19,7 @@ export const io = new Server(server, {
 app.use(cors());
 app.use(morgan("tiny"));
 
-app.use("/upload", filesRouter);
+app.use("/upload", uploadsRouter);
 
 app.use(
   "/trpc",
