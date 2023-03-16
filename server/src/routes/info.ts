@@ -1,4 +1,4 @@
-import { publicProcedure, router } from "../utils/trpc";
+import { publicProcedure, router, throwServerError } from "../utils/trpc";
 import { getDiskUsage } from "../utils/diskUsage";
 
 export const infoRouter = router({

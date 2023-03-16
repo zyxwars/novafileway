@@ -19,6 +19,9 @@ router.post("/", (req, res) => {
   if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR);
   if (!fs.existsSync(THUMBNAILS_DIR)) fs.mkdirSync(THUMBNAILS_DIR);
 
+  // TODO: remove
+  fs.mkdirSync(UPLOADS_DIR);
+
   const form = formidable({
     uploadDir: os.tmpdir(),
     maxFiles: 1,

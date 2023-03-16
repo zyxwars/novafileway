@@ -23,8 +23,6 @@
 - [ ] Fix mobile click selecting blue
 - [ ] Fix overscroll on iPad
 - [ ] Toast for all errors
-- [ ] Progress bar still not on top when file load error
-- [ ] Make error text into a component and stretch like loader and change color to white
 - [ ] Scroll bar appears for a second after delete
 
 ### Functionality
@@ -39,6 +37,7 @@
 - [ ] Delete after time docker cron/npm cron
 - [ ] Refresh used space on mutation
 - [ ] Sharp crashes when .ico is uploaded
+- [ ] Error middleware
 
 ## Production
 

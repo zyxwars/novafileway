@@ -7,6 +7,7 @@ import { FileCard } from "./FileCard";
 import { FaSadCry, FaSadTear } from "react-icons/fa";
 import { useStore } from "../store/store";
 import { socket } from "../App";
+import { ErrorContainer } from "./ErrorContainer";
 
 const isNote = (item: any): item is RouterOutput["note"]["list"][number] => {
   return item?.text !== undefined;
@@ -53,8 +54,8 @@ export const FilesAndNotes = () => {
   if (files.isLoading) return <Loader />;
   if (notes.isLoading) return <Loader />;
 
-  if (files.isError) return <div>{files.error.message}</div>;
-  if (notes.isError) return <div>{notes.error.message}</div>;
+  if (files.isError) return <ErrorContainer>{files.error}</ErrorContainer>;
+  if (notes.isError) return <ErrorContainer>{notes.error}</ErrorContainer>;
 
   return (
     <>
