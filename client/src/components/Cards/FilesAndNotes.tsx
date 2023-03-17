@@ -1,13 +1,13 @@
-import { RouterOutput, trpc } from "../utils/trpc";
-import { Loader } from "./Loader";
+import { RouterOutput, trpc } from "../../utils/trpc";
+import { Loader } from "../Loader";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo } from "react";
 import { NoteCard } from "./NoteCard";
 import { FileCard } from "./FileCard";
 import { FaSadCry, FaSadTear } from "react-icons/fa";
-import { useStore } from "../store/store";
-import { socket } from "../App";
-import { ErrorContainer } from "./ErrorContainer";
+import { useStore } from "../../store/store";
+import { socket } from "../../App";
+import { ErrorContainer } from "../ErrorContainer";
 
 const isNote = (item: any): item is RouterOutput["note"]["list"][number] => {
   return item?.text !== undefined;

@@ -5,14 +5,11 @@ export const router = t.router;
 export const middleware = t.middleware;
 export const publicProcedure = t.procedure;
 
-const discloseError = (e: any) => {
-  return { cause: process.env.NODE_ENV === "development" ? e : undefined };
-};
-
+// TODO: stack is not sent in prod
 export const throwServerError = (e: any) => {
   throw new TRPCError({
     code: "INTERNAL_SERVER_ERROR",
-    ...discloseError(e),
+    cause: e,
   });
 };
 
@@ -22,7 +19,7 @@ export const throwPrismaDeleteError = (e: any) => {
     throw new TRPCError({
       code: "NOT_FOUND",
       message: "Item already deleted",
-      ...discloseError(e),
+      cause: e,
     });
 
   // Other error

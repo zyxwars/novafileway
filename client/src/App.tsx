@@ -1,11 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterOutput, trpc } from "./utils/trpc";
-import { FileUploadModal } from "./components/FileUploadModal";
-import { FilesAndNotes } from "./components/FilesAndNotes";
+import { FileUploadModal } from "./components/Modals/FileUploadModal";
+import { FilesAndNotes } from "./components/Cards/FilesAndNotes";
 import { useEffect, useRef, useState } from "react";
 import { httpBatchLink } from "@trpc/client";
-import { Control } from "./components/Control";
-import { NoteUploadModal } from "./components/NoteUploadModal";
+import { ControlButtons } from "./components/ControlButtons";
+import { NoteUploadModal } from "./components/Modals/NoteUploadModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { motion } from "framer-motion";
@@ -49,7 +49,7 @@ function App() {
           <FilesAndNotes />
         </div>
         {/* Floating */}
-        <Control />
+        <ControlButtons />
         {/* Modal */}
         <FileUploadModal />
         <NoteUploadModal />

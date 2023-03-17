@@ -16,11 +16,9 @@ const MAX_FILE_SIZE = 500 * 1000 ** 2;
 const router = Router();
 
 router.post("/", (req, res) => {
-  if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR);
-  if (!fs.existsSync(THUMBNAILS_DIR)) fs.mkdirSync(THUMBNAILS_DIR);
-
-  // TODO: remove
-  fs.mkdirSync(UPLOADS_DIR);
+  if (!fs.existsSync(UPLOADS_DIR))
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+  if (!fs.existsSync(THUMBNAILS_DIR)) fs.mkdirSync(THUMBNAILS_DIR,{recursive: true});
 
   const form = formidable({
     uploadDir: os.tmpdir(),

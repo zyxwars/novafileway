@@ -24,7 +24,7 @@ import { useStore } from "../store/store";
 import { trpc } from "../utils/trpc";
 import { toast } from "react-toastify";
 
-export const Control = () => {
+export const ControlButtons = () => {
   const utils = trpc.useContext();
   const [isOpenOptions, setIsOpenOptions] = useState(false);
   const {

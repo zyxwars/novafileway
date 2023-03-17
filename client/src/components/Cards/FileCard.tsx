@@ -15,10 +15,10 @@ import {
 } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { DeletableCard } from "./DeletableCard";
-import { RouterOutput, trpc } from "../utils/trpc";
+import { RouterOutput, trpc } from "../../utils/trpc";
 import { BsTextLeft, BsSoundwave } from "react-icons/bs";
 import { TbBinary } from "react-icons/tb";
-import { useStore } from "../store/store";
+import { useStore } from "../../store/store";
 
 const getFileIcon = (filename: string, mimetype: string) => {
   const size = 64;

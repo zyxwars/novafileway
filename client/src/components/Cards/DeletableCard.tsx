@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import React, { PropsWithChildren, useState } from "react";
-import { useStore } from "../store/store";
+import { useStore } from "../../store/store";
 import { toast } from "react-toastify";
 
 export const DeletableCard = ({

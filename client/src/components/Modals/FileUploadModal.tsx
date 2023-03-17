@@ -1,11 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Modal } from "./Modal";
-import { useStore } from "../store/store";
+import { useStore } from "../../store/store";
 import { FaTimes } from "react-icons/fa";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
-import { trpc } from "../utils/trpc";
-import { FileToUpload } from "../store/uploadSlice";
+import { trpc } from "../../utils/trpc";
+import { FileToUpload } from "../../store/uploadSlice";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -55,7 +55,10 @@ export const FileUploadModal = () => {
       utils.file.list.invalidate();
     },
     onError: (err: any) => {
-      toast.error(err?.message);
+      toast.error(err?.response?.data?.error?.message || err?.message);
+
+      // TODO: This removes file on error, retry file maybe?
+      finishUpload(uploadMutation.mutate);
     },
   });
 

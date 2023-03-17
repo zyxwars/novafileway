@@ -1,7 +1,7 @@
 import { Modal } from "./Modal";
-import { useStore } from "../store/store";
+import { useStore } from "../../store/store";
 import { motion } from "framer-motion";
-import { trpc } from "../utils/trpc";
+import { trpc } from "../../utils/trpc";
 import { toast } from "react-toastify";
 
 export const NoteUploadModal = () => {

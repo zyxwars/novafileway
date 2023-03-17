@@ -7,6 +7,7 @@ import http from "http";
 import { Server } from "socket.io";
 import { PORT } from "./constants";
 import morgan from "morgan";
+import { Request, Response, NextFunction } from "express";
 
 const app = express();
 const server = http.createServer(app);
@@ -27,6 +28,20 @@ app.use(
     router: appRouter,
   })
 );
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.log(err.stack);
+
+  res.status(500).json({
+    error: {
+      message: err.message,
+      stack: process.env.SEND_STACK_TRACE ? err.stack : undefined,
+    },
+  });
+  next(err);
+});
+
+// TODO: trpc onerror handler, logger
 
 io.on("connection", (socket) => {
   console.log("connected");

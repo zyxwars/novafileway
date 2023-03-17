@@ -1,7 +1,7 @@
 import { FaCheck, FaCopy } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { DeletableCard } from "./DeletableCard";
-import { RouterOutput, trpc } from "../utils/trpc";
+import { RouterOutput, trpc } from "../../utils/trpc";
 import { motion, useAnimationControls } from "framer-motion";
 
 export const NoteCard = ({
@@ -11,7 +11,16 @@ export const NoteCard = ({
 }) => {
   const utils = trpc.useContext();
 
+  // TODO: test on slow connection
   const mutation = trpc.note.deleteById.useMutation({
+    onMutate: (deletedId) => {
+      utils.note.list.setData(
+        undefined,
+        (utils.note.list.getData() || []).filter(
+          (note) => note.id !== deletedId
+        )
+      );
+    },
     onError: (err) => {
       toast.error(err?.message);
     },
