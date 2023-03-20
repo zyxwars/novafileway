@@ -44,7 +44,7 @@ function App() {
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         {/* Content */}
-        <div className="flex h-screen w-full flex-col items-center justify-center bg-zinc-900">
+        <div className="flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-zinc-900">
           <InfoBar />
           <FilesAndNotes />
         </div>

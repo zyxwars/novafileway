@@ -23,7 +23,7 @@
 - [ ] Fix mobile click selecting blue
 - [ ] Fix overscroll on iPad
 - [ ] Toast for all errors
-- [ ] Scroll bar appears for a second after delete
+- [ ] Make .ico file for favicon
 
 ### Functionality
 
