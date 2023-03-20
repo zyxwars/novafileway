@@ -21,7 +21,7 @@ import { TbBinary } from "react-icons/tb";
 import { useStore } from "../../store/store";
 
 const getFileIcon = (filename: string, mimetype: string) => {
-  const size = 64;
+  const size = 80;
 
   // TODO: Multitple extensions for one file icon
   switch (filename.split(".").pop()) {
@@ -56,6 +56,14 @@ const getFileIcon = (filename: string, mimetype: string) => {
   }
 };
 
+const formatFileSize = (size: number) => {
+  // TODO: Round to 2 decimals
+  if (size > 10 ** 9) return `${size / 10 ** 9} Gb`;
+  else if (size > 10 ** 6) return `${size / 10 ** 6} Mb`;
+  else if (size > 10 ** 3) return `${size / 10 ** 3} Kb`;
+  else return `${size} B`;
+};
+
 export const FileCard = ({
   file,
 }: {
@@ -87,7 +95,7 @@ export const FileCard = ({
         }?openInBrowser=${isDownloadInline}`}
         target={isDownloadInline ? "_blank" : "_self"}
         // TODO: Set color based on filetype
-        className="flex min-h-0 flex-auto items-center justify-center bg-zinc-700 bg-gradient-to-r from-slate-500 to-zinc-500  text-white transition duration-500 ease-in hover:bg-zinc-600"
+        className="flex min-h-0 flex-auto items-center justify-center bg-zinc-700 bg-gradient-to-r from-slate-500 to-zinc-500  transition duration-500 ease-in hover:bg-zinc-600"
       >
         {file.mimetype.includes("image") ? (
           <img
@@ -96,14 +104,17 @@ export const FileCard = ({
             src={`${import.meta.env.VITE_API_URL}/upload/thumbnails/${file.id}`}
           />
         ) : (
-          getFileIcon(file.name, file.mimetype)
+          <motion.div>{getFileIcon(file.name, file.mimetype)}</motion.div>
         )}
       </a>
       <div
-        className="w-full flex-none overflow-hidden text-ellipsis whitespace-nowrap bg-zinc-800 bg-gradient-to-r from-slate-700  to-zinc-700 p-4 text-sm font-semibold"
+        className="flex-nonebg-zinc-800 w-full bg-gradient-to-r from-slate-700  to-zinc-700 p-3"
         // style={{ wordBreak: "break-all" }}
       >
-        {file.name}
+        <div className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold">
+          {file.name}
+        </div>
+        <div className="text-sm">{formatFileSize(file.size)}</div>
       </div>
     </DeletableCard>
   );

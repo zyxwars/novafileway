@@ -15,7 +15,7 @@ export const InfoBar = () => {
     <div className="w-full bg-zinc-800">
       {space.data && (
         <motion.div
-          className="h-3 bg-gradient-to-r from-cyan-500 to-blue-500"
+          className="h-2 bg-gradient-to-r from-cyan-500 to-blue-500"
           style={{
             width: `${(space.data.usedSpace / space.data.totalSpace) * 100}%`,
           }}

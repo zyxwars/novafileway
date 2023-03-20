@@ -52,7 +52,7 @@ export const NoteUploadModal = () => {
 
           <button
             autoFocus
-            className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 py-2 px-4 text-lg font-semibold text-white "
+            className="rounded-md bg-gradient-to-r from-yellow-500 to-amber-500 py-2 px-4 text-lg font-semibold text-white "
             onClick={() => mutation.mutate({ text: noteText })}
           >
             Upload

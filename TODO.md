@@ -24,6 +24,7 @@
 - [ ] Fix overscroll on iPad
 - [ ] Toast for all errors
 - [ ] Make .ico file for favicon
+- [ ] Hover styling
 
 ### Functionality
 

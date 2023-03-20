@@ -71,7 +71,7 @@ export const FilesAndNotes = () => {
             <div className="text-xl font-semibold">Nothing uploaded</div>
           </motion.div>
         ) : (
-          <div className="grid h-full w-full border-spacing-2 auto-rows-[15rem] grid-cols-2 gap-4 justify-self-start overflow-y-auto p-4 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+          <div className="grid h-full w-full border-spacing-2 auto-rows-[15rem] grid-cols-2 gap-4 justify-self-start overflow-y-auto p-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
             <AnimatePresence>
               {orderedFilesAndNotes.map((item) =>
                 isNote(item) ? (
