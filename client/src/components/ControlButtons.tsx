@@ -41,6 +41,7 @@ export const ControlButtons = () => {
     setIsDownloadInline,
   } = useStore();
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
 
   const filesDeleteAllMutation = trpc.file.deleteAll.useMutation({
     onError: (e) => toast.error(e.message),
@@ -60,22 +61,37 @@ export const ControlButtons = () => {
     // TODO: Add file paste, not working on linux?
     setNoteText(e.clipboardData?.getData("text") || "");
   };
+  const handleClick = (e: Event) => {
+    // TODO: Fix target typing
+    // TODO: Test when clicking alert
+    if (e.target) {
+      const targetElement = e.target as HTMLElement;
+      if (ref.current?.contains(targetElement)) return;
+      if (targetElement.id === "deleteButton") return;
+    }
+
+    setIsDeleting(false);
+    setIsOpenOptions(false);
+  };
 
   useEffect(() => {
     window.document.body.addEventListener("dragover", handleDragOver);
     window.document.body.addEventListener("dragleave", handleDragLeave);
     window.document.body.addEventListener("paste", handlePaste);
+    window.document.body.addEventListener("click", handleClick);
 
     return () => {
       window.document.body.removeEventListener("dragover", handleDragOver);
       window.document.body.removeEventListener("dragleave", handleDragLeave);
-      // window.removeEventListener("paste", handlePaste);
+      window.document.body.removeEventListener("paste", handlePaste);
+      window.document.body.removeEventListener("click", handleClick);
     };
   }, []);
 
   return (
     <>
       <motion.div
+        ref={ref}
         className={`fixed bottom-8 right-6 flex ${
           isFilesAndNotesEmpty && !isOpenOptions ? "animate-bounce" : ""
         } flex-col gap-4`}

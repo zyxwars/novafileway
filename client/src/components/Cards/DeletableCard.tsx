@@ -23,6 +23,7 @@ export const DeletableCard = ({
       <AnimatePresence>
         {isDeleting && (
           <motion.button
+            id="deleteButton"
             // Disable multi delete while animation is still playing
             // If undo is ever added this will need to be reworked a bit
             disabled={isAlreadyDeleted}

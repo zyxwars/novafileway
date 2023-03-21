@@ -25,12 +25,13 @@
 - [ ] Toast for all errors
 - [ ] Make .ico file for favicon
 - [ ] Hover styling
+- [ ] Round file size
 
 ### Functionality
 
 - [ ] Remove/rework upload during delete, test open file upload when modal auto closed
-- [ ] Optimistic update, like in FileCard
 - [ ] Show stack trace in toast
+- [ ] Make anonymous function into normal functions
 
 ## Server:
 

@@ -57,10 +57,9 @@ const getFileIcon = (filename: string, mimetype: string) => {
 };
 
 const formatFileSize = (size: number) => {
-  // TODO: Round to 2 decimals
-  if (size > 10 ** 9) return `${size / 10 ** 9} Gb`;
-  else if (size > 10 ** 6) return `${size / 10 ** 6} Mb`;
-  else if (size > 10 ** 3) return `${size / 10 ** 3} Kb`;
+  if (size > 10 ** 9) return `${(size / 10 ** 9).toFixed(2)} Gb`;
+  else if (size > 10 ** 6) return `${(size / 10 ** 6).toFixed(2)} Mb`;
+  else if (size > 10 ** 3) return `${(size / 10 ** 3).toFixed(2)} Kb`;
   else return `${size} B`;
 };
 
