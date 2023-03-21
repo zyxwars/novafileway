@@ -25,7 +25,6 @@
 - [ ] Toast for all errors
 - [ ] Make .ico file for favicon
 - [ ] Hover styling
-- [ ] Round file size
 
 ### Functionality
 
@@ -39,7 +38,7 @@
 - [ ] Error logging, install proper error logger for production, check if app auto restarts on crash
 - [ ] Delete after time docker cron/npm cron
 - [ ] Refresh used space on mutation
-- [ ] Sharp crashes when .ico is uploaded, check sharp compatible types
+- [ ] Sharp crashes when .ico is uploaded, check sharp compatible types > don't show thumbnail
 - [ ] Async error handling
 
 ## Production

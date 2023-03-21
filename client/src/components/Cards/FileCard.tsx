@@ -88,6 +88,7 @@ export const FileCard = ({
 
   return (
     <DeletableCard deleteFn={() => mutation.mutate(file.id)}>
+      {/* Preview */}
       <a
         href={`${import.meta.env.VITE_API_URL}/upload/${
           file.id
@@ -106,6 +107,7 @@ export const FileCard = ({
           <motion.div>{getFileIcon(file.name, file.mimetype)}</motion.div>
         )}
       </a>
+      {/* Details */}
       <div
         className="flex-nonebg-zinc-800 w-full bg-gradient-to-r from-slate-700  to-zinc-700 p-3"
         // style={{ wordBreak: "break-all" }}
@@ -113,7 +115,9 @@ export const FileCard = ({
         <div className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold">
           {file.name}
         </div>
-        <div className="text-sm">{formatFileSize(file.size)}</div>
+        <div className="text-sm text-slate-300">
+          {formatFileSize(file.size)}
+        </div>
       </div>
     </DeletableCard>
   );
