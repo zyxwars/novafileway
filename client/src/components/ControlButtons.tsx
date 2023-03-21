@@ -11,8 +11,10 @@ import {
   FaEllipsisH,
   FaEye,
   FaEyeSlash,
+  FaFileDownload,
   FaFirefoxBrowser,
   FaFolderOpen,
+  FaGlasses,
   FaPen,
   FaPlus,
   FaRadiation,
@@ -126,7 +128,14 @@ export const ControlButtons = () => {
                 animate={{ opacity: 1, y: 0 }}
                 onClick={() => setIsDownloadInline(!isDownloadInline)}
               >
-                {isDownloadInline ? <FaCloud /> : <FaDownload />}
+                {/* Pointer-events-none passes the click to the button itself, 
+                otherwise the options get closed because the clicked element 
+                changes to the other icon and is no longer considered as part of options, thus making them close */}
+                {isDownloadInline ? (
+                  <FaGlasses className="pointer-events-none" />
+                ) : (
+                  <FaFileDownload className="pointer-events-none" />
+                )}
               </motion.button>
               {/* Delete */}
               <motion.button
