@@ -33,9 +33,6 @@ export const FilesAndNotes = () => {
   }, [orderedFilesAndNotes]);
 
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("connected");
-    });
     socket.on("filesMutated", () => {
       files.refetch();
     });
@@ -45,7 +42,6 @@ export const FilesAndNotes = () => {
     });
 
     return () => {
-      socket.off("connect");
       socket.off("filesMutated");
       socket.off("notesMutated");
     };

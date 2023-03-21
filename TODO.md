@@ -18,28 +18,32 @@
 
 ## Client:
 
-### Style:
+### Bugs:
 
 - [ ] Fix mobile click selecting blue
 - [ ] Fix overscroll on iPad
-- [ ] Toast for all errors
+
+### Features:
+
 - [ ] Make .ico file for favicon
 - [ ] Hover styling
-
-### Functionality
-
 - [ ] Remove/rework upload during delete, test open file upload when modal auto closed
 - [ ] Show stack trace in toast
 - [ ] Make anonymous function into normal functions
 
 ## Server:
 
+### Bugs:
+
+- [ ] Sharp crashes when .ico is uploaded, check sharp compatible types > don't show thumbnail
+
+### Features:
+
+- [ ] Async error handling
 - [ ] Wrap every function in try catch and report as internal server error
 - [ ] Error logging, install proper error logger for production, check if app auto restarts on crash
 - [ ] Delete after time docker cron/npm cron
 - [ ] Refresh used space on mutation
-- [ ] Sharp crashes when .ico is uploaded, check sharp compatible types > don't show thumbnail
-- [ ] Async error handling
 
 ## Production
 
