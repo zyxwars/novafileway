@@ -25,7 +25,6 @@
 
 ### Features:
 
-- [ ] Make .ico file for favicon
 - [ ] Hover styling
 - [ ] Remove/rework upload during delete, test open file upload when modal auto closed
 - [ ] Show stack trace in toast

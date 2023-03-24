@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import React from "react";
+import React, { useState } from "react";
 import {
   FaBook,
   FaCode,
@@ -70,6 +70,7 @@ export const FileCard = ({
 }) => {
   const utils = trpc.useContext();
   const { isDownloadInline } = useStore();
+  const [isOpenDetails, setIsOpenDetails] = useState(false);
 
   const mutation = trpc.file.deleteById.useMutation({
     // TODO:
@@ -85,6 +86,10 @@ export const FileCard = ({
       toast.error(err?.message);
     },
   });
+
+  const handleToggleDetails = () => {
+    setIsOpenDetails((isOpenDetails) => !isOpenDetails);
+  };
 
   return (
     <DeletableCard deleteFn={() => mutation.mutate(file.id)}>
@@ -109,8 +114,9 @@ export const FileCard = ({
       </a>
       {/* Details */}
       <div
-        className="flex-nonebg-zinc-800 w-full bg-gradient-to-r from-slate-700  to-zinc-700 p-3"
-        // style={{ wordBreak: "break-all" }}
+        className="w-full flex-none bg-gradient-to-r from-slate-700  to-zinc-700 p-3"
+        style={{ wordBreak: "break-all" }}
+        onClick={handleToggleDetails}
       >
         <div className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold">
           {file.name}
@@ -118,6 +124,12 @@ export const FileCard = ({
         <div className="text-sm text-slate-300">
           {formatFileSize(file.size)}
         </div>
+        {isOpenDetails && (
+          <>
+            <div className="text-sm text-slate-300">{file.mimetype}</div>
+            <div className="text-sm text-slate-300">{file.createdAt}</div>
+          </>
+        )}
       </div>
     </DeletableCard>
   );

@@ -31,7 +31,7 @@ export const InfoBar = () => {
     <div className="w-full bg-zinc-800">
       {diskUsage.data && (
         <motion.div
-          className="h-2 bg-gradient-to-r from-cyan-500 to-blue-500"
+          className="h-1 rounded-r-sm bg-gradient-to-r from-cyan-500 to-blue-500"
           style={{
             width: `${
               (diskUsage?.data?.usedSpace / diskUsage?.data?.totalSpace) * 100
