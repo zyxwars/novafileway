@@ -88,12 +88,17 @@ router.post("/", (req, res) => {
         name: file.originalFilename || "Unnamed file",
         size: file.size,
         mimetype: file.mimetype || "",
+        uploaderIp:
+          req.headers["x-forwarded-for"]?.toString() ||
+          req.socket.remoteAddress ||
+          "",
         hasThumbnail,
         deleteAt: new Date(new Date().getTime() + deleteAfter),
       },
     });
 
     io.emit("filesMutated");
+    // TOOD: Return sha256 here
     return res.status(200).json(savedFile);
   });
 });

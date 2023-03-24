@@ -128,6 +128,7 @@ export const FileCard = ({
           <>
             <div className="text-sm text-slate-300">{file.mimetype}</div>
             <div className="text-sm text-slate-300">{file.createdAt}</div>
+            <div className="text-sm text-slate-300">{file.uploaderIp}</div>
           </>
         )}
       </div>

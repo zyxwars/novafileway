@@ -41,6 +41,7 @@
 - [ ] Error logging, install proper error logger for production, check if app auto restarts on crash
 - [ ] Delete after time docker cron/npm cron
 - [ ] Refresh used space on mutation
+- [ ] Show sha256 in details
 
 ## Production
 

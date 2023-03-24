@@ -16,6 +16,7 @@ model File {
   size         Int
   mimetype     String
   hasThumbnail Boolean
+  uploaderIp   String
   createdAt    DateTime @default(now())
   deleteAt     DateTime
 }
