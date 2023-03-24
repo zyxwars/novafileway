@@ -18,7 +18,8 @@ const router = Router();
 router.post("/", (req, res) => {
   if (!fs.existsSync(UPLOADS_DIR))
     fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-  if (!fs.existsSync(THUMBNAILS_DIR)) fs.mkdirSync(THUMBNAILS_DIR,{recursive: true});
+  if (!fs.existsSync(THUMBNAILS_DIR))
+    fs.mkdirSync(THUMBNAILS_DIR, { recursive: true });
 
   const form = formidable({
     uploadDir: os.tmpdir(),
@@ -64,10 +65,21 @@ router.post("/", (req, res) => {
     moveFile(file.filepath, newFilepath);
 
     // Create thumbnail
+    let hasThumbnail = false;
     if (file.mimetype?.startsWith("image/")) {
-      await sharp(fs.readFileSync(newFilepath))
+      const res = await sharp(fs.readFileSync(newFilepath))
         .resize(300)
-        .toFile(path.join(THUMBNAILS_DIR, newId));
+        .toFile(path.join(THUMBNAILS_DIR, newId))
+        .catch((e) => {
+          // TODO: Catch by code or something
+          if (e.message === "Input buffer contains unsupported image format")
+            return;
+          throw e;
+        });
+
+      if (res) {
+        hasThumbnail = true;
+      }
     }
 
     const savedFile = await prisma.file.create({
@@ -76,6 +88,7 @@ router.post("/", (req, res) => {
         name: file.originalFilename || "Unnamed file",
         size: file.size,
         mimetype: file.mimetype || "",
+        hasThumbnail,
         deleteAt: new Date(new Date().getTime() + deleteAfter),
       },
     });

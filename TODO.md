@@ -35,8 +35,6 @@
 
 ### Bugs:
 
-- [ ] Sharp crashes when .ico is uploaded, check sharp compatible types > don't show thumbnail
-
 ### Features:
 
 - [ ] Async error handling

@@ -97,7 +97,7 @@ export const FileCard = ({
         // TODO: Set color based on filetype
         className="flex min-h-0 flex-auto items-center justify-center bg-zinc-700 bg-gradient-to-r from-slate-500 to-zinc-500  transition duration-500 ease-in hover:bg-zinc-600"
       >
-        {file.mimetype.includes("image") ? (
+        {file.hasThumbnail ? (
           <img
             className="h-full w-full object-cover"
             alt="thumbnail"

@@ -11,12 +11,13 @@ datasource db {
 }
 
 model File {
-  id        String   @id
-  name      String
-  size      Int
-  mimetype  String
-  createdAt DateTime @default(now())
-  deleteAt  DateTime
+  id           String   @id
+  name         String
+  size         Int
+  mimetype     String
+  hasThumbnail Boolean
+  createdAt    DateTime @default(now())
+  deleteAt     DateTime
 }
 
 model Note {
