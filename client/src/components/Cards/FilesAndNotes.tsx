@@ -22,9 +22,13 @@ export const FilesAndNotes = () => {
   const orderedFilesAndNotes = useMemo(() => {
     if (!files.data || !notes.data) return [];
 
-    return [...files.data, ...notes.data].sort((a, b) =>
-      Number(new Date(a.createdAt).getTime() < new Date(b.createdAt).getTime())
-    );
+    return [...files.data, ...notes.data].sort((a, b) => {
+      return Number(
+        new Date(a.createdAt).getTime() < new Date(b.createdAt).getTime()
+      ) === 1
+        ? 1
+        : -1;
+    });
   }, [files.data, notes.data]);
 
   useEffect(() => {
