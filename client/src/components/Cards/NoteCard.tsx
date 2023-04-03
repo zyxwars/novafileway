@@ -26,35 +26,36 @@ export const NoteCard = ({
     },
   });
 
-  const clipboardControls = useAnimationControls();
-  const checkmarkControls = useAnimationControls();
+  const clipboardAnim = useAnimationControls();
+  const checkmarkAnim = useAnimationControls();
+  const copySequenceAnim = async () => {
+    clipboardAnim.set({ opacity: 1 });
+    checkmarkAnim.set({ opacity: 0 });
+    await clipboardAnim.start({ opacity: 0 });
+    await checkmarkAnim.start({ opacity: 1 });
+    await checkmarkAnim.start({ opacity: 0, transition: { delay: 3 } });
+    clipboardAnim.start({ opacity: 1 });
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(note.text);
+    copySequenceAnim();
+  };
 
   return (
     <DeletableCard deleteFn={() => mutation.mutate(note.id)}>
       <div className="relative min-h-0 flex-grow bg-zinc-800 p-2 text-white">
         <button
-          onClick={async () => {
-            navigator.clipboard.writeText(note.text);
-            clipboardControls.start({ rotate: 360, opacity: 0 });
-            await checkmarkControls.start({ rotate: 360, opacity: 1 });
-
-            await checkmarkControls.start({
-              opacity: 0,
-              transition: { delay: 3 },
-            });
-            clipboardControls.start({ opacity: 1 });
-            clipboardControls.set({ rotate: 0 });
-            checkmarkControls.set({ rotate: 0 });
-          }}
+          onClick={handleCopy}
           className="absolute bottom-2 right-2 rounded-md bg-zinc-900 p-2 transition duration-200 ease-in hover:bg-zinc-700"
         >
-          <motion.div animate={clipboardControls}>
+          <motion.div animate={clipboardAnim}>
             <FaCopy size={32} />
           </motion.div>
           <motion.div
             className="absolute top-0 right-0 left-0 bottom-0 flex items-center justify-center"
             initial={{ opacity: 0 }}
-            animate={checkmarkControls}
+            animate={checkmarkAnim}
           >
             <FaCheck size={24} />
           </motion.div>
