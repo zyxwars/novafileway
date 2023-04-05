@@ -1,4 +1,4 @@
-import { FaCheck, FaCopy } from "react-icons/fa";
+import { FaCheck, FaCopy, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { DeletableCard } from "./DeletableCard";
 import { RouterOutput, trpc } from "../../utils/trpc";
@@ -45,9 +45,10 @@ export const NoteCard = ({
   return (
     <DeletableCard deleteFn={() => mutation.mutate(note.id)}>
       <div className="relative min-h-0 flex-grow bg-zinc-800 p-2 text-white">
+        {/* Copy button */}
         <button
           onClick={handleCopy}
-          className="absolute bottom-2 right-2 rounded-md bg-zinc-900 p-2 transition duration-200 ease-in hover:bg-zinc-700"
+          className="absolute top-2 right-2 rounded-md bg-zinc-900 p-2 transition duration-200 ease-in hover:bg-zinc-700"
         >
           <motion.div animate={clipboardAnim}>
             <FaCopy size={32} />
@@ -60,7 +61,16 @@ export const NoteCard = ({
             <FaCheck size={24} />
           </motion.div>
         </button>
-        <div className="h-full w-full overflow-auto whitespace-pre-wrap break-words">
+        {/* Delete time */}
+        <div className="absolute top-1 left-1 rounded-sm bg-[rgba(0,0,0,0.3)] py-1 px-2">
+          <div className="flex items-center gap-1 text-white">
+            <FaTrash size={16} />
+            <div>In 3 days</div>
+          </div>
+        </div>
+        {/* Content */}
+        // TODO: Don't hard code padding
+        <div className="h-full w-full overflow-auto whitespace-pre-wrap break-words pt-8">
           {note.text}
         </div>
       </div>

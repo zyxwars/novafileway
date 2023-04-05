@@ -1,7 +1,7 @@
 import path from "path";
 
 // TODO: 1000 * 60 * 60 * 24 * 7;
-export const DELETE_AFTER = 10000;
+export const DELETE_AFTER = 1000 * 60 * 60 * 24 * 7;
 export const PORT = 8080;
 export const UPLOADS_DIR = path.join(__dirname, "../persist_data/uploads");
 export const THUMBNAILS_DIR = path.join(UPLOADS_DIR, "thumbnails");

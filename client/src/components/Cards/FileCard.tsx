@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import React, { useState } from "react";
 import {
   FaBook,
+  FaClock,
   FaCode,
   FaCompress,
   FaCopy,
@@ -12,6 +13,8 @@ import {
   FaHtml5,
   FaJs,
   FaPython,
+  FaStopwatch,
+  FaTrash,
 } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { DeletableCard } from "./DeletableCard";
@@ -61,6 +64,25 @@ const formatFileSize = (size: number) => {
   else if (size > 10 ** 6) return `${(size / 10 ** 6).toFixed(2)} Mb`;
   else if (size > 10 ** 3) return `${(size / 10 ** 3).toFixed(2)} Kb`;
   else return `${size} B`;
+};
+
+const formatTimeRemaining = (time: number) => {
+  const DAY = 1000 * 60 * 60 * 24;
+  const HOUR = 1000 * 60 * 60;
+  const MINUTE = 1000 * 60;
+  const SECONDS = 1000;
+  console.log(time);
+
+  if (time > DAY) {
+    return `${Math.round(time / DAY)} days`;
+  } else if (time > HOUR) {
+    return `${Math.round(time / HOUR)} hours`;
+  } else if (time > MINUTE) {
+    return `${Math.round(time / MINUTE)} minutes`;
+  } else if (time > 0) {
+    return `${Math.round(time / SECONDS)} seconds`;
+  }
+  return "Deleting soon";
 };
 
 export const FileCard = ({
@@ -131,6 +153,17 @@ export const FileCard = ({
             <div className="text-sm text-slate-300">{file.uploaderIp}</div>
           </>
         )}
+      </div>
+      {/* Delete time */}
+      <div className="absolute top-1 left-1 rounded-sm bg-[rgba(0,0,0,0.3)] py-1 px-2">
+        <div className="flex items-center gap-1 text-white">
+          <FaTrash size={16} />
+          <div>
+            {formatTimeRemaining(
+              new Date(file.deleteAt).getTime() - new Date().getTime()
+            )}
+          </div>
+        </div>
       </div>
     </DeletableCard>
   );
