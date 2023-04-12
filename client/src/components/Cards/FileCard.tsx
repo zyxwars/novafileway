@@ -93,9 +93,9 @@ export const FileCard = ({
   const utils = trpc.useContext();
   const { isDownloadInline } = useStore();
   const [isOpenDetails, setIsOpenDetails] = useState(false);
+  const { isDeleting } = useStore();
 
   const mutation = trpc.file.deleteById.useMutation({
-    // TODO:
     onMutate: (deletedId) => {
       utils.file.list.setData(
         undefined,
@@ -146,6 +146,7 @@ export const FileCard = ({
         <div className="text-sm text-slate-300">
           {formatFileSize(file.size)}
         </div>
+        {/* TODO: Animate details */}
         {isOpenDetails && (
           <>
             <div className="text-sm text-slate-300">{file.mimetype}</div>
@@ -155,16 +156,18 @@ export const FileCard = ({
         )}
       </div>
       {/* Delete time */}
-      <div className="absolute top-1 left-1 rounded-sm bg-[rgba(0,0,0,0.3)] py-1 px-2">
-        <div className="flex items-center gap-1 text-white">
-          <FaTrash size={16} />
-          <div>
-            {formatTimeRemaining(
-              new Date(file.deleteAt).getTime() - new Date().getTime()
-            )}
+      {!isDeleting && (
+        <div className="absolute top-1 left-1 rounded-sm bg-[rgba(0,0,0,0.3)] py-1 px-2">
+          <div className="flex items-center gap-1 text-white">
+            <FaTrash size={16} />
+            <div>
+              {formatTimeRemaining(
+                new Date(file.deleteAt).getTime() - new Date().getTime()
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </DeletableCard>
   );
 };
