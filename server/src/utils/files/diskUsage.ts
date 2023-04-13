@@ -12,9 +12,12 @@ export const getDiskUsage = () => {
     execSync("df / | awk 'FNR ==2 {print$4}'").toString()
   );
 
+  const allowedTotalSpace = availableSpace * ALLOWED_DISK_SPACE + usedSpace;
+  const allowedAvailableSpace = availableSpace * ALLOWED_DISK_SPACE;
+
   return {
-    totalSpace: availableSpace * ALLOWED_DISK_SPACE + usedSpace,
     usedSpace,
-    availableSpace: availableSpace * ALLOWED_DISK_SPACE,
+    availableSpace: allowedAvailableSpace,
+    totalSpace: allowedTotalSpace,
   };
 };

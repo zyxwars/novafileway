@@ -3,8 +3,6 @@
 - Single file upload ✅
 - Multi file upload loop ✅
 - Upload progress ✅
-- Max size check if file system if full
-  - Used space check
 - Used space indicator ✅
 - Image thumbnails ✅
 - Delete after time, cronjob docker
@@ -42,7 +40,6 @@
 - [ ] Wrap every function in try catch and report as internal server error
 - [ ] Error logging, install proper error logger for production
 - [ ] DeleteAt after time docker cron/npm cron
-- [ ] Refresh used space on mutation
 - [ ] Show sha256 in details
 
 ## Production
