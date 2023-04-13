@@ -11,7 +11,7 @@ export const fileRouter = router({
   list: publicProcedure.query(async (req) => {
     const files = await prisma.file.findMany();
 
-    return files.reverse();
+    return files;
   }),
   deleteById: publicProcedure.input(z.string()).mutation(async ({ input }) => {
     if (fs.existsSync(path.join(UPLOADS_DIR, input)))

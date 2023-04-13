@@ -3,7 +3,7 @@ import fs from "fs";
 import prisma from "./prisma";
 import { THUMBNAILS_DIR, UPLOADS_DIR } from "../constants";
 
-const deleteItems = async () => {
+export const deleteItems = async () => {
   console.log("Deleting items past deleteAt time");
 
   // Delete all items to be deleted before current date
@@ -27,4 +27,4 @@ const deleteItems = async () => {
   });
 };
 
-deleteItems();
+// deleteItems();

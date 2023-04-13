@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import { ALLOWED_DISK_SPACE } from "../constants";
+import { ALLOWED_DISK_SPACE } from "../../constants";
 
 export const getDiskUsage = () => {
   // const totalSpace = Number(

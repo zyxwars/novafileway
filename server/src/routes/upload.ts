@@ -7,11 +7,14 @@ import { io } from "..";
 import sharp from "sharp";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
-import { DELETE_AFTER, THUMBNAILS_DIR, UPLOADS_DIR } from "../constants";
+import {
+  DELETE_AFTER,
+  MAX_FILE_SIZE,
+  THUMBNAILS_DIR,
+  UPLOADS_DIR,
+} from "../constants";
 import prisma from "../utils/prisma";
-import { moveFile } from "../utils/move";
-
-const MAX_FILE_SIZE = 500 * 1000 ** 2;
+import { moveFile } from "../utils/files/move";
 
 const router = Router();
 
@@ -22,10 +25,11 @@ router.post("/", (req, res) => {
     fs.mkdirSync(THUMBNAILS_DIR, { recursive: true });
 
   const form = formidable({
-    uploadDir: os.tmpdir(),
+    uploadDir: UPLOADS_DIR,
     maxFiles: 1,
     maxFields: 1,
     maxFileSize: MAX_FILE_SIZE,
+    multiples: false,
   });
   let filePath: string | null = null;
 
@@ -44,7 +48,6 @@ router.post("/", (req, res) => {
     if (err) {
       if (err) return sendError(res, err?.message);
     }
-
     // The file shouldn't be an array as specified in formidable options
     const file = files?.file as formidable.File | null;
 
@@ -52,26 +55,22 @@ router.post("/", (req, res) => {
       return sendBadRequest(res, "No file provided");
     }
 
-    // TODO: Use zod
+    // TODO: Use zod to force deleteAfter to be a positive number
     const deleteAfter = Math.abs(Number(fields?.deleteAfter) || DELETE_AFTER);
 
-    // The database entry can be accessed by client query before the thumbnail exists
-    // so create the thumbnail before creating the db record
     const newId = uuidv4();
-
     const newFilepath = path.join(UPLOADS_DIR, newId);
+    fs.renameSync(file.filepath, newFilepath);
 
-    // Move file from tmp to permanent storage
-    moveFile(file.filepath, newFilepath);
-
-    // Create thumbnail
+    // The database entry can be accessed by a client query before the thumbnail exists
+    // so create the thumbnail before creating the db record to avoid empty thumbnail on the client
     let hasThumbnail = false;
     if (file.mimetype?.startsWith("image/")) {
       const res = await sharp(fs.readFileSync(newFilepath))
         .resize(300)
         .toFile(path.join(THUMBNAILS_DIR, newId))
         .catch((e) => {
-          // TODO: Catch by code or something
+          // TODO: Catch by error code or something
           if (e.message === "Input buffer contains unsupported image format")
             return;
           throw e;
@@ -91,14 +90,13 @@ router.post("/", (req, res) => {
         uploaderIp:
           req.headers["x-forwarded-for"]?.toString() ||
           req.socket.remoteAddress ||
-          "",
+          "Unknown ip",
         hasThumbnail,
         deleteAt: new Date(new Date().getTime() + deleteAfter),
       },
     });
 
     io.emit("filesMutated");
-    // TOOD: Return sha256 here
     return res.status(200).json(savedFile);
   });
 });

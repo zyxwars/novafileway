@@ -34,12 +34,14 @@
 
 ### Bugs:
 
+- [ ] Properly test upload, other devices, different file types
+
 ### Features:
 
 - [ ] Async error handling
 - [ ] Wrap every function in try catch and report as internal server error
-- [ ] Error logging, install proper error logger for production, check if app auto restarts on crash
-- [ ] Delete after time docker cron/npm cron
+- [ ] Error logging, install proper error logger for production
+- [ ] DeleteAt after time docker cron/npm cron
 - [ ] Refresh used space on mutation
 - [ ] Show sha256 in details
 
