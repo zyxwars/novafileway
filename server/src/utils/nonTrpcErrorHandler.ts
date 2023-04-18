@@ -7,11 +7,9 @@ export const sendBadRequest = (
   res.status(400).send(message);
 };
 
-export const sendError = (
-  res: Response,
-  message: string = "Internal error"
-) => {
+export const handleError = (res: Response, error: any) => {
   // TODO: remove from prod, add error logger
-  console.log(message);
-  res.status(500).send(message);
+  console.log(error);
+  // TODO: make a config to reveal info in prod
+  res.status(500).send(error.message);
 };
