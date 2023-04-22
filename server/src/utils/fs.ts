@@ -7,3 +7,8 @@ export const safeUnlink = (...paths: string[]) => {
     fs.unlinkSync(jointPath);
   }
 };
+
+export const moveFile = (src: string, dest: string) => {
+  fs.copyFileSync(src, dest);
+  fs.unlinkSync(src);
+};

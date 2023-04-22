@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { sendBadRequest, handleError } from "../utils/nonTrpcErrorHandler";
+import { handleError } from "../utils/nonTrpcErrorHandler";
 import formidable from "formidable";
 import fs from "fs";
 import path from "path";
@@ -14,7 +14,11 @@ import {
   UPLOADS_DIR,
 } from "../constants";
 import prisma from "../utils/prisma";
-import { moveFile } from "../utils/files/move";
+import { moveFile } from "../utils/fs";
+import { z } from "zod";
+import { fileFormSchema } from "./uploadSchemas";
+import { logger } from "../utils/logger";
+import { getFileName } from "../utils/getFileName";
 
 const router = Router();
 
@@ -38,26 +42,31 @@ router.post("/", (req, res) => {
       filePath = file.filepath;
     });
 
-    // Delete file on abort
-    form.on("aborted", () => {
-      if (filePath) {
-        fs.unlinkSync(filePath);
-      }
-    });
-
     form.parse(req, async (err, fields, files) => {
       if (err) {
-        if (err) return handleError(res, err?.message);
-      }
-      // The file shouldn't be an array as specified in formidable options
-      const file = files?.file as formidable.File | null;
+        if (err.code === 1002) {
+          logger.info("Aborting upload " + filePath, {
+            label: getFileName(__filename),
+          });
+          if (filePath) fs.unlinkSync(filePath);
+          return;
+        }
 
-      if (!file) {
-        return sendBadRequest(res, "No file provided");
+        return handleError({
+          res,
+          error: err,
+          statusCode: err.httpCode,
+          label: getFileName(__filename),
+        });
       }
 
-      // TODO: Use zod to force deleteAfter to be a positive number
-      const deleteAfter = Math.abs(Number(fields?.deleteAfter) || DELETE_AFTER);
+      const data = fileFormSchema.safeParse({ fields, files });
+      if (!data.success)
+        return handleError({ res, statusCode: 400, error: data.error });
+      const {
+        fields: { deleteAfter },
+        files: { file },
+      } = data.data;
 
       const newId = uuidv4();
       const newFilepath = path.join(UPLOADS_DIR, newId);
@@ -85,7 +94,7 @@ router.post("/", (req, res) => {
       const savedFile = await prisma.file.create({
         data: {
           id: newId,
-          name: file.originalFilename || "Unnamed file",
+          name: file.originalFilename,
           size: file.size,
           mimetype: file.mimetype || "",
           uploaderIp:
@@ -101,20 +110,24 @@ router.post("/", (req, res) => {
       return res.status(200).json(savedFile);
     });
   } catch (e) {
-    handleError(res, e);
+    handleError({ res, error: e, label: getFileName(__filename) });
   }
 });
 
 router.get("/thumbnails/:id", async (req, res) => {
   try {
-    if (!fs.existsSync(path.join(THUMBNAILS_DIR, req.params.id)))
-      return res
-        .status(404)
-        .send(`Thumbnail for file with id ${req.params.id} not found`);
+    const filePath = path.join(THUMBNAILS_DIR, req.params.id);
+    if (!fs.existsSync(filePath))
+      return handleError({
+        res,
+        statusCode: 404,
+        message: `Thumbnail for file with id ${req.params.id} not found`,
+        label: getFileName(__filename),
+      });
 
-    res.sendFile(path.join(THUMBNAILS_DIR, req.params.id));
+    res.sendFile(filePath);
   } catch (e) {
-    handleError(res, e);
+    handleError({ res, error: e, label: getFileName(__filename) });
   }
 });
 
@@ -124,7 +137,12 @@ router.get("/:id", async (req, res) => {
       where: { id: req.params.id },
     });
     if (!file)
-      return res.status(404).send(`File with id ${req.params.id} not found`);
+      return handleError({
+        res,
+        statusCode: 404,
+        label: getFileName(__filename),
+        message: `File with id ${req.params.id} not found`,
+      });
 
     res.set("Content-Type", file.mimetype);
 
@@ -140,7 +158,7 @@ router.get("/:id", async (req, res) => {
 
     res.download(path.join(UPLOADS_DIR, file.id), file.name);
   } catch (e) {
-    handleError(res, e);
+    handleError({ res, error: e, label: getFileName(__filename) });
   }
 });
 

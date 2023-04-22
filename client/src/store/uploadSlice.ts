@@ -7,7 +7,6 @@ const getFileId = (file: File) => {
   return file.name;
 };
 
-// TODO: Check proper interface naming
 export interface FileToUpload {
   data: File;
   id: string;

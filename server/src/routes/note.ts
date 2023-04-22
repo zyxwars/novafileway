@@ -15,7 +15,7 @@ export const noteRouter = router({
     .input(
       z.object({
         text: z.string(),
-        deleteAfter: z.number().positive().optional().default(DELETE_AFTER),
+        deleteAfter: z.number().positive().default(DELETE_AFTER),
       })
     )
     .mutation(async ({ input }) => {

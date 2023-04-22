@@ -32,13 +32,8 @@
 
 ### Bugs:
 
-- [ ] Properly test upload, other devices, different file types
-
 ### Features:
 
-- [ ] Async error handling
-- [ ] Wrap every function in try catch and report as internal server error
-- [ ] Error logging, install proper error logger for production
 - [ ] DeleteAt after time docker cron/npm cron
 - [ ] Show sha256 in details
 

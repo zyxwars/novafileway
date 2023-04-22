@@ -5,6 +5,7 @@ import { io } from "..";
 import path from "path";
 import prisma from "../utils/prisma";
 import { UPLOADS_DIR, THUMBNAILS_DIR } from "../constants";
+import { safeUnlink } from "../utils/fs";
 
 // Add for files is implemented in upload.ts as form posting doesn't work with trpc
 export const fileRouter = router({
@@ -14,11 +15,8 @@ export const fileRouter = router({
     return files;
   }),
   deleteById: publicProcedure.input(z.string()).mutation(async ({ input }) => {
-    if (fs.existsSync(path.join(UPLOADS_DIR, input)))
-      fs.unlinkSync(path.join(UPLOADS_DIR, input));
-
-    if (fs.existsSync(path.join(THUMBNAILS_DIR, input)))
-      fs.unlinkSync(path.join(THUMBNAILS_DIR, input));
+    safeUnlink(UPLOADS_DIR, input);
+    safeUnlink(THUMBNAILS_DIR, input);
 
     const deletedFile = await prisma.file
       .delete({ where: { id: input } })
@@ -31,11 +29,8 @@ export const fileRouter = router({
     const allFiles = await prisma.file.findMany();
 
     for (const file of allFiles) {
-      if (fs.existsSync(path.join(UPLOADS_DIR, file.id)))
-        fs.unlinkSync(path.join(UPLOADS_DIR, file.id));
-
-      if (fs.existsSync(path.join(THUMBNAILS_DIR, file.id)))
-        fs.unlinkSync(path.join(THUMBNAILS_DIR, file.id));
+      safeUnlink(UPLOADS_DIR, file.id);
+      safeUnlink(THUMBNAILS_DIR, file.id);
 
       await prisma.file.delete({ where: { id: file.id } });
     }

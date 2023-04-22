@@ -13,12 +13,13 @@ export const throwServerError = (e: any) => {
   });
 };
 
+// TODO: Check if this gets logged as error, because it shouldn't
 export const throwPrismaDeleteError = (e: any) => {
   // Item to delete not found
   if (e.code === "P2025")
     throw new TRPCError({
       code: "NOT_FOUND",
-      message: "Item already deleted",
+      message: "Item already deleted or didn't exist",
       cause: e,
     });
 

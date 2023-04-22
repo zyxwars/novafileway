@@ -1,15 +1,29 @@
 import { Response } from "express";
+import { logger } from "./logger";
+import { getFileName } from "./getFileName";
 
-export const sendBadRequest = (
-  res: Response,
-  message: string = "Bad request"
-) => {
-  res.status(400).send(message);
-};
+// TODO: make a config to reveal info in prod
+export const handleError = ({
+  res,
+  statusCode = 500,
+  message,
+  label = getFileName(__filename),
+  error,
+}: {
+  res: Response;
+  statusCode?: number;
+  message?: string;
+  label?: string;
+  error?: any;
+}) => {
+  if (statusCode < 500) {
+    logger.info(statusCode + " " + (message || error.message), {
+      label,
+      error,
+    });
+  } else logger.error(message || error.message, { label, error });
 
-export const handleError = (res: Response, error: any) => {
-  // TODO: remove from prod, add error logger
-  console.log(error);
-  // TODO: make a config to reveal info in prod
-  res.status(500).send(error.message);
+  res.status(statusCode).json({
+    error: { message: message || error.message, trace: error?.trace },
+  });
 };
