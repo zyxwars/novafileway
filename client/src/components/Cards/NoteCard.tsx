@@ -69,7 +69,7 @@ export const NoteCard = ({
           </div>
         </div>
         {/* Content */}
-        // TODO: Don't hard code padding
+        {/*// TODO: Don't hard code padding*/}
         <div className="h-full w-full overflow-auto whitespace-pre-wrap break-words pt-8">
           {note.text}
         </div>
