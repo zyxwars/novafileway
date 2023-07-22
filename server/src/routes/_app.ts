@@ -1,4 +1,4 @@
-import { router } from "../utils/trpc";
+import { router } from "../services/trpc";
 import { fileRouter } from "./file";
 import { infoRouter } from "./info";
 import { noteRouter } from "./note";

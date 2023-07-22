@@ -8,8 +8,9 @@ import { Server } from "socket.io";
 import { PORT } from "./constants";
 import morgan from "morgan";
 import { Request, Response, NextFunction } from "express";
-import { logger } from "./utils/logger";
-import { getFileName } from "./utils/getFileName";
+import { getFilename } from "./utils/fileUtils";
+import { deleteOldUploads } from "./tasks/deleteOldUploads";
+import { logger } from "./services/logger";
 
 const app = express();
 const server = http.createServer(app);
@@ -36,10 +37,17 @@ app.use(
 
 io.on("connection", (socket) => {
   logger.info(`Socket connection from: ${socket.handshake.address}`, {
-    label: getFileName(__filename),
+    label: getFilename(__filename),
   });
 });
 
+const deleteOldUploadsIntervalMs = 1000 * 60 * 60;
+logger.info(
+  `Running ${deleteOldUploads.name} every ${deleteOldUploadsIntervalMs} ms`,
+  { label: getFilename(__filename) }
+);
+setInterval(() => deleteOldUploads(), deleteOldUploadsIntervalMs);
+
 server.listen(PORT, () => {
-  logger.info(`Listening on port ${PORT}`, { label: getFileName(__filename) });
+  logger.info(`Listening on port ${PORT}`, { label: getFilename(__filename) });
 });

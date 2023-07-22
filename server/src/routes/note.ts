@@ -1,9 +1,13 @@
 import { z } from "zod";
-import { router, publicProcedure, throwPrismaDeleteError } from "../utils/trpc";
+import {
+  router,
+  publicProcedure,
+  throwPrismaDeleteError,
+} from "../services/trpc";
 import { v4 as uuidv4 } from "uuid";
 import { io } from "..";
+import prisma from "../services/prisma";
 import { DELETE_AFTER } from "../constants";
-import prisma from "../utils/prisma";
 
 export const noteRouter = router({
   list: publicProcedure.query(async (req) => {
@@ -33,12 +37,12 @@ export const noteRouter = router({
   deleteById: publicProcedure.input(z.string()).mutation(async ({ input }) => {
     const deletedNote = await prisma.note
       .delete({ where: { id: input } })
-      .catch((e) => throwPrismaDeleteError(e));
+      .catch((e: any) => throwPrismaDeleteError(e));
     io.emit("notesMutated");
     return deletedNote;
   }),
   deleteAll: publicProcedure.mutation(async () => {
-    const deletedCount = await prisma.note.deleteMany();
+    await prisma.note.deleteMany();
     io.emit("notesMutated");
     return;
   }),

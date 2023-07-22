@@ -8,11 +8,9 @@
 - Delete after time, cronjob docker
 - Delete stray files cron
 - Open/Download ✅
-- Folder upload, folder navigation 🤔
 - Paste text auto upload ✅
 - Text field creation ✅
 - Peek text ✅
-- Note upload size 🤔
 
 ## Client:
 
@@ -26,16 +24,12 @@
 - [ ] Hover styling
 - [ ] Remove/rework upload during delete, test open file upload when modal auto closed
 - [ ] Show stack trace in toast
-- [ ] Make anonymous function into normal functions
 
 ## Server:
 
 ### Bugs:
 
 ### Features:
-
-- [ ] DeleteAt after time docker cron/npm cron
-- [ ] Show sha256 in details
 
 ## Production
 

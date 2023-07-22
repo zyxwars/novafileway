@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { handleError } from "../utils/nonTrpcErrorHandler";
+import { handleError } from "../services/nonTrpcErrorHandler";
 import formidable from "formidable";
 import fs from "fs";
 import path from "path";
@@ -13,12 +13,24 @@ import {
   THUMBNAILS_DIR,
   UPLOADS_DIR,
 } from "../constants";
-import prisma from "../utils/prisma";
-import { moveFile } from "../utils/fs";
+import prisma from "../services/prisma";
+import { moveFile, getFilename } from "../utils/fileUtils";
 import { z } from "zod";
-import { fileFormSchema } from "./uploadSchemas";
-import { logger } from "../utils/logger";
-import { getFileName } from "../utils/getFileName";
+import { logger } from "../services/logger";
+
+export const fileFormSchema = z.object({
+  fields: z.object({
+    deleteAfter: z.number().positive().default(DELETE_AFTER),
+  }),
+  files: z.object({
+    file: z.object({
+      filepath: z.string(),
+      originalFilename: z.string(),
+      size: z.number(),
+      mimetype: z.string(),
+    }),
+  }),
+});
 
 const router = Router();
 
@@ -46,7 +58,7 @@ router.post("/", (req, res) => {
       if (err) {
         if (err.code === 1002) {
           logger.info("Aborting upload " + filePath, {
-            label: getFileName(__filename),
+            label: getFilename(__filename),
           });
           if (filePath) fs.unlinkSync(filePath);
           return;
@@ -56,7 +68,7 @@ router.post("/", (req, res) => {
           res,
           error: err,
           statusCode: err.httpCode,
-          label: getFileName(__filename),
+          label: getFilename(__filename),
         });
       }
 
@@ -110,7 +122,7 @@ router.post("/", (req, res) => {
       return res.status(200).json(savedFile);
     });
   } catch (e) {
-    handleError({ res, error: e, label: getFileName(__filename) });
+    handleError({ res, error: e, label: getFilename(__filename) });
   }
 });
 
@@ -122,12 +134,12 @@ router.get("/thumbnails/:id", async (req, res) => {
         res,
         statusCode: 404,
         message: `Thumbnail for file with id ${req.params.id} not found`,
-        label: getFileName(__filename),
+        label: getFilename(__filename),
       });
 
     res.sendFile(filePath);
   } catch (e) {
-    handleError({ res, error: e, label: getFileName(__filename) });
+    handleError({ res, error: e, label: getFilename(__filename) });
   }
 });
 
@@ -140,7 +152,7 @@ router.get("/:id", async (req, res) => {
       return handleError({
         res,
         statusCode: 404,
-        label: getFileName(__filename),
+        label: getFilename(__filename),
         message: `File with id ${req.params.id} not found`,
       });
 
@@ -158,7 +170,7 @@ router.get("/:id", async (req, res) => {
 
     res.download(path.join(UPLOADS_DIR, file.id), file.name);
   } catch (e) {
-    handleError({ res, error: e, label: getFileName(__filename) });
+    handleError({ res, error: e, label: getFilename(__filename) });
   }
 });
 

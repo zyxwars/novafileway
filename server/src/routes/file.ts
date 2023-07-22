@@ -1,11 +1,15 @@
 import { z } from "zod";
-import { router, publicProcedure, throwPrismaDeleteError } from "../utils/trpc";
+import {
+  router,
+  publicProcedure,
+  throwPrismaDeleteError,
+} from "../services/trpc";
 import fs from "fs";
 import { io } from "..";
 import path from "path";
-import prisma from "../utils/prisma";
+import prisma from "../services/prisma";
 import { UPLOADS_DIR, THUMBNAILS_DIR } from "../constants";
-import { safeUnlink } from "../utils/fs";
+import { safeUnlink } from "../utils/fileUtils";
 
 // Add for files is implemented in upload.ts as form posting doesn't work with trpc
 export const fileRouter = router({
