@@ -28,6 +28,7 @@
 ## Server:
 
 ### Bugs:
+- [ ] Note deleteAfter is being set to 3 instead of 7 days 🤔
 
 ### Features:
 
