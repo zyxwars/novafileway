@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { DeletableCard } from "./DeletableCard";
 import { RouterOutput, trpc } from "../../utils/trpc";
 import { motion, useAnimationControls } from "framer-motion";
+import { formatTimeRemaining } from "../../utils/formatting";
 
 export const NoteCard = ({
   note,
@@ -37,8 +38,8 @@ export const NoteCard = ({
     clipboardAnim.start({ opacity: 1 });
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(note.text);
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(note.text);
     copySequenceAnim();
   };
 
@@ -65,7 +66,11 @@ export const NoteCard = ({
         <div className="absolute top-1 left-1 rounded-sm bg-[rgba(0,0,0,0.3)] py-1 px-2">
           <div className="flex items-center gap-1 text-white">
             <FaTrash size={16} />
-            <div>In 3 days</div>
+            <div>
+              {formatTimeRemaining(
+                new Date(note.deleteAt).getTime() - new Date().getTime()
+              )}
+            </div>
           </div>
         </div>
         {/* Content */}
