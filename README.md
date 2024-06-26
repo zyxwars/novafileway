@@ -1,3 +1,9 @@
+## Fileway
+
+Local network file sharing
+
+<img src="example1.png"/>
+
 ## Running in development
 
 ### Server
@@ -10,7 +16,7 @@ npm i
 npx prisma migrate dev
 
 // Update prisma client
-prisma generate
+npx prisma generate
 
 // Start server
 npm run dev
